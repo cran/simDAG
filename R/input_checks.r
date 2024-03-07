@@ -6,7 +6,7 @@ is_formula <- function(x) {
 
 # check whether a node name is appropriate
 is_node_name <- function(name) {
-  length(name)==1 && is.character(name)
+  length(name) >= 1 && is.character(name)
 }
 
 # check whether a node type is appropriate
@@ -40,7 +40,7 @@ is_intercept <- function(intercept) {
 check_inputs_root_node <- function(name, type) {
 
   if (!is_node_name(name)) {
-    stop("The 'name' attribute must be a single character string.")
+    stop("The 'name' attribute must be character vector of length >= 1.")
   } else if (!is_node_dist(type)) {
     stop("The 'type' parameter of a root node must be a single",
          " character string naming a defined function.")
@@ -52,7 +52,7 @@ check_inputs_child_node <- function(name, type, parents, args, time_varying,
                                     formula) {
 
   if (!is_node_name(name)) {
-    stop("The 'name' attribute must be a single character string.")
+    stop("The 'name' attribute must be character vector of length >= 1.")
   } else if (!is_node_type(type)) {
     stop("The 'type' parameter of a child node must be a single",
          " character string pointing to a function starting with 'node_'.")
@@ -622,5 +622,28 @@ check_inputs_node_competing_events <- function(data, parents, sim_time, name,
         }
       }
     }
+  }
+}
+
+## check inputs for the sim_n_datasets() function
+check_inputs_sim_n_datasets <- function(dag, n_repeats, n_cores,
+                                        data_format, data_format_args,
+                                        progressbar) {
+
+  if (!inherits(dag, "DAG")) {
+    stop("'dag' must be a DAG object created using the empty_dag()",
+         " and node() or node_td() functions.")
+  } else if (!(length(n_repeats)==1 && is.numeric(n_repeats) &&
+               n_repeats >= 1)) {
+    stop("'n_repeats' must a single positive number.")
+  } else if (!(length(n_cores)==1 && is.numeric(n_cores) &&
+               n_cores >= 1)) {
+    stop("'n_cores' must be a single positive number.")
+  } else if (!(length(data_format)==1 && is.character(data_format))) {
+    stop("'data_format' must be a single character string.")
+  } else if (!is.list(data_format_args)) {
+    stop("'data_format_args' must be a list.")
+  } else if (!(length(progressbar)==1 && is.logical(progressbar))) {
+    stop("'progressbar' must be either TRUE or FALSE.")
   }
 }

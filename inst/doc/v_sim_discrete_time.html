@@ -30,23 +30,23 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -64,55 +64,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -121,13 +120,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -340,12 +346,12 @@ Approach</h1>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>In this small vignette, we introduce the
-<code>sim_discrete_time</code> function, which can be used to generate
+<code>sim_discrete_time()</code> function, which can be used to generate
 arbitrarily complex longitudinal data with discrete points in time. Just
-as the <code>sim_from_dag</code> function contained in this package, it
-allows any mixture of continuous, binary, categorical, count, or
+as the <code>sim_from_dag()</code> function contained in this package,
+it allows any mixture of continuous, binary, categorical, count, or
 time-to-event data. The main advantage of the
-<code>sim_discrete_time</code> function is that it naturally generates
+<code>sim_discrete_time()</code> function is that it naturally generates
 longitudinal data without the need to define a node for each variable at
 each point in time. It also makes the generation of complex
 time-to-event data a lot easier. Features such as time-dependent
@@ -373,21 +379,21 @@ schematic flow of DTS is shown in the figure below.</p>
 A generalized flow-chart of the discrete-time simulation approach
 </p>
 </div>
-<p>The <code>sim_discrete_time</code> directly implements this workflow.
-A data set at <span class="math inline">\(t = 0\)</span> is either
-simulated using the <code>sim_from_dag</code> function or supplied
-directly by the user (using the <code>t0_data</code> argument). This
-data set is then updated according to the time-dependent nodes added to
-the <code>dag</code> using <code>node_td</code> calls. Below we give a
-short example on how this works in practice. A more realistic (and
-therefore more complex) example can be found in a different
+<p>The <code>sim_discrete_time()</code> directly implements this
+workflow. A data set at <span class="math inline">\(t = 0\)</span> is
+either simulated using the <code>sim_from_dag()</code> function or
+supplied directly by the user (using the <code>t0_data</code> argument).
+This data set is then updated according to the time-dependent nodes
+added to the <code>dag</code> using <code>node_td()</code> calls. Below
+we give a short example on how this works in practice. A more realistic
+(and therefore more complex) example can be found in a different
 vignette.</p>
 <p>A DTS can be seen as a special case of simulation modeling. It is
 closely related to <em>dynamic microsimulation</em> (Spooner et
 al. 2021), <em>discrete-event simulation</em> (Banks 2014) and
 <em>agent-based modeling</em> (Ugur &amp; Saka 2006). As such, it
 requires a lot of input from the users. In general, the
-<code>sim_discrete_time</code> function is not an “off-the-shelves”
+<code>sim_discrete_time()</code> function is not an “off-the-shelves”
 function which can be used “as-is” to simulate data. In most cases, the
 user needs to write their own functions to actually use this function
 effectively. This is the price one has to pay for the nearly unlimited
@@ -397,10 +403,11 @@ complex longitudinal time-to-event data.</p>
 </div>
 <div id="defining-the-dag" class="section level1">
 <h1>Defining the DAG</h1>
-<p>Similar to the <code>sim_from_dag</code> function, the user needs to
-specify the nodes of the underlying causal DAG to use this function. All
-variables in a DTS can be categorized into three categories: <em>t0_root
-nodes</em>, <em>t0_child_nodes</em> and <em>tx_nodes</em>.</p>
+<p>Similar to the <code>sim_from_dag()</code> function, the user needs
+to specify the nodes of the underlying causal DAG to use this function.
+All variables in a DTS can be categorized into three categories:
+<em>t0_root nodes</em>, <em>t0_child_nodes</em> and
+<em>tx_nodes</em>.</p>
 <ul>
 <li><p><em>t0_root_nodes</em>: Variables that are completely independent
 of all other variables and are only generated once are called
@@ -428,16 +435,16 @@ in the simulation model or past states of the variable itself.</p></li>
 </ul>
 <p>The <code>t0_root_nodes</code> and <code>t0_child_nodes</code>
 arguments are specified using a <code>DAG</code> object and calls to the
-<code>node</code> function as usual when using the
-<code>sim_from_dag</code> function. In fact, they are simply passed to
+<code>node()</code> function as usual when using the
+<code>sim_from_dag()</code> function. In fact, they are simply passed to
 it under the hood. Their role in the data generation process is only to
 obtain the initial data set we need for <span class="math inline">\(t =
-0\)</span>. It would be equivalent to call the <code>sim_from_dag</code>
-function manually and then pass the output to the <code>t0_data</code>
-argument. We therefore won’t go into more detail here. More information
-about how to correctly specify this DAG can be found in the
-documentation of the <code>sim_from_dag</code> and <code>node</code>
-functions or the associated vignette.</p>
+0\)</span>. It would be equivalent to call the
+<code>sim_from_dag()</code> function manually and then pass the output
+to the <code>t0_data</code> argument. We therefore won’t go into more
+detail here. More information about how to correctly specify this DAG
+can be found in the documentation of the <code>sim_from_dag()</code> and
+<code>node()</code> functions or the associated vignette.</p>
 </div>
 <div id="a-simple-example---one-terminal-event" class="section level1">
 <h1>A Simple Example - One Terminal Event</h1>
@@ -449,7 +456,7 @@ generate data according to the following causal DAG:</p>
 A small DAG with time-varying age
 </p>
 </div>
-<p>Here, <code>sex</code> is a time-invariant variables, whereas
+<p>Here, <code>sex</code> is a time-invariant variable, whereas
 <code>age</code> and <code>death</code> are not. Suppose that each tick
 of the simulation corresponds to a duration of one year. Then,
 naturally, people will age one year on every simulation tick. We assume
@@ -457,42 +464,42 @@ that <code>sex</code> and <code>age</code> have a direct causal effect
 on the probability of death, regardless of the time. Once people are
 dead, they stay dead (no reincarnation allowed).</p>
 <p>If we want to use this structure in the
-<code>sim_discrete_time</code> function, we first have to generate an
+<code>sim_discrete_time()</code> function, we first have to generate an
 initial dataset for the state of the population at <span class="math inline">\(t = 0\)</span> as described above. We do this by
 first specifying the <code>t0_root_nodes</code> as follows:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simDAG)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">30</span>, <span class="at">sd=</span><span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(simDAG)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">30</span>, <span class="at">sd=</span><span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p>We assume that <code>age</code> is normally distributed and that we
 have equal numbers of each <code>sex</code>. This information is enough
 to specify the data set at <span class="math inline">\(t = 0\)</span>.
 Now we only need to add additional time-dependent nodes using the
-<code>node_td</code> function and were ready. First, we define a
+<code>node_td()</code> function and we are ready. First, we define a
 function that increases the age of all individuals by 1 at each
 step:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>node_advance_age <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(data<span class="sc">$</span>age <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>node_advance_age <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="fu">return</span>(data<span class="sc">$</span>age <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>}</span></code></pre></div>
 <p>Next, we need to define a function that will return the probability
 of <code>death</code> for every individual at time <span class="math inline">\(t\)</span>, given their current <code>age</code>
 and their <code>sex</code>. We use a logistic regression model, but make
 it explicit for exemplary reasons:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>prob_death <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  score <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">10</span> <span class="sc">+</span> <span class="fl">0.15</span> <span class="sc">*</span> data<span class="sc">$</span>age <span class="sc">+</span> <span class="fl">0.25</span> <span class="sc">*</span> data<span class="sc">$</span>sex</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  prob <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>score))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(prob)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>prob_death <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  score <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">10</span> <span class="sc">+</span> <span class="fl">0.15</span> <span class="sc">*</span> data<span class="sc">$</span>age <span class="sc">+</span> <span class="fl">0.25</span> <span class="sc">*</span> data<span class="sc">$</span>sex</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  prob <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>score))</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">return</span>(prob)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>}</span></code></pre></div>
 <p>Now we can add those nodes to the <code>DAG</code> as follows:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;advance_age&quot;</span>, <span class="at">parents=</span><span class="st">&quot;age&quot;</span>) <span class="sc">+</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;sex&quot;</span>),</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">prob_fun=</span>prob_death, <span class="at">event_duration=</span><span class="cn">Inf</span>, <span class="at">save_past_events=</span><span class="cn">TRUE</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">check_inputs=</span><span class="cn">FALSE</span>)</span></code></pre></div>
-<p>We simply pass the <code>node_advance_age</code> function to the
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;advance_age&quot;</span>, <span class="at">parents=</span><span class="st">&quot;age&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;sex&quot;</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>          <span class="at">prob_fun=</span>prob_death, <span class="at">event_duration=</span><span class="cn">Inf</span>, <span class="at">save_past_events=</span><span class="cn">TRUE</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>          <span class="at">check_inputs=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p>We simply pass the <code>node_advance_age()</code> function to the
 <code>type</code> argument of the <code>age</code> node.
 <code>death</code> is a <em>time-to-event</em> node, because it’s an
 event which is generated from a probability at each step in time. That
@@ -501,35 +508,32 @@ probability, as defined here, is determined by the
 <code>event_duration</code> to <code>Inf</code> to make this a permanent
 event (once you are dead, there is no going back).</p>
 <p>To visualize the resulting DAG, we can use the associated
-<code>plot</code> method:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dag)</span></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<code>plot()</code> method:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">plot</span>(dag)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 <p>To finally generate the desired data, we simply call the
-<code>sim_discrete_time</code> function:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">43</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(<span class="at">n_sim=</span><span class="dv">10</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">dag=</span>dag,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">max_t=</span><span class="dv">50</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">check_inputs=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<code>sim_discrete_time()</code> function:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">43</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(<span class="at">n_sim=</span><span class="dv">10</span>, <span class="at">dag=</span>dag, <span class="at">max_t=</span><span class="dv">50</span>, <span class="at">check_inputs=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <p>By setting <code>max_t=50</code>, we are letting this simulation run
 for 50 (simulated) years. The results look like this:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         age   sex death_event death_time .id</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1: 79.81243  TRUE        TRUE         27   1</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2: 72.12698  TRUE        TRUE         13   2</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3: 77.57016 FALSE        TRUE         31   3</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4: 82.32593 FALSE        TRUE         16   4</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5: 75.47951 FALSE        TRUE         17   5</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6: 78.61284 FALSE        TRUE          9   6</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt;         age   sex death_event death_time .id</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; 1: 79.81243  TRUE        TRUE         27   1</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; 2: 72.12698  TRUE        TRUE         13   2</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; 3: 77.57016 FALSE        TRUE         31   3</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; 4: 82.32593 FALSE        TRUE         16   4</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 5: 75.47951 FALSE        TRUE         17   5</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 6: 78.61284 FALSE        TRUE          9   6</span></span></code></pre></div>
 <p>It is easy to see that all people died over the course of those 50
 years by looking at the <code>death_event</code> column. The
 <code>death_time</code> column records the time at which each person
 died.</p>
 <p>If we want to graphically display a flow diagram of the
-data-generation mechanism, we may use the <code>plot</code> method
-associated with the output of the <code>sim_discrete_time</code>
+data-generation mechanism, we may use the <code>plot()</code> method
+associated with the output of the <code>sim_discrete_time()</code>
 function like this:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sim_dat)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">plot</span>(sim_dat)</span></code></pre></div>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 <p>This particular example could be simulated in a much easier fashion,
 without relying on a discrete-time approach, because <code>age</code>
@@ -543,71 +547,71 @@ little bit, but we will still keep it relatively simple.</p>
 <p>Suppose that the event of interest wasn’t <code>death</code>, but a
 cardiovascular event (<code>cve</code>). For the case of simplicity we
 will assume that the same causal structure and causal coefficients from
-above still apply, but that the event is now no longer terminal and my
-reoccur arbitrary number of times. First, let’s redefine the nodes to
-get the new name right:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">30</span>, <span class="at">sd=</span><span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>)</span></code></pre></div>
+above still apply, but that the event is now no longer terminal and may
+re-occur an arbitrary number of times. First, let’s redefine the nodes
+to get the new name right:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">30</span>, <span class="at">sd=</span><span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p>We also redefine the function that generates the required event
 probabilities:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>prob_cve <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  score <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">15</span> <span class="sc">+</span> <span class="fl">0.15</span> <span class="sc">*</span> data<span class="sc">$</span>age <span class="sc">+</span> <span class="fl">0.25</span> <span class="sc">*</span> data<span class="sc">$</span>sex</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  prob <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>score))</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(prob)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>prob_cve <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  score <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">15</span> <span class="sc">+</span> <span class="fl">0.15</span> <span class="sc">*</span> data<span class="sc">$</span>age <span class="sc">+</span> <span class="fl">0.25</span> <span class="sc">*</span> data<span class="sc">$</span>sex</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  prob <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>score))</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">return</span>(prob)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>}</span></code></pre></div>
 <p>Now, all we have to do in this case is change some arguments of the
-<code>node_time_to_event</code> function:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;advance_age&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;cve&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;sex&quot;</span>),</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">prob_fun=</span>prob_cve, <span class="at">event_duration=</span><span class="dv">1</span>, <span class="at">save_past_events=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<code>node_time_to_event()</code> function:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;advance_age&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;cve&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;sex&quot;</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>          <span class="at">prob_fun=</span>prob_cve, <span class="at">event_duration=</span><span class="dv">1</span>, <span class="at">save_past_events=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Apart from changing the node name, we also changed the
 <code>event_duration</code> parameter to 1, meaning that a
 cardiovascular event only lasts 1 year. We also set
 <code>save_past_events</code> to <code>TRUE</code> in order to store the
 possible recurrent events. Now we call the
-<code>sim_discrete_time</code> function as before:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(<span class="at">n_sim=</span><span class="dv">10</span>,</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">dag=</span>dag,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">max_t=</span><span class="dv">50</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         age   sex cve_event cve_time .id</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1: 82.67833  TRUE     FALSE       NA   1</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2: 90.30020 FALSE      TRUE       50   2</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3: 88.25512  TRUE     FALSE       NA   3</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4: 90.28344 FALSE     FALSE       NA   4</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5: 79.90450  TRUE     FALSE       NA   5</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6: 81.70720  TRUE     FALSE       NA   6</span></span></code></pre></div>
+<code>sim_discrete_time()</code> function as before:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(<span class="at">n_sim=</span><span class="dv">10</span>,</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                             <span class="at">dag=</span>dag,</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>                             <span class="at">max_t=</span><span class="dv">50</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data)</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt;         age   sex cve_event cve_time .id</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; 1: 82.67833  TRUE     FALSE       NA   1</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; 2: 90.30020 FALSE      TRUE       50   2</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; 3: 88.25512  TRUE     FALSE       NA   3</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; 4: 90.28344 FALSE     FALSE       NA   4</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; 5: 79.90450  TRUE     FALSE       NA   5</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; 6: 81.70720  TRUE     FALSE       NA   6</span></span></code></pre></div>
 <p>In this case, the data is a little more complex. At time <span class="math inline">\(t = 50\)</span>, only one person is currently
 experiencing a cardiovascular event, which is why the
 <code>cve_event</code> column is <code>FALSE</code> in almost all rows
 and the <code>cve_time</code> column is <code>NA</code> in almost all
 rows. We need to transform this output data into different formats using
-the <code>sim2data</code> function to gain more information.</p>
+the <code>sim2data()</code> function to gain more information.</p>
 <p>For example, we can transform it into the start-stop format:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>d_start_stop <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim_dat, <span class="at">to=</span><span class="st">&quot;start_stop&quot;</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_start_stop)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    .id start stop   cve      age   sex</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1:   1     1   50 FALSE 82.67833  TRUE</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2:   2     1   43 FALSE 90.30020 FALSE</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3:   2    44   44  TRUE 90.30020 FALSE</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4:   2    45   49 FALSE 90.30020 FALSE</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5:   2    50   50  TRUE 90.30020 FALSE</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6:   3     1   50 FALSE 88.25512  TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>d_start_stop <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim_dat, <span class="at">to=</span><span class="st">&quot;start_stop&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">head</span>(d_start_stop)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt;    .id start stop   cve      age   sex</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; 1:   1     1   50 FALSE 82.67833  TRUE</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; 2:   2     1   43 FALSE 90.30020 FALSE</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; 3:   2    44   44  TRUE 90.30020 FALSE</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; 4:   2    45   49 FALSE 90.30020 FALSE</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; 5:   2    50   50  TRUE 90.30020 FALSE</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; 6:   3     1   50 FALSE 88.25512  TRUE</span></span></code></pre></div>
 <p>In this format, we can clearly see when the events occurred. This
 type of format is usually used to fit statistical models for
 time-to-event data. Another possibility is to transform it into the
 long-format:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>d_long <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim_dat, <span class="at">to=</span><span class="st">&quot;long&quot;</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_long)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    .id .time   cve      age  sex</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1:   1     1 FALSE 82.67833 TRUE</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2:   1     2 FALSE 82.67833 TRUE</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3:   1     3 FALSE 82.67833 TRUE</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4:   1     4 FALSE 82.67833 TRUE</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5:   1     5 FALSE 82.67833 TRUE</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6:   1     6 FALSE 82.67833 TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>d_long <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim_dat, <span class="at">to=</span><span class="st">&quot;long&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">head</span>(d_long)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt;    .id .time   cve      age  sex</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; 1:   1     1 FALSE 82.67833 TRUE</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; 2:   1     2 FALSE 82.67833 TRUE</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; 3:   1     3 FALSE 82.67833 TRUE</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; 4:   1     4 FALSE 82.67833 TRUE</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; 5:   1     5 FALSE 82.67833 TRUE</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt; 6:   1     6 FALSE 82.67833 TRUE</span></span></code></pre></div>
 <p>This may also be useful to fit discrete-time survival models.</p>
 <p>The simulation done here assumes that the time and number of previous
 events has no effect on any further events of the patient. This

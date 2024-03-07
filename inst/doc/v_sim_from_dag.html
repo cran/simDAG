@@ -30,23 +30,23 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -64,55 +64,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -121,13 +120,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -338,7 +344,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>In this small vignette, we introduce the <code>sim_from_dag</code>
+<p>In this small vignette, we introduce the <code>sim_from_dag()</code>
 function, which can be used to simulate complex data from arbitrary
 causal directed acyclic graphs (DAGs). The simulated data may include
 continuous, binary, categorical, count or time-to-event variables. This
@@ -398,7 +404,7 @@ between each node and its parents.</p>
 </div>
 <div id="defining-the-dag" class="section level1">
 <h1>Defining the DAG</h1>
-<p>Because the <code>sim_from_dag</code> function uses the method
+<p>Because the <code>sim_from_dag()</code> function uses the method
 described above, it requires information about the causal structure and
 the exact form of the relationship between child nodes and their
 parents. All of this information has to be included in the
@@ -411,11 +417,11 @@ useful when the interest is in getting a toy data set resembling real
 data as closely as possible).</p>
 <p>Regardless of which strategy you want to use, first you have to
 initialize an empty <code>DAG</code> object like this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simDAG)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(simDAG)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>()</span></code></pre></div>
 <p>Afterwards you can add an unlimited amount of root nodes and child
 nodes to it. Multiple different types are implemented.</p>
 <div id="root-node-types" class="section level2">
@@ -458,7 +464,7 @@ collection of nodes covers a lot of data types, it is still a somewhat
 limited collection. If, for example, we wanted to add a child node that
 is normally distributed but also truncated at specific values, we could
 not do this using just the offered node functions. For this reason, the
-<code>sim_from_dag</code> function also allows the user to use custom
+<code>sim_from_dag()</code> function also allows the user to use custom
 functions as nodes, which makes it possible to model any kind of data
 and any kind of relationship.</p>
 </div>
@@ -470,36 +476,37 @@ figure above stands for <code>age</code>, <span class="math inline">\(B\)</span>
 <code>death</code>. We have to start by defining what the root nodes
 should look like. We use the following code to define <code>age</code>
 and <code>sex</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> dag <span class="sc">+</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">50</span>, <span class="at">sd=</span><span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> dag <span class="sc">+</span> </span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">50</span>, <span class="at">sd=</span><span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p>All nodes are defined by calling the <code>node()</code> function and
 adding the output to the <code>dag</code> object using a simple
 <code>+</code>. This syntax is heavily inspired by the
-<code>simcausal</code> R-package (Sofrygin et al. 2017). Here, we assume
+<code>simCausal</code> R-package (Sofrygin et al. 2017). Here, we assume
 that <code>age</code> is a continuous normally distributed variable with
 a mean of 50 and a standard deviation of 4 (If this was a real
 simulation study we would probably use a truncated normal distribution
 to ensure that age is not negative). This can be done by setting the
-<code>dist</code> parameter to <code>rnorm</code>, which is the standard
-R function for generating random values from a normal distribution. All
-arguments listed in the <code>params</code> parameter will be passed to
-this function. Similarly, we define <code>sex</code> to be a Bernoulli
-distributed variable (taking only the values 0/1). We assume that there
-is an even gender distribution by setting <code>p = 0.5</code>.</p>
+<code>dist</code> parameter to <code>&quot;rnorm&quot;</code>, which is the
+standard R function for generating random values from a normal
+distribution. All arguments listed in the <code>params</code> parameter
+will be passed to this function. Similarly, we define <code>sex</code>
+to be a Bernoulli distributed variable (taking only the values 0/1). We
+assume that there is an even gender distribution by setting
+<code>p = 0.5</code>.</p>
 <p>Next, we have to define what the relationship between the child nodes
 and their parents should look like. We may use the following code:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;bmi&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;age&quot;</span>), <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">1.1</span>, <span class="fl">0.4</span>),</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">intercept=</span><span class="dv">12</span>, <span class="at">error=</span><span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;bmi&quot;</span>), <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>),</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">intercept=</span><span class="sc">-</span><span class="dv">15</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;bmi&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;age&quot;</span>), <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">1.1</span>, <span class="fl">0.4</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>       <span class="at">intercept=</span><span class="dv">12</span>, <span class="at">error=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;bmi&quot;</span>), <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>       <span class="at">intercept=</span><span class="sc">-</span><span class="dv">15</span>)</span></code></pre></div>
 <p>Since the <code>bmi</code> node is dependent on both <code>sex</code>
 and <code>age</code>, we have to list both of these nodes as the parents
 of <code>bmi</code>. We then specify that the <code>bmi</code> should be
 a continuous variable modeled using a linear regression by setting
 <code>type=&quot;gaussian&quot;</code>. The concrete regression equation is
-defined through the use of the <code>interecept</code>,
+defined through the use of the <code>intercept</code>,
 <code>betas</code> and <code>error</code> arguments. Our specification
 for the <code>bmi</code> node corresponds to the following equation:</p>
 <p><span class="math display">\[
@@ -517,91 +524,91 @@ described by the code above is then:</p>
 logit(death) = -15 + age \cdot 0.1 + bmi \cdot 0.3.
 \]</span></p>
 <p>To check whether we got the causal relationships right, we can call
-the <code>plot</code> function on the DAG object. The output should look
-very similar to the hand-drawn DAG above.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dag)</span></code></pre></div>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAJACAMAAABlpiR1AAAAtFBMVEUAAAAAABgAACwAGxgAGywAGz0AME04AAA4ABg4GwA4Gxg4Gyw4MCw4MD04ME04Q004Q15jAABjGwBjGxhjMD1jQ01jVE1jVF5jVG2MGwCMMACMMBiMQ02MVCyMVD2MVF6MZW2xMACxMBixQxixQyyxQz2xVD2xVF6xZV6xZW2xdm3VQxjVVCzVVD3VZT3VZU3VZW3Vdk3Vdl7Vdm34VCz4ZT34ZU34ZV74dk34dl74dm3///+0XGGVAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAW0UlEQVR4nO3daWMTV5aA4XKC8QCN28AwmE53CAzTg1mSdNsslv7//2rVJpWW2m7d5Zxz3/dLbCHbpVNPbkklWyrWRIIrUm8A0VAAJdEBlEQHUBIdQEl0ACXRAZREB1ASHUBJdAAl0QGURAdQEh1ASXQAJdEBlEQHUBIdQEl0ACXRAZREB1ASHUBJdAAl0QGURAdQEh1ASXQApaUVp/L2zX19I8qxyuLqVL6QApRc68XpEylAyakxnL6MApTmN1HnFumSH+VtoymXZuls11HnH+ZzyymD5vOsjbr+OK8bT+Zz47lyPtADlKY3776nF6IApckt4ulIFKA0taU8nYQClKa1ePlsiM79sUFuDJnLk8/ZiyhAaUq+eM4WClCakEefq3mHeYDSeH59zlpDAUqjefY5SyhAaSzvPucc5AFKI3l7/L4ndCo8gNJwQXxOFwpQGi6Mz8lHeYDSYKF8ThUKUBoqnE+A0vIC3QGdIRSgNFBIn9OEApT6C+sToLSwwECnCAUo9RbaJ0BpUcGBThAKUOorvE+A0oJiAB31B1DqKwLQ8SUUoNRTDJ8AJeeiAB0VClDqCaAkuaBPwwOUlhbHJ0DJMYCS6CIBHRMKUDrdINDv7x+Xrz7/+OWf7SX37x+VF7y6LT/58Wzz8flt+9FDgJL3hoB+vmjfDunsVX3J1/aSs9/KT+/KD682H7zd/PenjwAl7w0Aveu8YVcNcuuzveBt/VF1zeshnwAltwaAlvrKY/m3583xuzqQX96u7t/tHdrP/zV6gAcoOdYP9P51e9j++l9P39w2S+rDrd3rvVV2+AAPUHJsGGhxtnt81GF5QHX8AA9QcmzgEP+pubf59ENH7K7qGN9eOHKAByg5NgB0B/LsslxHqzuch0DrB05jB3iAkmOD50E/P+qeZzoA2qCs19krgFKQRp5Juv/yy0V7WqkEWp9d6vR1+88ApQBNearzy0W9Ru4eJO0At3cDmgO+o0+AUk8DQL//34sH9WH8bQ300zHE6imkf4wf5AFKjvUKrU5xnt9sVsnqKc/r5k7og80lvz9/8vLD9jpX9bmmwRNNACXH+pfQ9hTn7jxS98nPrdjNmlr9d/CRPEDJsYEz9e92Gi/rI/vBr4+8bR8eVQ+VBs6Fjv7dMUCpp6FHSc2v2/389GaLtrrk7Mn2qc/mvuen4YM8f9VJzvF38SQ6XlmERMdrM5Hswr/8IkBpQbw+KMmOV1gm0fEa9SQ73uWDRMf7JJHseKc5kh3v1Umy492OSXS8XzzJLojQqT4BSqMFADqdHUBpNO9CJ6+fAKUpeRY6wydAaUpe74fO8QlQmpRHoPPIAZQm5W0NnbV+ApSm5knoXHAApal5EDpz+VwDlGa0eBGd7xOgNKNiEVEHngCl8faMOAt14glQGq3Yp+W2ijryBCiNVRzZmi/UmSdAabji2Od67iq6gCdAabDTPpt/mYZzEU+A0lDDuooxpIt1rgFKA437ql8StMemF1sApb4mEyuO87cR3r4TGcsnM/ckbANJTIZPgNLphPgEKJ3K693IRQnZDBKVHJ8ApePk8AQoHSfJJ0DpMFE+AUoHyfIJUNpPmE+AUjdBD9+bhG0OJU2eT4DSLnk8AUq7JPoEKLWJ9AlQapLpE6BUJ9QnQKlKqk+A0lrk6aU2qdtFERPsE6Ak9/BeJnjTKE6ifQI0+2T7BGjuCfcJ0MyT7hOgeSfeJ0BzTvLppTbxG0jB0uAToPmmgSdA802HT4DmmhKfAM00LT4BmmdqfAI0x1Q8fG9Ss6HkLU0+AZpfmngCNL90+QRobinzCdDM0uYToHmlzidAs0qfT4BmlKrTS236tpgcU+kToNmkkidAs0mpT4BmklafAM0jtT4BmkV6fQI0g3Q+fG/Su+U0MdU+AWo+1TwBaj7lPgFqPO0+AWo79T4Bajr9PgFqOQM+AWo33aeX2gzcBDqZDZ8AtZoNngC1mhWfALWZGZ8ANZkdnwC1mCGfADWYJZ8ANZeR00ttlm4Lrc35BKixjPEEqLHM+QSoqez5BKilDPoEqKEs+gSomaw9fG+yeJuyzKhPgBrJKE+AGsmsT4CayK5PgFrIsE+AGsiyT4Dqz7RPgGrP6umlNtM3LoOs+wSo7qzzBKju7PsEqOYy8AlQxeXgE6B6y8InQLVm/uF7UxY30mC5+ASoznLhCVCd5eMToBrLyCdAFZaTT4DqKyufAFVXXj4BqqxsTi+15XVr1ZedT4CqKjueAFVVhj4BqqgcfQJUT1n6BKia8vQJUC1l6hOgOsrv9FJbpjdbWfn6BKiG8uUJUA3l7BOg8svaJ0DFl7dPgEovc58AlV3GD9+bMr/5QmtV4hOgImtcwhOgMqtXTnyuASqyoi31hgiIGQSuOG7y10TYPPExhICVyFbHjeHDZyemEKaiB+ee0qGvRWgdQwjRCM4O0p6vRmgbM/DeRJ29RGfdXTUfI/DcHJ6njQK0GyPw2lydp4jisxsz8JgTz9ro3nfB5i4G4S9nntUqmnrrhcZcPDX7vidEJ8VU/LSUZ0U09Y2QGEPxkgeeKxbRUzESH/nxyRp6IkbiIV8+WUOPYyCL83H3E6F9MY+lefW54jB/EONYmG+fCN2PaSzMu0+E7sUwFuV//VxxP3QvZrGoED5ZQrsxiyWF8YnQToxiQUEO8Ajdi0ksKJhPhG5jEO4F9MkDpTbm4FxInyyhbczBubBAEVrHGFwL9wgJoJ0Yg2uBfSK0jik4FnoBBWgdU3AsuE+EVjEEt8IvoACtYghuRfAJ0DKG4FYMoAhdA9SxGEd4gJYxA6f6ff54VhRnv00D+PWiKH76CNChmIFTAI0VM3AqDlCEAtQxP0BHY+8A1KmBh0gA9RsjcAmg0WIELo0C/f5uc/fyyZvqkruiKK5Wnx9tLn95u1p9eb754PK2/Bfug47HCFwaA/rrRf0yyZXDEuhfX9cXnP/7Xf3Bg48AnRQjcGkE6K6HDdDjHgJ0UozApVGg5zerb+WiWd4brYCevakvKIpXq/vygxImQMdjBC6NAT0vD+2Vw4cN0Ot2Kb1qPgDotBiBS2NAr6sPP9VUW46Vx+oBfvsBQMdjBC5NO83U+Ltrl9Stx/Y6AB2PEbg0ArRBB1APMQKXWEGjxQicmvRcPEA9xAicGgZaPVTfe5AEUNcYgVMjQCt11Wmmq9UCoLxAE0AdGwFaPDg4Ue8INPXNFBAzcGoMaFt7Wh6grjEDt3qFlvjO/7fjE6CLYgZuDQO9/ePFRuWTm9UioOybNUBd45VFIsUQHANonBiCY+GBsmvKmIJrvPxilJiCa6GBsmeqGINzvAR4jBjDvIrd04+8y0eMmMOMmtPv209D+mTH1DGHqR3orC4KCDTVzZQWg5jUCZ1r3qszRkxivNM6q3/BZ+gYxUj9OtfBllDugO5iFEMN6qyuEAZovFsoPmbR26jO+kr4DBrDON0knfUV8RkypnGiyTqrK+MzZIzjsFk6qy/w65M9shfj2Gu2zvqLPPoMc7v0xkB2Oemsv9AXT3bHYUykyVln/dX4DBQjKVums/4OHnx6uz2GYigedNbfheUzRLlPxY/O5lvh039Zj8WjzubbwdN3+Q7Gs87mm8LTc5mOJojO5hvD02c5DieYzvbbz9KZ4x6YUXbjCayz/Rksnp7Ka0IxdG5/0vjamdfw3cpoRvF0dn5er82MBr+oXOYUW+fBz90v+lYoLoth4UJv9vcaOlVnfMehU3uW9106nfwv4S2zk0y5drJo+8vmINMe2blX4TGDg0x8v5O7vV7zN0gZ5/uS8+Bcp988/aru6edMYu8qATY4Ge+5xYPsfT4v9nPOImDwbJHvlg1yVOcOqaftHdgQCSp4PtN30f6SMeAuEyQCoL5zn6OQXx2XxgGgfnN+pQKXv77xvtskWgCo19zmuODPFz1uukwImy0SuV1Kc5njoj8A97TrhOpcN8/Di9wylc0fpICX0JCrc72Wul1amz3N5C9CJFnnmrXTd3PHmfhl3ITrZAH13rxxpn0hTPE61yyg3psJ1JPP1fzDvAada4B6b848vb6hxaw9qUQnR3j/zXmzAM/vZzH1R6vRuWYB9d/0gUZ6Q6ADipp0soAGaAZQ3z5PCt3TqEvnmgU0QNOPs/59nrgf2gGpTucaoAGaONFIb+u7RalRJ0f4EE0FGsTn0UG+6Ob/xoZO4zZLb9pIQ/k8EKpaJwtokFID7QrVzZMFNEiTZhrQZ+duqPL1E6BBmjLTkD47S6ju+58c4cOUHuhWqH6gqbfAYhOGGtjn3uMkxUB1brX4BAA9da4pzI0NmsqNlt/4VAOdo+8HqjSABmkC0NA+bQjVuezLb3Sq4RdQK0BTb4HNxoGG92kBKAtooEQANSAUn4Eam2uMIzxAqbdRoCdBfb0oip8+zkP441lRnP1mFChH+FBFAHr/+TIDoKm3wGrBgd6/vygejgFVLxSgoQoO9NPm6GceKEf4YI0MtuchEkD3w2ewAOohFtBwzQT65cVG2eWfHaD37x9t9s/jV7fNNe6/vNj8Y3H25E3Ls+phA7S8S1r8/Moa0NRbYLdZQO/f1drOft0CLanWl9WL44/n29/pvLw9Bvprc/XzW4DSlGYBfdv9neIK6NZnI/T+decaV0dA9/7NDFCO8AGbA7TSeH6z+va6BVqh26yU1dJarop3pdTNwf3bs/au59590OrK1b8dLKGq9zA+AzYH6NsWVrVOlkDvWn3Vv11v/vvt/aOr1mV13X2g1Ud3xdFDLM27mAU0ZDOAViyvV11ib/cuedi58t1poNftSmwKaOotsNwMoJ3zRA2xvXucncP293/+cnESaP3lAKXJLQK6/7inBvm9Ou20+9w8UI7wQfMJtET37hBsBkBTb4HpZjwXfxro/pND1Wmls7/8/cPp+6AGgbKAhm0G0OoeZ33+8vhB0uFVMgKaegtsN+e3mbanjranmbaXHC2yp08z9QFVvJcVb7qK5gDtOVH/4Ga1+v35k5cfms8316ifE90CffBx9ecw0Ci3NUQc4QM36/dBt09ctkCrI/m264FrnN9aBZp6C4w37686W39/fd0S+7x9Mv7s1arzXPzl35q7p80lRoGygIZu5p8df3ux2SVPPty/7vy63eOi+u26+q7o/edHm8+e3uyeWrp/V/6C3eUQUL07GZ+h45VFFgXQ0PHaTEviCB88CUD17mR8Bk/g64PqiQU0fAKA6t3J+AyfoNeo1xdAw5ceqN6dzBE+QoLeJ0ldijddT9NmHOed5pTFAhqj1EAV72N8xmjikCO927GqABqjqUDjvF+8pjjCR2nqkIMIVb2LVW+8nqZPOYBQ1bsYoFGaAdS7UNV7mCN8nGZM2bdQ3TsYn3GaM2a/QHXvYBbQSM0as881VPn+xWek5s3Zm1D1+1f9DdDS3Dn7Eap+93KEj9XsOftYRPXvXHzGav6gFwvt7tzun9F7vFWh07W1qnMZ9CKi+/tWLdDUW5BNbpN2J3r483QK1bStynOdtJvQ4x2r1KeijVWe86SL+avoyd2q0CcLaMSWjHoW0T6CKn1q2lrlLRt1MXEdHdqlGoGm3oKMWjzrUaNj+vQtoZq2VX1eZt2LdJK86jqKiOrZUgt5m3Vxqqlf2Xy9r20Jm5bttJGEYTfboESoks20kqRh61hENWyjoURNW4VQBZtoKWHTli9U/hbaStq0xS+iwjfPXOLGLVyo7K0zmMBxizYgedtMJnHekhdRuVtmNJHzlitU7IaZTei8pUIQulmGkzpwmYuoyI2yndiBixQqcJOsJ3jiAoXK2yLzSZ64OKHiNiiDRE9c2mFe1tbkkeyRyxIqamNySfrIJaEQtCn5JH7mghZRMRuSU/JnLkaolO3IKw0zFyJDxlbkloqhy1hEJWxDfukYugShAjYhx7QMPT2P5BuQZ2qmnnoRTf9/SJ7pmXpiofhMk6axJxUK0DSpGntCoRzhE6Vr7OkO8/hMlLK5pxLKApoqdXNPQwWfqdI3+CSLKEBTpXDwCYRyhE+WysFH94LPZOmcfORFlAU0XUonH1coPtOldvQxhQI0XXpHH28R5QifMMWjjyYUnwlTPfs4QllAU6Z79lEWUXymTPnwYwgFaMrUDz+4UI7wSdM//NCA8Jk0A9MPe5hnAU2bhekHFYrPtNkYf0ChAE2bkfEHW0Q5wifOyvhDCcVn4uzMP4hQFtDUGZp/iEUUn6mztAMCCAVo6mztAO9CAZo6Yzsg9UuMke+s7U6EGsve3kSoqQzuzLmLaHGiUNtGc7O4K6YLqzWujkKpmGzuhUm6TtI8YBp+U2k4o7tgzNbphfP0Uhppk+lkVsc/KGsazh3SiNtNB5kdfr/QeTwhmjbDoz8tdD5PiKbM8uBPLKJuPCGaLtNjPxQ68ZFRn1DTs5Ka8aHv+3TX2RhNdTMyLp+ZL1k9d6to6luRXdlM3IdPhMYvl4F74VkRTX1LMiuTeXvzidDI5TFujz4RGrcspu3VJ0KjlsGw/Tw82hOawdSklMGovftkDY2Y/VEH8InQeJmfdBCfCI2W9UEH8onQWBmfs/8HSFugxicnJeNjDuaTJTRStscc0CdC42R7ygBVn+kpB/WJ0ChZHnJgnwiNkeUZA9RAhmcc7hTTFqjh6UnJ8IiD+2QJjZDhEQPUQnZHHMEnQsNnd8IANZHdCQPURGYnHMUnQoNndsAAtZHZAQPURmYHDFAbmR0wQG1kdsAAtZHVAQ/6vP/y4qIoirMnb9pL/nix+fzpzf3rovjpY32d9482Fz1+dYvQpFmd7xDQH8+3b9h1Wft7V3929j9boF8vmmuc/QbQlFmd7wDQcpncdlVe8qn7JnMV0K3PUaFWByglq/MdAHpXqtsc3L8923zwsNV4frP69roF+uNZvbrel0vr+eBR3uoApWR1vkOH+G/vH20XzlJf+996bS2B3jV0V6u3m4+uAZouq/Od8iD+roZZsbzaXlIC3bHcUQVokqzOdxTo93/+clEDLY/nzR3N8mC/Abp3L3XkGG91gFIyO98hod+rU0gtvg7Q8sMN0Oou6DSgZucnJbMDHgD6bh/fKNDmzChAU2R2wP1Aq5NKZ3/5+4e7vkN855KxzM5PSmYH3At095hoyoMkgCbO7IB7ge6Wx/7TTNtLAJo6swMeBFqelq9OwlcMe07UP7hZrX5//uTlB4AmzO6Ae4UeP7F5fMld95KBg73d8UnJ7oSH74SWXf6t1df+ssivF+1j9s/bJ+PPXrGAJszuhPsfxt9/frRx9/Sm8zTRlxebSy7//HrR+XW7x0X1G3k8E580wxN2+JXlDtBJGZ6elAyPeDLQTz//9//X6+Td5EfvAI2U4RFPBlo9IipPhP7xbHtGFKBCsjziqUL3ntnkCC8ryzOevIRO//15gMbO9IwnC939Fd2MO6D4jJHtIfMuH+qzPWWAqs/4lHmnOe0ZHzPv1ak962Pm3Y6VZ37OvF+87uwPOohQ+2OTUgaTDiA0g6lJKYNR+3+gxAOkeGUxas9Cs5iZlPIYtleheYxMSnlM2+dRnuN71HKZtjehuQxMStnM288iyvIZu3wG7kMoPqOX08QXC81pWFLKaubFklW0YPlMUWZDdxcKzzRlN3Y3ovBMVX6DdzjOc3RPV5aTn0cUnSnLdPjFxHW0YPFMXMbjHzUKTgHlvQuKvpW0YOkUEnthXZwo9TZRG7uCRAdQEh1ASXQAJdEBlEQHUBIdQEl0ACXRAZREB1ASHUBJdAAl0QGURAdQEh1ASXQAJdEBlEQHUBIdQEl0ACXRAZREB1ASHUBJdAAl0QGURAdQEt1/ANZBl9LO1WstAAAAAElFTkSuQmCC" /><!-- --></p>
+the <code>plot()</code> function on the DAG object. The output should
+look very similar to the hand-drawn DAG above.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">plot</span>(dag)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
 <p>This is all correct. We can now use this <code>DAG</code> object to
-generate random data using the <code>sim_from_dag</code> function:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(<span class="at">dag=</span>dag, <span class="at">n_sim=</span><span class="dv">10000</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lade nötigen Namensraum: Rfast</span></span></code></pre></div>
+generate random data using the <code>sim_from_dag()</code> function:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(<span class="at">dag=</span>dag, <span class="at">n_sim=</span><span class="dv">10000</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; Lade nötigen Namensraum: Rfast</span></span></code></pre></div>
 <p>Setting a seed for the random number generator is necessary to obtain
 replicable results. The data generated using this code looks like
 this:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_dat, <span class="dv">5</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         age   sex      bmi death</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1: 55.48383  TRUE 33.25311 FALSE</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2: 47.74121 FALSE 29.58815 FALSE</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3: 51.45251 FALSE 30.12967 FALSE</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4: 52.53145  TRUE 32.07877 FALSE</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5: 51.61707 FALSE 36.09082  TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">head</span>(sim_dat, <span class="dv">5</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt;         age   sex      bmi death</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; 1: 55.48383  TRUE 33.25311 FALSE</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; 2: 47.74121 FALSE 29.58815 FALSE</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; 3: 51.45251 FALSE 30.12967 FALSE</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; 4: 52.53145  TRUE 32.07877 FALSE</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; 5: 51.61707 FALSE 36.09082  TRUE</span></span></code></pre></div>
 <p>Binary variables such as <code>sex</code> and <code>death</code> are
 by default treated as logical variables, because this is the most memory
 efficient way to store them. We can now check the distributions and
 relationships in this dataset to confirm that it indeed corresponds to
 our specified causal DAG. Starting with the root nodes:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sim_dat<span class="sc">$</span>age)</span></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(sim_dat<span class="sc">$</span>sex)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FALSE  TRUE </span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5051  4949</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">hist</span>(sim_dat<span class="sc">$</span>age)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">table</span>(sim_dat<span class="sc">$</span>sex)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; FALSE  TRUE </span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt;  5051  4949</span></span></code></pre></div>
 <p>This seems to be correct. Note that this is a finite dataset, which
 means that the results will never <em>exactly</em> match the theoretical
 distributions. But it’s definitely close enough here. To check if the
 child nodes were modeled correctly, we simply fit the corresponding
-models using the <code>glm</code> function:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mod_bmi <span class="ot">&lt;-</span> <span class="fu">glm</span>(bmi <span class="sc">~</span> age <span class="sc">+</span> sex, <span class="at">data=</span>sim_dat, <span class="at">family=</span><span class="st">&quot;gaussian&quot;</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_bmi)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; glm(formula = bmi ~ age + sex, family = &quot;gaussian&quot;, data = sim_dat)</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Deviance Residuals: </span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     Min       1Q   Median       3Q      Max  </span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -7.4923  -1.3951   0.0158   1.3831   8.0821  </span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (Intercept) 12.184254   0.253188   48.12   &lt;2e-16 ***</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; age          0.396020   0.005039   78.58   &lt;2e-16 ***</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sexTRUE      1.177159   0.040563   29.02   &lt;2e-16 ***</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (Dispersion parameter for gaussian family taken to be 4.112615)</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     Null deviance: 70134  on 9999  degrees of freedom</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Residual deviance: 41114  on 9997  degrees of freedom</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; AIC: 42524</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of Fisher Scoring iterations: 2</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mod_death <span class="ot">&lt;-</span> <span class="fu">glm</span>(death <span class="sc">~</span> age <span class="sc">+</span> bmi, <span class="at">data=</span>sim_dat, <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_death)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; glm(formula = death ~ age + bmi, family = &quot;binomial&quot;, data = sim_dat)</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Deviance Residuals: </span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     Min       1Q   Median       3Q      Max  </span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -2.4957  -0.9638  -0.5215   1.0239   2.5186  </span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;               Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (Intercept) -14.319144   0.371511  -38.54   &lt;2e-16 ***</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; age           0.093229   0.007057   13.21   &lt;2e-16 ***</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; bmi           0.289714   0.011331   25.57   &lt;2e-16 ***</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (Dispersion parameter for binomial family taken to be 1)</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     Null deviance: 13773  on 9999  degrees of freedom</span></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Residual deviance: 11805  on 9997  degrees of freedom</span></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; AIC: 11811</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of Fisher Scoring iterations: 3</span></span></code></pre></div>
+models using the <code>glm()</code> function:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>mod_bmi <span class="ot">&lt;-</span> <span class="fu">glm</span>(bmi <span class="sc">~</span> age <span class="sc">+</span> sex, <span class="at">data=</span>sim_dat, <span class="at">family=</span><span class="st">&quot;gaussian&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">summary</span>(mod_bmi)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; glm(formula = bmi ~ age + sex, family = &quot;gaussian&quot;, data = sim_dat)</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; Deviance Residuals: </span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt;     Min       1Q   Median       3Q      Max  </span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; -7.4923  -1.3951   0.0158   1.3831   8.0821  </span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; (Intercept) 12.184254   0.253188   48.12   &lt;2e-16 ***</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; age          0.396020   0.005039   78.58   &lt;2e-16 ***</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; sexTRUE      1.177159   0.040563   29.02   &lt;2e-16 ***</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&gt; (Dispersion parameter for gaussian family taken to be 4.112615)</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#&gt;     Null deviance: 70134  on 9999  degrees of freedom</span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; Residual deviance: 41114  on 9997  degrees of freedom</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="co">#&gt; AIC: 42524</span></span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="co">#&gt; Number of Fisher Scoring iterations: 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>mod_death <span class="ot">&lt;-</span> <span class="fu">glm</span>(death <span class="sc">~</span> age <span class="sc">+</span> bmi, <span class="at">data=</span>sim_dat, <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">summary</span>(mod_death)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; glm(formula = death ~ age + bmi, family = &quot;binomial&quot;, data = sim_dat)</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; Deviance Residuals: </span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;     Min       1Q   Median       3Q      Max  </span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; -2.4957  -0.9638  -0.5215   1.0239   2.5186  </span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt;               Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; (Intercept) -14.319144   0.371511  -38.54   &lt;2e-16 ***</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; age           0.093229   0.007057   13.21   &lt;2e-16 ***</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; bmi           0.289714   0.011331   25.57   &lt;2e-16 ***</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; (Dispersion parameter for binomial family taken to be 1)</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt;     Null deviance: 13773  on 9999  degrees of freedom</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; Residual deviance: 11805  on 9997  degrees of freedom</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; AIC: 11811</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt; Number of Fisher Scoring iterations: 3</span></span></code></pre></div>
 <p>Evidently, the coefficients do match the causal coefficients we
 specified earlier.</p>
 </div>
@@ -612,7 +619,7 @@ to base the values for the causal coefficients on that specific data
 set. This can be done by fitting a single model for each child node,
 extracting the estimated coefficients from the fitted models and putting
 those into an appropriate <code>DAG</code> object. If the assumed DAG is
-big, this can be a time-extensive task. The <code>dag_from_data</code>
+big, this can be a time-extensive task. The <code>dag_from_data()</code>
 function automates this process. This function takes a node list
 containing only minimal information about the causal structure and node
 type and outputs a fully specified <code>DAG</code> object.</p>
@@ -623,27 +630,27 @@ about the nature of the relationship between the nodes (e.g. we know or
 can reasonably guess the node type). Now all we have to do is create a
 partially specified <code>DAG</code> in accordance to these assumptions
 first:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>) <span class="sc">+</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>) <span class="sc">+</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;bmi&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;age&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;bmi&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;bmi&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;age&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;bmi&quot;</span>))</span></code></pre></div>
 <p>This looks a lot like the code used above, except that we are not
 explicitly defining the actual beta coefficients. We only define the
 causal structure and the node types. Now we can call the
-<code>dag_from_data</code> function:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>est_dag <span class="ot">&lt;-</span> <span class="fu">dag_from_data</span>(<span class="at">dag=</span>dag, <span class="at">data=</span>sim_dat)</span></code></pre></div>
+<code>dag_from_data()</code> function:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>est_dag <span class="ot">&lt;-</span> <span class="fu">dag_from_data</span>(<span class="at">dag=</span>dag, <span class="at">data=</span>sim_dat)</span></code></pre></div>
 <p>It returns an object that includes a fully specified
 <code>DAG</code>, which can be used directly in the
-<code>sim_from_dag</code> function:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sim_dat2 <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(<span class="at">dag=</span>est_dag<span class="sc">$</span>dag, <span class="at">n_sim=</span><span class="dv">10000</span>)</span></code></pre></div>
-<p>The <code>dag_from_data</code> function essentially just fits the
+<code>sim_from_dag()</code> function:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>sim_dat2 <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(<span class="at">dag=</span>est_dag<span class="sc">$</span>dag, <span class="at">n_sim=</span><span class="dv">10000</span>)</span></code></pre></div>
+<p>The <code>dag_from_data()</code> function essentially just fits the
 corresponding models one by one for each node and extracts the relevant
 data from the models to fill in the gaps in the empty nodes. If we set
 <code>return_models</code> to <code>TRUE</code> in the
-<code>dag_from_data</code> function call above, we can actually see that
-it used the exact same models we fit earlier to check if the simulation
-was valid.</p>
+<code>dag_from_data()</code> function call above, we can actually see
+that it used the exact same models we fit earlier to check if the
+simulation was valid.</p>
 </div>
 </div>
 <div id="time-varying-covariates" class="section level1">
@@ -651,7 +658,7 @@ was valid.</p>
 <p>Most real data sets include time-varying covariates, e.g. variables
 that are measured at multiple points in time that are subject to
 changes. It is possible to generate this type of data using the
-<code>sim_from_dag</code> function as well. All we need to do is to
+<code>sim_from_dag()</code> function as well. All we need to do is to
 define an appropriate <code>DAG</code> that directly specifies how the
 variables change over time. For example, we can extend the simple
 <code>DAG</code> from above to include a dimension of time:</p>
@@ -664,33 +671,33 @@ A small DAG with four nodes
 <p>Here, nodes <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are time-constant variables that only
 have a causal effect on the initial state of <span class="math inline">\(C\)</span> and <span class="math inline">\(D\)</span>, while nodes <span class="math inline">\(C\)</span> and <span class="math inline">\(D\)</span> change over time interdependently. If
 we want to simulate data from a DAG that looks like this using the
-<code>sim_from_dag</code> function, we have to add a node to the for
+<code>sim_from_dag()</code> function, we have to add a node to the for
 every point in time that we want to consider.</p>
 <p>We will quickly go through a somewhat simpler example, considering
 only 2 points in time. We define our nodes in the following way:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">50</span>, <span class="at">sd=</span><span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;bmi_t1&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">1.1</span>, <span class="fl">0.4</span>), <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;age&quot;</span>),</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">intercept=</span><span class="dv">12</span>, <span class="at">error=</span><span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;death_t1&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;sex&quot;</span>, <span class="st">&quot;bmi_t1&quot;</span>),</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>), <span class="at">intercept=</span><span class="sc">-</span><span class="dv">15</span>) <span class="sc">+</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;bmi_t2&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">parents=</span><span class="st">&quot;bmi_t1&quot;</span>, <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">1.1</span>), <span class="at">intercept=</span><span class="dv">0</span>,</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">error=</span><span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;death_t2&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>),</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;bmi_t2&quot;</span>), <span class="at">intercept=</span><span class="sc">-</span><span class="dv">15</span>)</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(<span class="at">dag=</span>dag, <span class="at">n_sim=</span><span class="dv">10000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">50</span>, <span class="at">sd=</span><span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;bmi_t1&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">1.1</span>, <span class="fl">0.4</span>), <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;age&quot;</span>),</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>       <span class="at">intercept=</span><span class="dv">12</span>, <span class="at">error=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;death_t1&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;sex&quot;</span>, <span class="st">&quot;bmi_t1&quot;</span>),</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>       <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>), <span class="at">intercept=</span><span class="sc">-</span><span class="dv">15</span>) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;bmi_t2&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">parents=</span><span class="st">&quot;bmi_t1&quot;</span>, <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">1.1</span>), <span class="at">intercept=</span><span class="dv">0</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>       <span class="at">error=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;death_t2&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">betas=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>),</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>       <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;bmi_t2&quot;</span>), <span class="at">intercept=</span><span class="sc">-</span><span class="dv">15</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(<span class="at">dag=</span>dag, <span class="at">n_sim=</span><span class="dv">10000</span>)</span></code></pre></div>
 <p>In this example, the <code>bmi</code> at <span class="math inline">\(t = 1\)</span> is a function of both
 <code>sex</code> and <code>age</code>, but the <code>bmi</code> at <span class="math inline">\(t = 2\)</span> is only a function of the previous
 <code>bmi</code>. The <code>death</code> node is determined by the
 initial <code>age</code> and by the time-varying <code>bmi</code>. This
 surely is not the most realistic example. It is only meant to show how
-the <code>sim_from_dag</code> function may be used to incorporate
+the <code>sim_from_dag()</code> function may be used to incorporate
 time-dependent covariates. If many points in time should be considered
 or there are very complex time-dependent structures that may not be
 easily described using a DAG like the one above, the
-<code>sim_discrete_time</code> function also included in this package
+<code>sim_discrete_time()</code> function also included in this package
 may be used instead.</p>
 </div>
 <div id="references" class="section level1">

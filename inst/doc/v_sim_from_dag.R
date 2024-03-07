@@ -1,7 +1,8 @@
 ## ---- include=FALSE-----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse=TRUE,
-  comment="#>"
+  comment="#>",
+  fig.align="center"
 )
 
 ## ---- include=TRUE, fig.align="center", fig.cap=c("A small DAG with four nodes"), echo=FALSE, out.width=400----

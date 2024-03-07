@@ -30,23 +30,23 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -64,55 +64,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -121,13 +120,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -340,7 +346,7 @@ Discrete-Time Simulation</h1>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>This vignette contains an in-depth example on how to use the
-<code>sim_discrete_time</code> function to generate complex
+<code>sim_discrete_time()</code> function to generate complex
 time-to-event data. Unlike the other vignettes, we will not rely on a
 overly simple example here. Instead, our aim is to generate somewhat
 realistic data about the Covid-19 pandemic. In particular, we are
@@ -351,7 +357,7 @@ real data, including measurement problems as described below. This data
 generation algorithm was then used to identify a suitable data analysis
 strategy for the real data. We only describe a slightly simplified
 version of the data generation part here to give a detailed example on
-how the <code>sim_discrete_time</code> function may be used
+how the <code>sim_discrete_time()</code> function may be used
 effectively.</p>
 <p>Note that the algorithm described here is not completely the same as
 the one we originally used, because that would require us to include
@@ -406,7 +412,7 @@ between the considered variables.</p>
 generate the initial data used in the simulation process. It is
 important to check this data thoroughly, as it will be used as a basis
 for all subsequent steps of the simulation. The
-<code>sim_from_dag</code> function might be very helpful for this
+<code>sim_from_dag()</code> function might be very helpful for this
 step.</p>
 </div>
 <div id="write-functions-for-each-time-varying-node-one-at-a-time." class="section level2">
@@ -442,7 +448,9 @@ particular real-life data set. To do this we decided to simulate data
 that is as close to the real data as possible. Using this data we could
 then try out different analysis strategies and see which one performed
 adequately. The goal for this vignette is to use parts of this model to
-showcase the capabilities of the <code>simDAG</code> package.</p>
+showcase the capabilities of the <code>simDAG</code> package. More
+information on the actual simulation can be found in the first related
+publication (Denz et al. 2023).</p>
 </div>
 <div id="theoretical-model" class="section level2">
 <h2>Theoretical model</h2>
@@ -478,22 +486,21 @@ each point in time. Once they occur, they last for some duration
 (e.g. someone being sick for two weeks or something similar). After the
 event is over, there is usually some duration where the person is
 “immune” to receiving the event again. This is a perfect case for using
-a time-dependent node of type <code>time_to_event</code>.</p>
+a time-dependent node of type <code>&quot;time_to_event&quot;</code>.</p>
 <p>We start out modeling every one of these variables as completely
 independent of each other using the following DAG:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Paket &#39;data.table&#39; wurde unter R Version 4.2.3 erstellt</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Paket &#39;ggplot2&#39; wurde unter R Version 4.2.2 erstellt</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simDAG)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;vaccination&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.001</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">21</span>, <span class="at">immunity_duration=</span><span class="cn">Inf</span>) <span class="sc">+</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;covid&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.001</span>, <span class="at">event_duration=</span><span class="dv">30</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">immunity_duration=</span><span class="dv">80</span>) <span class="sc">+</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;sickness&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.0001</span>,</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">2</span>, <span class="at">immunity_duration=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; Warning: Paket &#39;ggplot2&#39; wurde unter R Version 4.2.3 erstellt</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(simDAG)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;vaccination&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.001</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">21</span>, <span class="at">immunity_duration=</span><span class="cn">Inf</span>) <span class="sc">+</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;covid&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.001</span>, <span class="at">event_duration=</span><span class="dv">30</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>          <span class="at">immunity_duration=</span><span class="dv">80</span>) <span class="sc">+</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;sickness&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.0001</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">2</span>, <span class="at">immunity_duration=</span><span class="dv">2</span>)</span></code></pre></div>
 <p>In the DAG above, we supplied a constant value to each of the
 <code>prob_fun</code> arguments, indicating that regardless of time and
 other variables, each event has a constant probability of occurring on
@@ -516,28 +523,28 @@ simply raising the probability of occurrence of the
 <code>covid</code> or <code>vaccination</code> event is currently
 happening. This can be done by formulating an appropriate
 <code>prob_fun</code> for the <code>sickness</code> node:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>prob_sickness <span class="ot">&lt;-</span> <span class="cf">function</span>(data, rr_covid, rr_vacc, base_p) {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># multiply base probability by relevant RRs</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> base_p <span class="sc">*</span> rr_vacc<span class="sc">^</span>(data<span class="sc">$</span>vaccination_event) <span class="sc">*</span> rr_covid<span class="sc">^</span>(data<span class="sc">$</span>covid_event)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>prob_sickness <span class="ot">&lt;-</span> <span class="cf">function</span>(data, rr_covid, rr_vacc, base_p) {</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="co"># multiply base probability by relevant RRs</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  p <span class="ot">&lt;-</span> base_p <span class="sc">*</span> rr_vacc<span class="sc">^</span>(data<span class="sc">$</span>vaccination_event) <span class="sc">*</span> rr_covid<span class="sc">^</span>(data<span class="sc">$</span>covid_event)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="fu">return</span>(p)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>}</span></code></pre></div>
 <p>This works because any number to an exponent of 1 is itself, while
 any number to an exponent of 0 is one. The
 <code>vaccination_event</code> and <code>covid_event</code> columns are
 always either <code>TRUE</code> (when an event is currently happening)
 or <code>FALSE</code> (when no event is currently happening), which are
 interpreted as 1 and 0 by R. Let’s update our DAG:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;vaccination&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.001</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">21</span>, <span class="at">immunity_duration=</span><span class="cn">Inf</span>) <span class="sc">+</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;covid&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.001</span>, <span class="at">event_duration=</span><span class="dv">30</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">immunity_duration=</span><span class="dv">80</span>) <span class="sc">+</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;sickness&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_sickness,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;vaccination_event&quot;</span>, <span class="st">&quot;covid_event&quot;</span>),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.0001</span>, <span class="at">rr_covid=</span><span class="fl">3.5</span>, <span class="at">rr_vacc=</span><span class="fl">3.24</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">2</span>, <span class="at">immunity_duration=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;vaccination&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.001</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">21</span>, <span class="at">immunity_duration=</span><span class="cn">Inf</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;covid&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.001</span>, <span class="at">event_duration=</span><span class="dv">30</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>          <span class="at">immunity_duration=</span><span class="dv">80</span>) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;sickness&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_sickness,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;vaccination_event&quot;</span>, <span class="st">&quot;covid_event&quot;</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.0001</span>, <span class="at">rr_covid=</span><span class="fl">3.5</span>, <span class="at">rr_vacc=</span><span class="fl">3.24</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">2</span>, <span class="at">immunity_duration=</span><span class="dv">2</span>)</span></code></pre></div>
 <p>Instead of passing a constant value to the <code>prob_fun</code>
 argument, we are now passing it the previously defined function. Because
 our function has <code>base_p</code>, <code>rr_covid</code> and
@@ -551,35 +558,36 @@ as <code>parents</code> now, because they are used in the
 </div>
 <div id="part-3-making-the-vaccine-useful" class="section level2">
 <h2>Part 3: Making the vaccine useful</h2>
-<p>So far we assumed that it makes no difference whether the person
-received the vaccine or not. We will now change this by implementing a
-time-window after receiving the vaccine in which the person cannot
-develop a <code>covid</code> infection. Again, this can be done by
-defining an appropriate <code>prob_fun</code> function, this time for
-the <code>covid</code> node:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>prob_covid <span class="ot">&lt;-</span> <span class="cf">function</span>(data, base_p, vacc_duration) {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">fifelse</span>(data<span class="sc">$</span>vaccination_time_since_last <span class="sc">&lt;</span> vacc_duration,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>               <span class="dv">0</span>, base_p, <span class="at">na=</span>base_p)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>So far we assumed that the <code>covid</code> infection probability
+is unaffected by whether the person received the vaccine or not. We will
+now change this by implementing a time-window after receiving the
+vaccine in which the person cannot develop a <code>covid</code>
+infection. Again, this can be done by defining an appropriate
+<code>prob_fun</code> function, this time for the <code>covid</code>
+node:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>prob_covid <span class="ot">&lt;-</span> <span class="cf">function</span>(data, base_p, vacc_duration) {</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">fifelse</span>(data<span class="sc">$</span>vaccination_time_since_last <span class="sc">&lt;</span> vacc_duration,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>               <span class="dv">0</span>, base_p, <span class="at">na=</span>base_p)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">return</span>(p)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>}</span></code></pre></div>
 <p>In this function we use the column
 <code>vaccination_time_since_last</code>, which is a column that can
 optionally be created in time-to-event nodes by setting
 <code>time_since_last</code> to <code>TRUE</code>. So let’s again update
 our DAG accordingly:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;vaccination&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.001</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">21</span>, <span class="at">immunity_duration=</span><span class="cn">Inf</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">time_since_last=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;covid&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_covid,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;vaccination_time_since_last&quot;</span>),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.001</span>, <span class="at">vacc_duration=</span><span class="dv">80</span>, <span class="at">event_duration=</span><span class="dv">30</span>,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">immunity_duration=</span><span class="dv">80</span>) <span class="sc">+</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;sickness&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_sickness,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;vaccination_event&quot;</span>, <span class="st">&quot;covid_event&quot;</span>),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.0001</span>, <span class="at">rr_covid=</span><span class="fl">3.5</span>, <span class="at">rr_vacc=</span><span class="fl">3.24</span>,</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">2</span>, <span class="at">immunity_duration=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;vaccination&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.001</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">21</span>, <span class="at">immunity_duration=</span><span class="cn">Inf</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>          <span class="at">time_since_last=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;covid&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_covid,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;vaccination_time_since_last&quot;</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.001</span>, <span class="at">vacc_duration=</span><span class="dv">80</span>, <span class="at">event_duration=</span><span class="dv">30</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>          <span class="at">immunity_duration=</span><span class="dv">80</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;sickness&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_sickness,</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;vaccination_event&quot;</span>, <span class="st">&quot;covid_event&quot;</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.0001</span>, <span class="at">rr_covid=</span><span class="fl">3.5</span>, <span class="at">rr_vacc=</span><span class="fl">3.24</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">2</span>, <span class="at">immunity_duration=</span><span class="dv">2</span>)</span></code></pre></div>
 <p>Instead of just updating the <code>parents</code> and
 <code>prob_fun</code> arguments of the <code>covid</code> node, we now
 also had to set the <code>time_since_last</code> argument of the
@@ -591,74 +599,87 @@ better now. But there is still a lot we can do.</p>
 <h2>Part 4: Sick people don’t get vaccinated</h2>
 <p>In reality, very little people who were currently experiencing a
 Covid-19 infection went and got the vaccine. In fact, this is absolutely
-discouraged by doctors world-wide. To add this circumstance to the mode,
-we once again simply have to update the probability of receiving a
-vaccination, by defining an appropriate <code>prob_fun</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>prob_vaccination <span class="ot">&lt;-</span> <span class="cf">function</span>(data, base_p) {</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">fifelse</span>(data<span class="sc">$</span>covid_event, <span class="dv">0</span>, base_p)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+discouraged by doctors world-wide. To add this circumstance to the
+model, we once again simply have to update the probability of receiving
+a vaccination, by defining an appropriate <code>prob_fun</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>prob_vaccination <span class="ot">&lt;-</span> <span class="cf">function</span>(data, base_p) {</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  </span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">fifelse</span>(data<span class="sc">$</span>covid_event, <span class="dv">0</span>, base_p)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  </span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="fu">return</span>(p)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>}</span></code></pre></div>
 <p>Using this function, the probability of getting vaccinated for any
 individual that is currently experiencing a <code>covid</code> infection
 is 0. Let’s update our DAG one more time to include these changes:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;vaccination&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">prob_fun=</span>prob_vaccination,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;covid_event&quot;</span>), <span class="at">base_p=</span><span class="fl">0.001</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">21</span>, <span class="at">immunity_duration=</span><span class="cn">Inf</span>,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">time_since_last=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;covid&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_covid,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;vaccination_time_since_last&quot;</span>),</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.001</span>, <span class="at">vacc_duration=</span><span class="dv">80</span>, <span class="at">event_duration=</span><span class="dv">30</span>,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">immunity_duration=</span><span class="dv">80</span>) <span class="sc">+</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;sickness&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_sickness,</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;vaccination_event&quot;</span>, <span class="st">&quot;covid_event&quot;</span>),</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.0001</span>, <span class="at">rr_covid=</span><span class="fl">3.5</span>, <span class="at">rr_vacc=</span><span class="fl">3.24</span>,</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">2</span>, <span class="at">immunity_duration=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;vaccination&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>          <span class="at">prob_fun=</span>prob_vaccination,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;covid_event&quot;</span>), <span class="at">base_p=</span><span class="fl">0.001</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">21</span>, <span class="at">immunity_duration=</span><span class="cn">Inf</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>          <span class="at">time_since_last=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;covid&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_covid,</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;vaccination_time_since_last&quot;</span>),</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.001</span>, <span class="at">vacc_duration=</span><span class="dv">80</span>, <span class="at">event_duration=</span><span class="dv">30</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>          <span class="at">immunity_duration=</span><span class="dv">80</span>) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;sickness&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_sickness,</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;vaccination_event&quot;</span>, <span class="st">&quot;covid_event&quot;</span>),</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.0001</span>, <span class="at">rr_covid=</span><span class="fl">3.5</span>, <span class="at">rr_vacc=</span><span class="fl">3.24</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">2</span>, <span class="at">immunity_duration=</span><span class="dv">2</span>)</span></code></pre></div>
 <p>Again we simply changed the <code>prob_fun</code> argument and added
 the correct <code>parents</code> to the appropriate node. Our final
 “DAG” looks like this:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dag, <span class="at">mark_td_nodes=</span><span class="cn">FALSE</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lade nötigen Namensraum: ggforce</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lade nötigen Namensraum: igraph</span></span></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">plot</span>(dag, <span class="at">mark_td_nodes=</span><span class="cn">FALSE</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; Lade nötigen Namensraum: ggforce</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; Lade nötigen Namensraum: igraph</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 <p>Note that in this plot it doesn’t look like a classic DAG anymore,
-because it has an bi-directional arrow between <code>covid</code> and
+because it has a bi-directional arrow between <code>covid</code> and
 <code>vaccination</code> due to the time-dependent nature of their
 relationship.</p>
 </div>
 <div id="generating-data-using-the-final-model" class="section level2">
 <h2>Generating Data using the final model</h2>
-<p>We are now pleased with the complexity of our data-generation
+<p>Suppose we are now pleased with the complexity of our data-generation
 algorithm and want to simulate data from it. We can do this by simply
-calling the <code>sim_discrete_time</code> function on the specified
+calling the <code>sim_discrete_time()</code> function on the specified
 DAG:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>, <span class="at">max_t=</span><span class="dv">800</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sim)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; A simDT object with:</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   -  1000  observations</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   -  800  distinct points in time</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   -  3  time-varying variables in total</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   -  3  time_to_event nodes</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   -  0  competing_events nodes</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Only the last state of the simulation was saved.</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>, <span class="at">max_t=</span><span class="dv">800</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">summary</span>(sim)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; A simDT object with:</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt;   -  1000  observations</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt;   -  800  distinct points in time</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt;   -  3  time-varying variables in total</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt;   -  3  time_to_event nodes</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt;   -  0  competing_events nodes</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; Only the last state of the simulation was saved.</span></span></code></pre></div>
 <p>For exemplary purposes, we kind of arbitrarily used 1000 individuals
 and let the simulation run for 800 days. By calling the
-<code>plot</code> method, we get a concise overview over the process we
-simulated:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sim, <span class="at">box_text_size=</span><span class="dv">4</span>)</span></code></pre></div>
+<code>plot()</code> method, we get a concise overview over the process
+we simulated:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">plot</span>(sim, <span class="at">box_text_size=</span><span class="dv">4</span>)</span></code></pre></div>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>A more useful output of the resulting data can be obtained using the
+<code>sim2data()</code> function. For example, we could transform the
+output to the start-stop format:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">sim2data</span>(sim, <span class="at">to=</span><span class="st">&quot;start_stop&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt;        .id start stop vaccination covid sickness</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt;    1:    1     1  178       FALSE FALSE    FALSE</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt;    2:    1   179  199        TRUE FALSE    FALSE</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt;    3:    1   200  800       FALSE FALSE    FALSE</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt;    4:    2     1  501       FALSE FALSE    FALSE</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt;    5:    2   502  531       FALSE  TRUE    FALSE</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt;   ---                                           </span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; 3466: 1000     1   47       FALSE FALSE    FALSE</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt; 3467: 1000    48   49       FALSE FALSE     TRUE</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt; 3468: 1000    50  131       FALSE FALSE    FALSE</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt; 3469: 1000   132  152        TRUE FALSE    FALSE</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; 3470: 1000   153  800       FALSE FALSE    FALSE</span></span></code></pre></div>
 <p>As can be seen, we managed to implement a fairly complex
 data-generation mechanism using only a few small function definitions
 and a few lines of code, allowing us to generate a complex dataset with
-three interdependent time-varying variables with only minimal effort. By
-utilizing the <code>sim2data</code> function, we could directly
-transform the <code>sim</code> object into a dataset in the start-stop
-format to run some statistical models on it (such as a cox-regression
-model).</p>
+three interdependent time-varying variables with only minimal
+effort.</p>
 </div>
 <div id="going-even-further" class="section level2">
 <h2>Going even further</h2>
@@ -687,6 +708,17 @@ more. How much complexity you really need is completely up to you. We
 hope that the <code>simDAG</code> package can help you with whatever you
 need.</p>
 </div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Banks, Jerry, John S. Carson II, Barry L. Nelson, and David M. Nicol
+(2014). Discrete-Event System Simulation. Vol. 5. Edinburgh Gate:
+Pearson Education Limited.</p>
+<p>Denz, Robin, Katharina Meiszl, Peter Ihle, Doris F. Oberle, Ursula
+Drechsel-Bäuerle, Katrin Scholz, Ingo Meyer and Nina Timmesfeld (2023).
+“Impact of Record-Linkage Errors in Covid-19 Vaccine-Safety Analyses
+using German Health-Care Data: A Simulation Study”. In:
+arXiv:2310.15016</p>
 </div>
 
 

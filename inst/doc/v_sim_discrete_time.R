@@ -43,10 +43,7 @@ plot(dag)
 
 ## -----------------------------------------------------------------------------
 set.seed(43)
-sim_dat <- sim_discrete_time(n_sim=10,
-                             dag=dag,
-                             max_t=50,
-                             check_inputs=FALSE)
+sim_dat <- sim_discrete_time(n_sim=10, dag=dag, max_t=50, check_inputs=FALSE)
 
 ## -----------------------------------------------------------------------------
 head(sim_dat$data)

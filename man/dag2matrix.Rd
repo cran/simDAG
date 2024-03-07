@@ -12,7 +12,7 @@ dag2matrix(dag, include_root_nodes=TRUE, include_td_nodes=FALSE)
 }
 \arguments{
   \item{dag}{
-A \code{DAG} object created using the \code{\link{empty_dag}} function with nodes added to it using the \code{+} syntax. See \code{?empty_dag} or \code{?node} for more details. Currently does not support DAGs with time-dependent nodes added using the \code{\link{node_td}} function.
+A \code{DAG} object created using the \code{\link{empty_dag}} function with nodes added to it using the \code{+} syntax. See \code{?empty_dag} or \code{?node} for more details. Supports DAGs with time-dependent nodes added using the \code{\link{node_td}} function. However, including such DAGs may result in cyclic causal structures, because time is not represented in the output matrix.
   }
   \item{include_root_nodes}{
 Whether to include root nodes in the output matrix. Should usually be kept at \code{TRUE} (default).
@@ -22,7 +22,7 @@ Whether to include time-dependent nodes added to the \code{dag} using the \code{
   }
 }
 \details{
-An adjacency matrix is simply a square matrix in which each node has one column and one row associated with it. For example, if the node A has a causal effect on node B, the matrix will contain \code{TRUE} in the spot \code{matrix["A", "B"]}.
+An adjacency matrix is simply a square matrix in which each node has one column and one row associated with it. For example, if the node A has a causal effect on node B, the matrix will contain \code{1} in the spot \code{matrix["A", "B"]}.
 
 If a time-varying node is also defined as a time-fixed node, the parents of both parts will be pooled when creating the output matrix.
 }
@@ -49,6 +49,23 @@ dag <- empty_dag() +
 
 # get adjacency matrix
 dag2matrix(dag)
+
+# get adjacency matrix using only the child nodes
+dag2matrix(dag, include_root_nodes=FALSE)
+
+## adding time-varying nodes
+dag <- dag +
+  node_td("disease", type="time_to_event", parents=c("age", "smoking"),
+          prob_fun=0.01) +
+  node_td("death", type="time_to_event", parents=c("age", "sex", "smoking",
+                                                   "disease"),
+          prob_fun=0.001, event_duration=Inf)
+
+# get adjacency matrix including all nodes
+dag2matrix(dag, include_td_nodes=TRUE)
+
+# get adjacency matrix including only time-constant nodes
+dag2matrix(dag, include_td_nodes=FALSE)
 
 # get adjacency matrix using only the child nodes
 dag2matrix(dag, include_root_nodes=FALSE)
