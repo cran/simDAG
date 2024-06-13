@@ -12,7 +12,7 @@ node_gaussian(data, parents, formula=NULL, betas, intercept, error)
 }
 \arguments{
   \item{data}{
-A \code{data.frame} containing all columns specified by \code{parents}.
+A \code{data.table} (or something that can be coerced to a \code{data.table}) containing all columns specified by \code{parents}.
   }
   \item{parents}{
 A character vector specifying the names of the parents that this particular child node has. If non-linear combinations or interaction effects should be included, the user may specify the \code{formula} argument instead.
@@ -32,6 +32,19 @@ A single number specifying the sigma error that should be used when generating t
 }
 \details{
 Using the general linear regression equation, the observation-specific value that would be expected given the model is generated for every observation in the dataset generated thus far. We could stop here, but this would create a perfect fit for the node, which is unrealistic. Instead, we add an error term by taking one sample of a normal distribution for each observation with mean zero and standard deviation \code{error}. This error term is then added to the predicted mean.
+
+\strong{\emph{Formal Description}}:
+
+Formally, the data generation can be described as:
+
+\deqn{Y \sim \texttt{intercept} + \texttt{parents}_1 \cdot \texttt{betas}_1 + ... + \texttt{parents}_n \cdot \texttt{betas}_n+ N(0, \texttt{error}),}
+
+where \eqn{N(0, \texttt{error})} denotes the normal distribution with mean 0 and a standard deviation of \code{error} and \eqn{n} is the number of parents (\code{length(parents)}).
+
+For example, given \code{intercept=-15}, \code{parents=c("A", "B")}, \code{betas=c(0.2, 1.3)} and \code{error=2} the data generation process is defined as:
+
+\deqn{Y \sim -15 + A \cdot 0.2 + B \cdot 1.3 + N(0, 2).}
+
 }
 \author{
 Robin Denz

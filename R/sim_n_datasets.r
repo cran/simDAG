@@ -3,7 +3,8 @@
 ## either the sim_from_dag() or sim_discrete_time() function
 ## with or without parallel processing
 #' @export
-sim_n_datasets <- function(dag, n_repeats, n_cores=parallel::detectCores(),
+sim_n_datasets <- function(dag, n_sim, n_repeats,
+                           n_cores=parallel::detectCores(),
                            data_format="raw", data_format_args=list(),
                            seed=stats::runif(1), progressbar=TRUE, ...) {
 
@@ -20,7 +21,7 @@ sim_n_datasets <- function(dag, n_repeats, n_cores=parallel::detectCores(),
     for (i in seq_len(n_repeats)) {
       out[[i]] <- generate_one_dataset(dag=dag, data_format=data_format,
                                        data_format_args=data_format_args,
-                                       ...)
+                                       n_sim=n_sim, ...)
     }
 
   # with parallel processing
@@ -36,9 +37,9 @@ sim_n_datasets <- function(dag, n_repeats, n_cores=parallel::detectCores(),
     # set up cluster
     cl <- parallel::makeCluster(n_cores, outfile="")
     doSNOW::registerDoSNOW(cl)
-    pckgs <- c("data.table", "simDAG", "dplyr", "Rfast")
-    glob_funs <- ls(envir=.GlobalEnv)[sapply(ls(envir=.GlobalEnv), function(obj)
-      "function"==class(eval(parse(text=obj)))[1])]
+    pckgs <- c("data.table", "simDAG", "Rfast")
+    glob_funs <- ls(envir=.GlobalEnv)[vapply(ls(envir=.GlobalEnv), function(obj)
+      "function"==class(eval(parse(text=obj)))[1], FUN.VALUE=logical(1))]
 
     # add progress bar
     if (progressbar) {
@@ -58,7 +59,8 @@ sim_n_datasets <- function(dag, n_repeats, n_cores=parallel::detectCores(),
                                                       "simDAG")
 
       generate_one_dataset(dag=dag, data_format=data_format,
-                           data_format_args=data_format_args, ...)
+                           data_format_args=data_format_args,
+                           n_sim=n_sim, ...)
     }
     on.exit(close(pb))
     on.exit(parallel::stopCluster(cl))
@@ -69,13 +71,14 @@ sim_n_datasets <- function(dag, n_repeats, n_cores=parallel::detectCores(),
 
 ## generate one dataset using either the sim_from_dag() or the
 ## sim_discrete_time() function and optionally format it
-generate_one_dataset <- function(dag, data_format, data_format_args, ...) {
+generate_one_dataset <- function(dag, data_format, data_format_args, n_sim,
+                                 ...) {
 
   # simulate the dataset
   if (length(dag$tx_nodes) > 0) {
-    dat <- sim_discrete_time(dag=dag, ...)
+    dat <- sim_discrete_time(dag=dag, n_sim=n_sim, ...)
   } else {
-    dat <- sim_from_dag(dag, ...)
+    dat <- sim_from_dag(dag=dag, n_sim=n_sim, ...)
   }
 
   # transform it, if specified

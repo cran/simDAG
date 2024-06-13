@@ -1,5 +1,7 @@
 \name{sim2data}
 \alias{sim2data}
+\alias{as.data.table.simDT}
+\alias{as.data.frame.simDT}
 
 \title{
 Transform \code{sim_discrete_time} output into the start-stop, long- or wide-format
@@ -9,10 +11,23 @@ This function transforms the output of the \code{\link{sim_discrete_time}} funct
 }
 \usage{
 sim2data(sim, to, use_saved_states=sim$save_states=="all",
-         as_data_frame=FALSE, check_inputs=TRUE)
+         overlap=FALSE, target_event=NULL,
+         keep_only_first=FALSE, as_data_frame=FALSE,
+         check_inputs=TRUE, ...)
+
+\method{as.data.table}{simDT}(x, keep.rownames=FALSE, to, overlap=FALSE,
+              target_event=NULL, keep_only_first=FALSE,
+              use_saved_states=x$save_states=="all",
+              check_inputs=TRUE, ...)
+
+\method{as.data.frame}{simDT}(x, row.names=NULL, optional=FALSE, to,
+              overlap=FALSE, target_event=NULL,
+              keep_only_first=FALSE,
+              use_saved_states=x$save_states=="all",
+              check_inputs=TRUE, ...)
 }
 \arguments{
-  \item{sim}{
+  \item{sim, x}{
 An object created with the \code{\link{sim_discrete_time}} function.
   }
   \item{to}{
@@ -21,19 +36,42 @@ Specifies the format of the output data. Must be one of: \code{"start_stop"}, \c
   \item{use_saved_states}{
 Whether the saved simulation states (argument \code{save_states} in \code{sim_discrete_time} function) should be used to construct the resulting data or not. See details.
   }
+  \item{overlap}{
+Only used when \code{to="start_stop"}. Specifies whether the intervals should overlap or not. If \code{TRUE}, the \code{"stop"} column is simply increased by one, as compared to the output when \code{overlap=FALSE}. This means that changes for a given \eqn{t} are recorded at the start of the next interval, but the previous interval ends on that same day.
+  }
+  \item{target_event}{
+Only used when \code{to="start_stop"}. By default (keeping this argument at \code{NULL}) all time-to-event nodes are treated equally when creating the start-stop intervals. This can be changed by supplying a single character string to this argument, naming one time-to-event node. This node will then be treated as the outcome. The output then corresponds to what would be needed to fit a Cox proportional hazards model. See details.
+  }
+  \item{keep_only_first}{
+Only used when \code{to="start_stop"} and \code{target_event} is not \code{NULL}. Either \code{TRUE} or \code{FALSE} (default). If \code{TRUE}, all information after the first event per person will be discarded. Useful when \code{target_event} should be treated as a terminal variable.
+  }
   \item{as_data_frame}{
 Set this argument to \code{TRUE} to return a \code{data.frame} instead of a \code{data.table}.
   }
   \item{check_inputs}{
 Whether to perform input checks (\code{TRUE} by default). Prints warning messages if the output may be incorrect due to missing information.
   }
+  \item{keep.rownames}{
+Currently not used.
+  }
+  \item{row.names}{
+Passed to the \code{as.data.frame} function which is called on the finished \code{data.table}. See \code{?as.data.frame} for more information.
+  }
+  \item{optional}{
+Passed to the \code{as.data.frame} function which is called on the finished \code{data.table}. See \code{?as.data.frame} for more information.
+  }
+  \item{...}{
+Further arguments passed to \code{as.data.frame} (conversion from finished \code{data.table} to \code{data.frame}). Only available when directly calling \code{sim2data} with \code{as_data_frame=TRUE} or when using \code{as.data.frame.simDT}.
+  }
 }
 \details{
-The raw output of the \code{sim_discrete_time} function may be difficult to use for further analysis. Using this function, it is straightforward to transform that output into three different formats, which are described below. Note that some caution needs to be applied when using this function, which is also described below.
+The raw output of the \code{sim_discrete_time} function may be difficult to use for further analysis. Using one of these functions, it is straightforward to transform that output into three different formats, which are described below. Note that some caution needs to be applied when using this function, which is also described below. Both \code{as.data.table} and \code{as.data.frame} internally call \code{sim2data} and only exist for user convenience.
 
 \strong{\emph{The start-stop format}:}
 
-The start-stop format (\code{to="start_stop"}), also known as counting process or period format corresponds to a \code{data.table} containing multiple rows per person, where each row corresponds to a period of time in which no variables changed. These intervals are defined by the \code{start} and \code{stop} columns. The \code{start} column gives the time at which the period started, the \code{stop} column denotes the time when the period ended. These intervals are coded to be non-overlapping, meaning that the edges of the periods are included in the period itself. For example, if the respective period is exactly 1 point in time long, \code{start} will be equal to \code{stop}. If non-overlapping periods are desired, the user can simply add 1 to the \code{stop} column.
+The start-stop format (\code{to="start_stop"}), also known as counting process or period format corresponds to a \code{data.table} containing multiple rows per person, where each row corresponds to a period of time in which no variables changed. These intervals are defined by the \code{start} and \code{stop} columns. The \code{start} column gives the time at which the period started, the \code{stop} column denotes the time when the period ended. By default these intervals are coded to be non-overlapping, meaning that the edges of the periods are included in the period itself. For example, if the respective period is exactly 1 point in time long, \code{start} will be equal to \code{stop}. If non-overlapping periods are desired, the user can specify \code{overlap=TRUE} instead.
+
+By default, all time-to-event nodes are treated equally. This is not optimal when the goal is to fit survival regression models. In this case, we usually want the target event to be treated in a special way (see for example Chiou et al. 2023). In general, instead of creating new intervals for it we want existing intervals to end at event times with the corresponding event indicator. This can be achieved by naming the target outcome in the \code{target_event} variable. The previously specified duration of this target event is then ignored. If only the first occurrence of the event is of interest, users may also set \code{keep_only_first=TRUE} to keep only information up until the first event per person.
 
 \strong{\emph{The long format}:}
 
@@ -82,6 +120,9 @@ Robin Denz
 \seealso{
 \code{\link{sim_discrete_time}}
 }
+\references{
+Sy Han Chiou, Gongjun Xu, Jun Yan, and Chiung-Yu Huang (2023). "Regression Modeling for Recurrent Events Possibly with an Informative Terminal Event Using R Package reReg". In: Journal of Statistical Software. 105.5, pp. 1-34.
+}
 \examples{
 library(simDAG)
 
@@ -95,27 +136,37 @@ prob_car_crash <- function(data) {
 }
 
 prob_death <- function(data) {
-  ifelse(data$car_crash_event, 0.1, 0.0001)
+  ifelse(data$car_crash_event, 0.1, 0.001)
 }
 
 dag <- empty_dag() +
   node("sex", type="rbernoulli", p=0.5) +
   node_td("car_crash", type="time_to_event", prob_fun=prob_car_crash,
-          parents="sex") +
+          parents="sex", event_duration=3) +
   node_td("death", type="time_to_event", prob_fun=prob_death,
-          parents="car_crash_event")
+          parents="car_crash_event", event_duration=Inf)
 
 # generate some data, only saving the last state
 # not a problem here, because the only time-varying nodes are
 # time-to-event nodes where the event times are saved
 sim <- sim_discrete_time(dag, n_sim=20, max_t=500, save_states="last")
 
-# transform to start-stop format
+# transform to standard start-stop format
 d_start_stop <- sim2data(sim, to="start_stop")
+head(d_start_stop)
+
+# transform to "death" centric start-stop format
+# and keep only information until death, cause it's a terminal event
+# (this could be used in a Cox model)
+d_start_stop <- sim2data(sim, to="start_stop", target_event="death",
+                         keep_only_first=TRUE, overlap=TRUE)
+head(d_start_stop)
 
 # transform to long-format
 d_long <- sim2data(sim, to="long")
+head(d_long)
 
 # transform to wide-format
 d_wide <- sim2data(sim, to="wide")
+#head(d_wide)
 }

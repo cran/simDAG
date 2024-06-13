@@ -1,19 +1,28 @@
 
 ## transform output from the sim_discrete_time function into the
 ## start-stop format
-sim2start_stop <- function(sim, use_saved_states=sim$save_states=="all") {
+sim2start_stop <- function(sim, use_saved_states=sim$save_states=="all",
+                           overlap=FALSE, target_event=NULL,
+                           keep_only_first=FALSE) {
 
   if (use_saved_states) {
-    data <- sim2start_stop.all(sim=sim)
+    data <- sim2start_stop.all(sim=sim, overlap=overlap,
+                               target_event=target_event,
+                               keep_only_first=keep_only_first)
   } else {
-    data <- sim2start_stop.last(sim=sim)
+    data <- sim2start_stop.last(sim=sim, overlap=overlap,
+                                target_event=target_event,
+                                keep_only_first=keep_only_first)
   }
 
   return(data)
 }
 
 ## used when save_states="all" was used in sim_discrete_time
-sim2start_stop.all <- function(sim) {
+sim2start_stop.all <- function(sim, overlap=FALSE, target_event=NULL,
+                               keep_only_first=FALSE) {
+
+  .id <- .event_count <- .event_cumsum <- NULL
 
   # transform to long format
   data <- sim2long(sim=sim)
@@ -24,10 +33,43 @@ sim2start_stop.all <- function(sim) {
                        endsWith(c_names, "_event_count"))]
   data <- data[, c_names, with=FALSE]
 
+  # names of time-varying nodes
   varying <- unlist(lapply(sim$tx_nodes, FUN=function(x){x$name}))
-  data <- long2start_stop(data=data, id=".id", time=".time",
-                          varying=varying, check_inputs=FALSE)
 
+  # prepare long-format if outcome specific data.table is desired
+  if (!is.null(target_event)) {
+    event_duration <-
+      get_event_duration(sim$tx_nodes[varying==target_event][[1]])
+
+    # set event to FALSE after initial occurrence to get
+    # length 1 event intervals
+    if (event_duration > 1) {
+      data[, .event_cumsum := cumsum(eval(parse(text=target_event))), by=.id]
+      data[, (target_event) := (.event_cumsum %% event_duration)==1]
+      data[, .event_cumsum := NULL]
+    }
+
+    # create event count to make sure that subsequent, distinct events
+    # are not grouped together
+    if (event_duration == 1) {
+      data[, .event_count := cumsum(eval(parse(text=target_event))), by=.id]
+      varying <- c(varying, ".event_count")
+    }
+  }
+
+  # transform to start-stop format
+  data <- long2start_stop(data=data, id=".id", time=".time",
+                          varying=varying, overlap=overlap,
+                          check_inputs=FALSE)
+
+  # make it outcome centric
+  if (!is.null(target_event)) {
+    if (event_duration==1) {
+      data[, .event_count := NULL]
+    }
+    data <- collapse_for_target_event(data, target_event=target_event,
+                                      keep_only_first=keep_only_first)
+  }
   return(data)
 }
 
@@ -40,7 +82,8 @@ sim2start_stop.all <- function(sim) {
 #' @importFrom data.table setcolorder
 #' @importFrom data.table dcast
 #' @importFrom data.table :=
-sim2start_stop.last <- function(sim) {
+sim2start_stop.last <- function(sim, overlap=FALSE, target_event=NULL,
+                                keep_only_first=FALSE) {
 
   # temporary error message
   if (length(sim$ce_past_events) > 0) {
@@ -81,6 +124,11 @@ sim2start_stop.last <- function(sim) {
   event_durations <- vapply(sim$tx_nodes[tx_type=="time_to_event"],
                             FUN=get_event_duration,
                             FUN.VALUE=numeric(1))
+
+  # artificially set duration of target event to 1
+  if (!is.null(target_event)) {
+    event_durations[tte_names==target_event] <- 1
+  }
 
   # create list of inverted tte_lists and a list containing the number
   # of events per person per event kind
@@ -181,6 +229,17 @@ sim2start_stop.last <- function(sim) {
   # correct end of intervals
   data[, stop := stop - 1]
   data <- data[start <= stop & !duplicated(data), ]
+
+  # if specified, make it event centric
+  if (!is.null(target_event)) {
+    data <- collapse_for_target_event(data, target_event=target_event,
+                                      keep_only_first=keep_only_first)
+  }
+
+  # if intervals should be overlapping, add them back
+  if (overlap) {
+    data[, stop := stop + 1]
+  }
 
   # reorder columns
   first_cols <- c(".id", "start", "stop", tte_names)

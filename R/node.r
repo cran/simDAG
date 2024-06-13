@@ -175,7 +175,8 @@ print.DAG.node <- function(x, ...) {
   if (!is.character(x[[1]])) {
     cat("A list of DAG.node objects.")
   # root nodes
-  } else if (length(x$parents) == 0 || all(x$parents=="")) {
+  } else if ((length(x$parents) == 0 || all(x$parents=="")) &&
+             !x$type %in% c("time_to_event", "competing_events")) {
     cat("A DAG.node object specifying a single root node with:\n")
     cat("  - name: '", x$name, "'\n", sep="")
     cat("  - type: '", x$type, "'\n", sep="")
@@ -192,7 +193,10 @@ print.DAG.node <- function(x, ...) {
     cat("A DAG.node object specifying a single child node with:\n")
     cat("  - name: '", x$name, "'\n", sep="")
     cat("  - type: '", x$type, "'\n", sep="")
-    cat("  - parents: '", paste0(x$parents, collapse="', '"), "'\n", sep="")
+
+    if (length(x$parents) > 0) {
+      cat("  - parents: '", paste0(x$parents, collapse="', '"), "'\n", sep="")
+    }
 
     if (length(x)==4) {
       cat("  - no additional parameters\n")
@@ -223,5 +227,20 @@ print.DAG.node <- function(x, ...) {
 ## S3 summary method for DAG.node objects
 #' @export
 summary.DAG.node <- function(object, ...) {
-  print.DAG.node(x=object, ...)
+
+  if (!is.character(object[[1]])) {
+    str_equations <- character()
+    for (i in seq_len(length(object))) {
+      str_equations_i <- structural_equation(object[[i]])
+      str_equations <- c(str_equations, str_equations_i)
+    }
+  } else {
+    str_equations <- structural_equation(object)
+  }
+  str_equations_print <- align_str_equations(str_equations)
+
+  cat("A DAG.node object using the following structural equation(s):\n\n")
+  cat(str_equations_print, sep="\n")
+
+  return(invisible(str_equations))
 }

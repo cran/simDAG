@@ -3,16 +3,15 @@ set.seed(42)
 dt <- data.table::data.table(.id=seq(1, 200),
                              "age"=rnorm(n=200, mean=30, sd=7.5),
                              "sex"=rbinom(n=200, size=1, prob=0.7))
-dt <- dt %>%
-  dplyr::mutate(
-    smoking = ifelse(dt$sex == 0,
-                     rbinom(n=nrow(dt[dt$sex == 0,]), size=1, prob=0.26),
-                     rbinom(n=nrow(dt[dt$sex == 1,]), size=1, prob=0.20)),
-    sickness_event = FALSE,
-    sickness_time = NA_integer_,
-    sickness_past_event_times = NA_integer_)
 
-prob_sick <- function(data, sim_time, rr_smoke0, rr_smoke1) {
+dt$smoking <- ifelse(dt$sex == 0,
+                     rbinom(n=nrow(dt[dt$sex == 0,]), size=1, prob=0.26),
+                     rbinom(n=nrow(dt[dt$sex == 1,]), size=1, prob=0.20))
+dt$sickness_event <- FALSE
+dt$sickness_time <- NA_integer_
+dt$sickness_past_event_times <- NA_integer_
+
+prob_sick <- function(data, sim_time, rr_smoke0, rr_smoke1=5) {
   # smoking-dependent risk
   risk <- fifelse(data$smoking == 1, rr_smoke0, rr_smoke1)
 
@@ -45,7 +44,6 @@ test_that("correct nrow, ncol", {
                             name="sickness",
                             prob_fun=prob_sick,
                             rr_smoke0=1,
-                            rr_smoke1=5,
                             event_duration=1,
                             immunity_duration=100,
                             save_past_events=FALSE,

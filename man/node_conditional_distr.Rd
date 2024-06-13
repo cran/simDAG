@@ -14,7 +14,7 @@ node_conditional_distr(data, parents, distr, default_distr=NULL,
 }
 \arguments{
   \item{data}{
-A \code{data.frame} containing all columns specified by \code{parents}.
+A \code{data.table} (or something that can be coerced to a \code{data.table}) containing all columns specified by \code{parents}.
   }
   \item{parents}{
 A character vector specifying the names of the parents that this particular child node has.
@@ -40,6 +40,17 @@ A single logical value specifying whether to perform input checks or not. May be
 }
 \details{
 Utilizing the user-defined distribution in each stratum of \code{parents} (supplied using the \code{distr} argument), this function simply calls the user-defined function with the arguments given by the user to generate a new variable. This allows the new variable to consist of a mix of different distributions, based on categorical \code{parents}.
+
+\strong{\emph{Formal Description}}:
+
+Formally, the data generation process can be described as a series of conditional equations. For example, suppose that there is just one parent node \code{sex} with the levels \code{male} and \code{female} with the goal of creating a continuous outcome that has a normal distribution of \eqn{N(10, 3)} for males and \eqn{N(7, 2)} for females. The conditional equation is then:
+
+\deqn{Y \sim \begin{cases}
+			N(10, 3), & \text{if } \texttt{sex="male"} \\
+			N(7, 2), & \text{if } \texttt{sex="female"} \\
+		\end{cases},}
+
+If there are more than two variables, the conditional distribution would be stratified by the intersection of all subgroups defined by the variables.
 }
 \author{
 Robin Denz

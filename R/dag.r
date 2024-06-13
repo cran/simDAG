@@ -26,7 +26,7 @@ add_node <- function(dag, node) {
   dag_names <- names_DAG(dag)
 
   if (node$name %in% dag_names & !node$time_varying) {
-    stop("A node with the name ", node$name, " is alread present in the",
+    stop("A node with the name ", node$name, " is already present in the",
          " DAG object and will not be overwritten.")
   }
 
@@ -63,7 +63,7 @@ add_node <- function(dag, node) {
       out <- add_node(dag=out, node=object_1[[i]])
     }
   } else {
-    stop("Only output created using the node() or node_td() function can",
+    stop("Only output created using the node() or node_td() functions can",
          " be added to a DAG object.")
   }
   return(out)
@@ -78,7 +78,7 @@ print.DAG <- function(x, ...) {
   n_tx_nodes <- length(x$tx_nodes)
   n_total_nodes <- n_root_nodes + n_child_nodes + n_tx_nodes
 
-  if (n_total_nodes==0) {
+  if (is_empty_dag(x)) {
     cat("An empty DAG object without any nodes.\n")
   } else {
     cat("A DAG object with:\n")
@@ -92,18 +92,68 @@ print.DAG <- function(x, ...) {
 ## S3 summary method for DAG objects
 #' @export
 summary.DAG <- function(object, ...) {
-  print.DAG(x=object, ...)
+
+  if (is_empty_dag(object)) {
+    cat("An empty DAG object without any nodes.\n")
+    return(invisible(character(0)))
+  } else {
+    # setup output vector
+    names_dag <- names_DAG(object, remove_duplicates=FALSE,
+                           include_tx_nodes=TRUE)
+    str_len <- numeric()
+    str_equations <- character()
+
+    # loop over all node types and all nodes therein,
+    # obtaining the structural equations for each one
+    # NOTE: because some nodes have multiple equations, extra loop with k
+    for (i in seq_len(3)) {
+      for (j in seq_len(length(object[[i]]))) {
+        str_equations_i <- structural_equation(object[[i]][[j]])
+        str_len[length(str_len) + 1] <- length(str_equations_i)
+        for (k in seq_len(length(str_equations_i))) {
+          str_equations[length(str_equations) + 1] <- str_equations_i[k]
+        }
+      }
+    }
+    names(str_equations) <- rep(names_dag, times=str_len)
+    str_equations_print <- align_str_equations(str_equations)
+
+    cat("A DAG object using the following structural equations:\n\n")
+    cat(str_equations_print, sep="\n")
+
+    return(invisible(str_equations))
+  }
+}
+
+## S3 method for DAG object to turn a DAG into an igraph object
+#' @importFrom igraph as.igraph
+#' @export
+as.igraph.DAG <- function(x, ...) {
+  mat <- dag2matrix(dag=x, include_root_nodes=TRUE, include_td_nodes=TRUE)
+  g <- igraph::graph_from_adjacency_matrix(mat, mode="directed")
+  return(g)
+}
+
+# get names of nodes in a DAG at a given level (root, child, tx)
+names_DAG_level <- function(dag, level) {
+
+  if (level=="root") {
+    nodes <- dag$root_nodes
+  } else if (level=="child") {
+    nodes <- dag$child_nodes
+  } else if (level=="tx") {
+    nodes <- dag$tx_nodes
+  }
+  names <- vapply(nodes, FUN=function(x){x$name}, FUN.VALUE=character(1))
+  return(names)
 }
 
 ## extract all node names from DAG objects
 ## NOTE: not an S3 method because that makes it confusing for R-Studio users
-names_DAG <- function(x, include_tx_nodes=FALSE) {
-  root_names <- vapply(x$root_nodes, FUN=function(x){x$name},
-                       FUN.VALUE=character(1))
-  child_names <- vapply(x$child_nodes, FUN=function(x){x$name},
-                        FUN.VALUE=character(1))
-  tx_names <- vapply(x$tx_nodes, FUN=function(x){x$name},
-                     FUN.VALUE=character(1))
+names_DAG <- function(x, include_tx_nodes=FALSE, remove_duplicates=TRUE) {
+  root_names <- names_DAG_level(x, "root")
+  child_names <- names_DAG_level(x, "child")
+  tx_names <- names_DAG_level(x, "tx")
 
   if (include_tx_nodes) {
     out <- c(root_names, child_names, tx_names)
@@ -112,7 +162,9 @@ names_DAG <- function(x, include_tx_nodes=FALSE) {
   }
 
   # in case the node is defined in both fixed and varying
-  out <- out[!duplicated(out)]
+  if (remove_duplicates) {
+    out <- out[!duplicated(out)]
+  }
 
   return(out)
 }
@@ -120,4 +172,9 @@ names_DAG <- function(x, include_tx_nodes=FALSE) {
 ## check if DAG object contains time-varying nodes
 is_time_varying_dag <- function(dag) {
   length(dag$tx_nodes)!=0
+}
+
+## check if DAG object is empty
+is_empty_dag <- function(dag) {
+  (length(dag$root_nodes) + length(dag$child_nodes) + length(dag$tx_nodes))==0
 }

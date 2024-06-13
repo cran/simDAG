@@ -240,7 +240,8 @@ check_inputs_long2start_stop <- function(data, id, time, varying) {
 }
 
 ## check user inputs to sim2data function
-check_inputs_sim2data <- function(sim, use_saved_states, to) {
+check_inputs_sim2data <- function(sim, use_saved_states, to, target_event,
+                                  keep_only_first, overlap) {
 
   # errors
   if (!inherits(sim, "simDT")) {
@@ -255,6 +256,10 @@ check_inputs_sim2data <- function(sim, use_saved_states, to) {
   } else if (!(is.character(to) & length(to)==1 &
                to %in% c("start_stop", "long", "wide"))) {
     stop("'to' must be one of: 'start_stop', 'long', 'wide'.")
+  } else if (!(is.logical(keep_only_first) & length(keep_only_first)==1)) {
+    stop("'keep_only_first' must be either TRUE or FALSE.")
+  } else if (!(is.logical(overlap) & length(overlap)==1)) {
+    stop("'overlap' must be either TRUE or FALSE.")
   }
 
   # extract node_time_to_event objects
@@ -262,6 +267,13 @@ check_inputs_sim2data <- function(sim, use_saved_states, to) {
   tte_names <- names(sim$tte_past_events)
   save_past_events <- unlist(lapply(sim$tx_nodes[node_types=="time_to_event"],
                                     FUN=function(x){x$save_past_events}))
+
+  if (!is.null(target_event) && !(is.character(target_event) &&
+                                  length(target_event)==1 &&
+                                  target_event %in% tte_names)) {
+    stop("'target_event' must be a single character string, specifying a",
+         " time_to_event node used in the creation of 'sim'.")
+  }
 
   # raise warning due to missing information if needed
   if (length(tte_names) < length(sim$tx_nodes) & sim$save_states!="all") {
@@ -525,8 +537,9 @@ check_inputs_node_time_to_event <- function(data, parents, sim_time, name,
   stopifnot("'prob_fun' must be a function or a single number." =
               is.function(prob_fun) | (is.numeric(prob_fun) &
                                          length(prob_fun)==1))
-  stopifnot("'event_duration' must be a single integer." =
-              (length(event_duration) == 1 && is.numeric(event_duration)))
+  stopifnot("'event_duration' must be a single integer > 0." =
+              (length(event_duration) == 1 && is.numeric(event_duration) &&
+                event_duration > 0))
   stopifnot("'immunity_duration' must be a single integer." =
               (length(immunity_duration) == 1 &&
                  is.numeric(immunity_duration)))
@@ -550,13 +563,11 @@ check_inputs_node_time_to_event <- function(data, parents, sim_time, name,
         length(body(prob_fun)) != 0)
 
     # check content of prob_fun_args
-    if (length(setdiff(names(formals(prob_fun)),
-                       c("data", "sim_time"))) != 0) {
-      for (i in seq_len(length(setdiff(names(formals(prob_fun)),
-                                 c("data", "sim_time"))))) {
-        if(!is.element(setdiff(names(formals(prob_fun)),
-                               c("data", "sim_time"))[i],
-                       names(prob_fun_args))) {
+    arg_names <- setdiff(names(formals(prob_fun)), c("data", "sim_time"))
+    if (length(args) != 0) {
+      for (i in seq_len(length(arg_names))) {
+        if(!arg_names[i] %in% names(prob_fun_args) &
+           inherits(formals(prob_fun)[[arg_names[i]]], "name")) {
           stop("All parameters of 'prob_fun' except 'data' and 'sim_time'",
                " must be included in the node_td() call if they don't have a",
                " default value.")
@@ -582,8 +593,9 @@ check_inputs_node_competing_events <- function(data, parents, sim_time, name,
               (length(name) == 1 && is.character(name)))
   stopifnot("'prob_fun' must be a function." =
               is.function(prob_fun))
-  stopifnot("'event_duration' must be a vector of integers." =
-              (length(event_duration) > 1 && is.numeric(event_duration)))
+  stopifnot("'event_duration' must be a vector of integers > 0." =
+              (length(event_duration) > 1 && is.numeric(event_duration) &&
+               all(event_duration > 0)))
   stopifnot(
     "'immunity_duration' must be a single integer >= max(event_duration)." =
               (length(immunity_duration) == 1 &&

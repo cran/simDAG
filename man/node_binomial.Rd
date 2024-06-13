@@ -5,7 +5,7 @@
 Simulate a Node Using Logistic Regression
 }
 \description{
-Data from the parents is used to generate the node using logistic regression by predicting the covariate specific probability of 1 and sampling from a bernoulli distribution accordingly.
+Data from the parents is used to generate the node using logistic regression by predicting the covariate specific probability of 1 and sampling from a Bernoulli distribution accordingly.
 }
 \usage{
 node_binomial(data, parents, formula=NULL, betas, intercept,
@@ -14,7 +14,7 @@ node_binomial(data, parents, formula=NULL, betas, intercept,
 }
 \arguments{
   \item{data}{
-A \code{data.frame} containing all columns specified by \code{parents}.
+A \code{data.table} (or something that can be coerced to a \code{data.table}) containing all columns specified by \code{parents}.
   }
   \item{parents}{
 A character vector specifying the names of the parents that this particular child node has. If non-linear combinations or interaction effects should be included, the user may specify the \code{formula} argument instead.
@@ -43,6 +43,22 @@ A character vector of length 2 or \code{NULL} (default). If \code{NULL}, the res
 }
 \details{
 Using the normal form a logistic regression model, the observation specific event probability is generated for every observation in the dataset. Using the \code{rbernoulli} function, this probability is then used to take one bernoulli sample for each observation in the dataset. If only the probability should be returned \code{return_prob} should be set to \code{TRUE}.
+
+\strong{\emph{Formal Description}}:
+
+Formally, the data generation can be described as:
+
+\deqn{Y \sim Bernoulli(logit(\texttt{intercept} + \texttt{parents}_1 \cdot \texttt{betas}_1 + ... + \texttt{parents}_n \cdot \texttt{betas}_n)),}
+
+where \eqn{Bernoulli(p)} denotes one Bernoulli trial with success probability \eqn{p}, \eqn{n} is the number of parents (\code{length(parents)}) and the \eqn{logit(x)} function is defined as:
+
+\deqn{logit(x) = ln(\frac{x}{1-x}).}
+
+For example, given \code{intercept=-15}, \code{parents=c("A", "B")} and \code{betas=c(0.2, 1.3)} the data generation process is defined as:
+
+\deqn{Y \sim Bernoulli(logit(-15 + A \cdot 0.2 + B \cdot 1.3)).}
+
+\strong{\emph{Output Format}}:
 
 By default this function returns a logical vector containing only \code{TRUE} and \code{FALSE} entries, where \code{TRUE} corresponds to an event and \code{FALSE} to no event. If those should be coded as 0/1 instead, the user can use the \code{coerce2numeric} argument. If they should be coded as a character with specific labels, the user can use the \code{labels} argument. To additionally output it as a factor, the user may use the \code{coerce2factor} argument. If both \code{coerce2factor} and \code{coerce2numeric} are set to \code{TRUE}, the result will be a factor. The last three arguments of this function are ignored if \code{return_prob} is set to \code{TRUE}.
 }

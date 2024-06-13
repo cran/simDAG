@@ -70,9 +70,7 @@ dag <- dag +
           prob_fun=prob_cve, event_duration=1, save_past_events=TRUE)
 
 ## -----------------------------------------------------------------------------
-sim_dat <- sim_discrete_time(n_sim=10,
-                             dag=dag,
-                             max_t=50)
+sim_dat <- sim_discrete_time(n_sim=10, dag=dag, max_t=50)
 head(sim_dat$data)
 
 ## ----warning=FALSE------------------------------------------------------------

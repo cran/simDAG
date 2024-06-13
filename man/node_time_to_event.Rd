@@ -5,11 +5,11 @@
 Simulate a Time-to-Event Node in Discrete-Time Simulation
 }
 \description{
-This node essentially models a dichotomous time-dependent variable for which the time of the event will be important for later usage. It adds two columns to \code{data}: \code{name_event} (whether the person currently has an event) and \code{name_time} (the time at which the current event started). Past events are stored in a list. See details.
+This node essentially models a dichotomous time-dependent variable for which the time of the event will be important for later usage. It adds two columns to \code{data}: \code{name_event} (whether the person currently has an event) and \code{name_time} (the time at which the current event started). Past events are stored in a list. Can only be used inside of the \code{\link{sim_discrete_time}} function, not outside of it. See details.
 }
 \usage{
 node_time_to_event(data, parents, sim_time, name,
-                   prob_fun, ..., event_duration=0,
+                   prob_fun, ..., event_duration=1,
                    immunity_duration=event_duration,
                    time_since_last=FALSE, event_count=FALSE,
                    save_past_events=TRUE, check_inputs=TRUE,
@@ -17,7 +17,7 @@ node_time_to_event(data, parents, sim_time, name,
 }
 \arguments{
   \item{data}{
-A \code{data.frame} containing all columns specified by \code{parents}.
+A \code{data.table} containing all columns specified by \code{parents}. Similar objects such as \code{data.frame}s are not supported.
   }
   \item{parents}{
 A character vector specifying the names of the parents that this particular child node has. Those child nodes should be valid column names in \code{data}. Because the state of this variable is by definition dependent on its previous states, the columns produced by this function will automatically be considered its parents without the user having to manually specify this.
@@ -35,7 +35,7 @@ A function that returns a numeric vector of size \code{nrow(data)} containing on
 An arbitrary amount of additional named arguments passed to \code{prob_fun}. Ignore this if you do not want to pass any arguments. Also ignored if \code{prob_fun} is a single number.
   }
   \item{event_duration}{
-A single number >= 0 specifying how long the event should last. The point in time at which an event occurs also counts into this duration. For example, if an event occurs at \eqn{t = 2} and it has a duration of 3, the event will be set to \code{TRUE} on \eqn{t \in \{2, 3, 4\}}.
+A single number > 0 specifying how long the event should last. The point in time at which an event occurs also counts into this duration. For example, if an event occurs at \eqn{t = 2} and it has a duration of 3, the event will be set to \code{TRUE} on \eqn{t \in \{2, 3, 4\}}. Therefore, all events must have a duration of at least 1 unit (otherwise they never happened).
   }
   \item{immunity_duration}{
 A single number >= \code{event_duration} specifying how long the person should be immune to the event after it is over. The count internally starts when the event starts, so in order to use an immunity duration of 10 time units after the event is over \code{event_duration + 10} should be used.
@@ -87,6 +87,9 @@ Robin Denz, Katharina Meiszl
 }
 \value{
 Returns a \code{data.table} containing at least two columns with updated values of the node.
+}
+\note{
+This function cannot be called outside of the \code{\link{sim_discrete_time}} function. It only makes sense to use it as a type in a \code{\link{node_td}} function call, as described in the documentation and vignettes.
 }
 \seealso{
 \code{\link{empty_dag}}, \code{\link{node_td}}, \code{\link{sim_discrete_time}}

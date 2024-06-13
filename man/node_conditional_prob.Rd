@@ -14,7 +14,7 @@ node_conditional_prob(data, parents, probs, default_probs=NULL,
 }
 \arguments{
   \item{data}{
-A \code{data.frame} containing all columns specified by \code{parents}.
+A \code{data.table} (or something that can be coerced to a \code{data.table}) containing all columns specified by \code{parents}.
   }
   \item{parents}{
 A character vector specifying the names of the parents that this particular child node has.
@@ -40,6 +40,22 @@ A single logical value specifying whether input checks should be performed or no
 }
 \details{
 Utilizing the user-defined discrete probability distribution in each stratum of \code{parents} (supplied using the \code{probs} argument), this function simply calls either the \code{\link{rbernoulli}} or the \code{\link{rcategorical}} function.
+
+\strong{\emph{Formal Description}}:
+
+Formally, the data generation process can be described as a series of conditional equations. For example, suppose that there is just one parent node \code{sex} with the levels \code{male} and \code{female} with the goal of creating a binary outcome that has a probability of occurrence of 0.5 for males and 0.7 for females. The conditional equation is then:
+
+\deqn{Y \sim Bernoulli(p),}
+
+where:
+
+\deqn{p = \begin{cases}
+			0.5, & \text{if } \texttt{sex="male"} \\
+			0.7, & \text{if } \texttt{sex="female"} \\
+		\end{cases},}
+
+and \eqn{Bernoulli(p)} is the Bernoulli distribution with success probability \eqn{p}. If the outcome has more than two categories, the Bernoulli distribution would be replaced by \eqn{Multinomial(p)} with \eqn{p} being replaced by a matrix of class probabilities. If there are more than two variables, the conditional distribution would be stratified by the intersection of all subgroups defined by the variables.
+
 }
 \author{
 Robin Denz

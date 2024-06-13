@@ -17,8 +17,13 @@ sim_surv_time <- function(row, betas, dist, lambda, gamma) {
 node_cox <- function(data, parents, formula=NULL, betas, surv_dist,
                      lambda, gamma, cens_dist, cens_args, name) {
 
+  if (!data.table::is.data.table(data)) {
+    data.table::setDT(data)
+  }
+
   if (!is.null(formula)) {
-    data <- stats::model.frame(formula=formula, data=data)
+    data <- stats::model.matrix(object=formula, data=data)
+    data <- as.data.frame(data[, -1])
   } else {
     data <- as.data.frame(data[, parents, with=FALSE])
   }

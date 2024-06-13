@@ -518,13 +518,14 @@ event (once you are dead, there is no going back).</p>
 <p>By setting <code>max_t=50</code>, we are letting this simulation run
 for 50 (simulated) years. The results look like this:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data)</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt;         age   sex death_event death_time .id</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; 1: 79.81243  TRUE        TRUE         27   1</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; 2: 72.12698  TRUE        TRUE         13   2</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; 3: 77.57016 FALSE        TRUE         31   3</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; 4: 82.32593 FALSE        TRUE         16   4</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 5: 75.47951 FALSE        TRUE         17   5</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 6: 78.61284 FALSE        TRUE          9   6</span></span></code></pre></div>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt;         age    sex death_event death_time   .id</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;       &lt;num&gt; &lt;lgcl&gt;      &lt;lgcl&gt;      &lt;int&gt; &lt;int&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; 1: 79.81243   TRUE        TRUE         27     1</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; 2: 72.12698   TRUE        TRUE         13     2</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; 3: 77.57016  FALSE        TRUE         31     3</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 4: 82.32593  FALSE        TRUE         16     4</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 5: 75.47951  FALSE        TRUE         17     5</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; 6: 78.61284  FALSE        TRUE          9     6</span></span></code></pre></div>
 <p>It is easy to see that all people died over the course of those 50
 years by looking at the <code>death_event</code> column. The
 <code>death_time</code> column records the time at which each person
@@ -572,17 +573,16 @@ cardiovascular event only lasts 1 year. We also set
 <code>save_past_events</code> to <code>TRUE</code> in order to store the
 possible recurrent events. Now we call the
 <code>sim_discrete_time()</code> function as before:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(<span class="at">n_sim=</span><span class="dv">10</span>,</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                             <span class="at">dag=</span>dag,</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>                             <span class="at">max_t=</span><span class="dv">50</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data)</span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt;         age   sex cve_event cve_time .id</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; 1: 82.67833  TRUE     FALSE       NA   1</span></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; 2: 90.30020 FALSE      TRUE       50   2</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; 3: 88.25512  TRUE     FALSE       NA   3</span></span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; 4: 90.28344 FALSE     FALSE       NA   4</span></span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; 5: 79.90450  TRUE     FALSE       NA   5</span></span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; 6: 81.70720  TRUE     FALSE       NA   6</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(<span class="at">n_sim=</span><span class="dv">10</span>, <span class="at">dag=</span>dag, <span class="at">max_t=</span><span class="dv">50</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt;         age    sex cve_event cve_time   .id</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt;       &lt;num&gt; &lt;lgcl&gt;    &lt;lgcl&gt;    &lt;int&gt; &lt;int&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; 1: 82.67833   TRUE     FALSE       NA     1</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; 2: 90.30020  FALSE      TRUE       50     2</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; 3: 88.25512   TRUE     FALSE       NA     3</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; 4: 90.28344  FALSE     FALSE       NA     4</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; 5: 79.90450   TRUE     FALSE       NA     5</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; 6: 81.70720   TRUE     FALSE       NA     6</span></span></code></pre></div>
 <p>In this case, the data is a little more complex. At time <span class="math inline">\(t = 50\)</span>, only one person is currently
 experiencing a cardiovascular event, which is why the
 <code>cve_event</code> column is <code>FALSE</code> in almost all rows
@@ -592,26 +592,31 @@ the <code>sim2data()</code> function to gain more information.</p>
 <p>For example, we can transform it into the start-stop format:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>d_start_stop <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim_dat, <span class="at">to=</span><span class="st">&quot;start_stop&quot;</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">head</span>(d_start_stop)</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt;    .id start stop   cve      age   sex</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; 1:   1     1   50 FALSE 82.67833  TRUE</span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; 2:   2     1   43 FALSE 90.30020 FALSE</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; 3:   2    44   44  TRUE 90.30020 FALSE</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; 4:   2    45   49 FALSE 90.30020 FALSE</span></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; 5:   2    50   50  TRUE 90.30020 FALSE</span></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; 6:   3     1   50 FALSE 88.25512  TRUE</span></span></code></pre></div>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt;      .id start  stop    cve      age    sex</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;lgcl&gt;    &lt;num&gt; &lt;lgcl&gt;</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; 1:     1     1    50  FALSE 82.67833   TRUE</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; 2:     2     1    43  FALSE 90.30020  FALSE</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; 3:     2    44    44   TRUE 90.30020  FALSE</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; 4:     2    45    49  FALSE 90.30020  FALSE</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; 5:     2    50    50   TRUE 90.30020  FALSE</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; 6:     3     1    50  FALSE 88.25512   TRUE</span></span></code></pre></div>
 <p>In this format, we can clearly see when the events occurred. This
 type of format is usually used to fit statistical models for
-time-to-event data. Another possibility is to transform it into the
-long-format:</p>
+time-to-event data (although before fitting those, you might want to
+take a look at the <code>target_event</code>, <code>overlap</code> and
+<code>keep_only_first</code> arguments of <code>sim2data()</code>).
+Another possibility is to transform it into the long-format:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>d_long <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim_dat, <span class="at">to=</span><span class="st">&quot;long&quot;</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">head</span>(d_long)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt;    .id .time   cve      age  sex</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; 1:   1     1 FALSE 82.67833 TRUE</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; 2:   1     2 FALSE 82.67833 TRUE</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; 3:   1     3 FALSE 82.67833 TRUE</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; 4:   1     4 FALSE 82.67833 TRUE</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; 5:   1     5 FALSE 82.67833 TRUE</span></span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt; 6:   1     6 FALSE 82.67833 TRUE</span></span></code></pre></div>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; Key: &lt;.id, .time&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt;      .id .time    cve      age    sex</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;lgcl&gt;    &lt;num&gt; &lt;lgcl&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; 1:     1     1  FALSE 82.67833   TRUE</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; 2:     1     2  FALSE 82.67833   TRUE</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; 3:     1     3  FALSE 82.67833   TRUE</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt; 4:     1     4  FALSE 82.67833   TRUE</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt; 5:     1     5  FALSE 82.67833   TRUE</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt; 6:     1     6  FALSE 82.67833   TRUE</span></span></code></pre></div>
 <p>This may also be useful to fit discrete-time survival models.</p>
 <p>The simulation done here assumes that the time and number of previous
 events has no effect on any further events of the patient. This
