@@ -70,8 +70,12 @@ dag <- empty_dag() +
 # generate 10 datasets without parallel processing
 out <- sim_n_datasets(dag, n_repeats=10, n_cores=1, n_sim=100)
 
+if (requireNamespace("doSNOW") & requireNamespace("doRNG") &
+    requireNamespace("foreach")) {
+
 # generate 10 datasets with parallel processing
 out <- sim_n_datasets(dag, n_repeats=10, n_cores=2, n_sim=100)
+}
 
 # generate 10 datasets and transforming the output
 # (using the sim2data function internally)

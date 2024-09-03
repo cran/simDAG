@@ -1,0 +1,83 @@
+
+test_that("only column names", {
+  formula <- "~ -1 + A*2 + B*3 + C*3"
+  expected <- list(formula_parts=c("A", "B", "C"),
+                   betas=c(2, 3, 3),
+                   intercept=-1)
+  out <- parse_formula(formula, node_type="gaussian")
+  expect_equal(out, expected)
+})
+
+test_that("no intercept with cox node", {
+  formula <- "~ A*2 + B*3 + C*3"
+  expected <- list(formula_parts=c("A", "B", "C"),
+                   betas=c(2, 3, 3))
+  out <- parse_formula(formula, node_type="cox")
+  expect_equal(out, expected)
+})
+
+test_that("with cubic terms", {
+  formula <- "~ -1 + A*2 + B*3 + C*3 + I(A^2)*-7"
+  expected <- list(formula_parts=c("A", "B", "C", "I(A^2)"),
+                   betas=c(2, 3, 3, -7),
+                   intercept=-1)
+  out <- parse_formula(formula, node_type="gaussian")
+  expect_equal(out, expected)
+})
+
+test_that("with interactions", {
+  formula <- "~ -1 + A*2 + B*3 + C*3 + A:C*0.3"
+  expected <- list(formula_parts=c("A", "B", "C", "A:C"),
+                   betas=c(2, 3, 3, 0.3),
+                   intercept=-1)
+  out <- parse_formula(formula, node_type="gaussian")
+  expect_equal(out, expected)
+})
+
+test_that("with a missing intercept", {
+  formula <- "~ A*2 + B*3 + C*3"
+  expect_error(parse_formula(formula, node_type="gaussian"),
+               "No intercept found in supplied 'formula'.")
+})
+
+test_that("intercept not a number", {
+  formula <- "~ Alpha + A*2 + B*3 + C*3"
+  expect_error(suppressWarnings(parse_formula(formula, node_type="gaussian")),
+               paste0("Intercept supplied in 'formula' is not a number. ",
+                      "Supplied intercept: Alpha"))
+})
+
+test_that("with a missing coefficient", {
+  formula <- "~ 10 + A*2 + B*3 + C"
+  expect_error(parse_formula(formula, node_type="gaussian"),
+               paste0("Multiple intercepts or missing * found in 'formula': ",
+                      "10, C. Please re-define the formula and re-run ",
+                      "the function."), fixed=TRUE)
+})
+
+test_that("with a start too many", {
+  formula <- "~ 10 + A*2 + B**3 + C*5"
+  expect_error(parse_formula(formula, node_type="gaussian"),
+               paste0("Missing variable name or coefficient in supplied ",
+                      "'formula'. The problem starts somewhere at: 'B...'"),
+               fixed=TRUE)
+})
+
+test_that("beta not a number", {
+  formula <- "~ 5 + A*C + B*3 + C*3"
+  expect_error(suppressWarnings(parse_formula(formula, node_type="gaussian")),
+               paste0("One or more of the supplied beta coefficients ",
+                      "in 'formula' are not numbers."))
+})
+
+test_that("allows functions of numbers", {
+  # one way
+  formula <- "~ 3 + A*log(2) + B*exp(-1) + C*1.5"
+  out <- parse_formula(formula, node_type="binomial")
+  expect_equal(out$betas, c(log(2), exp(-1), 1.5))
+
+  # other way
+  formula <- "~ 3 + log(2)*A + exp(-1)*B + 1.5*C"
+  out <- parse_formula(formula, node_type="binomial")
+  expect_equal(out$betas, c(log(2), exp(-1), 1.5))
+})

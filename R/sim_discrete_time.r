@@ -75,7 +75,7 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=TRUE,
   # get relevant node names
   tx_node_names <- vapply(tx_nodes, function(x){x$name},
                           FUN.VALUE=character(1))
-  tx_node_types <- vapply(tx_nodes, function(x){x$type},
+  tx_node_types <- vapply(tx_nodes, function(x){x$type_str},
                           FUN.VALUE=character(1))
 
   data <- initialize_columns(data=data,
@@ -86,7 +86,7 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=TRUE,
   # define a list of arguments once so it doesn't have to be changed
   # inside the double for loop
   arg_list <- lapply(tx_nodes, clean_node_args)
-  fun_list <- lapply(tx_nodes, FUN=function(x){get(paste0("node_", x$type))})
+  fun_list <- lapply(tx_nodes, FUN=function(x){x$type_fun})
 
   # get current environment
   envir <- environment()
@@ -116,7 +116,22 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=TRUE,
 
       # get relevant arguments
       args <- arg_list[[i]]
-      args$data <- data[, args$parents, with=FALSE]
+
+      if (!is.null(tx_nodes[[i]]$formula) &&
+          !is_formula(tx_nodes[[i]]$formula)) {
+
+        # augment data for formula input
+        args$data <- tryCatch({
+          data_for_formula(data=data, args=args)},
+          error=function(e){
+            stop("An error occured when interpreting the formula of node '",
+                 tx_nodes[[i]]$name, "'. The message was:\n", e,
+                 call.=FALSE)
+          }
+        )
+      } else {
+        args$data <- data[, args$parents, with=FALSE]
+      }
 
       # get function
       node_type_fun <- fun_list[[i]]
@@ -125,6 +140,9 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=TRUE,
       # add or remove internal arguments if needed
       if ("sim_time" %in% fun_pos_args) {
         args$sim_time <- t
+      }
+      if ("past_states" %in% fun_pos_args) {
+        args$past_states <- past_states
       }
       if (!"parents" %in% fun_pos_args) {
         args$parents <- NULL
@@ -140,7 +158,7 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=TRUE,
         do.call(node_type_fun, args)},
         error=function(e){
           stop("An error occured when processing node '", tx_nodes[[i]]$name,
-               "' at time t = ", t, ". The message was: ", e)
+               "' at time t = ", t, ". The message was:\n", e, call.=FALSE)
         }
       )
 
@@ -151,7 +169,7 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=TRUE,
         error=function(e){
           stop("An error occured when trying to add the output of node '",
                tx_nodes[[i]]$name, "' at time t = ", t, " to the current",
-               " data. The message was: ", e)
+               " data. The message was:\n", e, call.=FALSE)
         }
       )
     }
@@ -163,7 +181,7 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=TRUE,
         do.call(tx_transform_fun, args=tx_transform_args)},
         error=function(e){
           stop("An error occured when calling the tx_transform() function",
-               " at t = ", t, ". The message was: ", e)
+               " at t = ", t, ". The message was:\n", e, call.=FALSE)
         }
       )
     }

@@ -51,3 +51,25 @@ Documentation
 
 * Documentation pages of most nodes now include formal descriptions of the data generation mechanism
 * Re-wrote the documentation page for custom node definition
+
+# simDAG 0.2.0
+
+Enhancements
+
+* Added the `output` argument to the `rbernoulli()` function to allow different output formats.
+* Change default of `sort_dag` in `sim_from_dag()` from `TRUE` to `FALSE`.
+* Moved the functionality of the `coerce2factor` and `coerce2numeric` arguments in `rcategorical()`, `node_multinomial()` and `node_binomial()` to the `output` argument for a more consistent syntax and easier usage.
+* It is now allowed to directly supply functions to the `type` argument in `node()` and `node_td()`.
+* Passing optional arguments to the `layout` function in `plot.DAG()` is now supported.
+
+Bug Fixes
+
+* The `node_fill` argument of the `plot.DAG()` function is no longer being ignored if `mark_td_nodes` was set to `TRUE`.
+
+New Features
+
+* Added a new enhanced formula interface, which allows users to directly type out the underlying structural equations for many node types. This replaces the old `formula` argument. Standard formulas (without betas and intercepts) are still supported, but no longer mentioned in the documentation and will be deprecated in future versions.
+
+Documentation
+
+* Added a new vignette explaining in detail how the new enhanced formula interface for the `node()` function works.

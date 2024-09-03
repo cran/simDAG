@@ -11,14 +11,14 @@ is_node_name <- function(name) {
 
 # check whether a node type is appropriate
 is_node_type <- function(type) {
-  length(type)==1 && is.character(type) &&
-    exists(paste0("node_", type), mode="function")
+  (length(type)==1 && is.character(type) &&
+    exists(paste0("node_", type), mode="function")) | is.function(type)
 }
 
 # check whether a node type (root nodes) is appropriate
 is_node_dist <- function(type) {
-  length(type)==1 && is.character(type) && exists(type, mode="function",
-                                                  envir=globalenv())
+  (length(type)==1 && is.character(type) &&
+     exists(type, mode="function", envir=globalenv())) | is.function(type)
 }
 
 # check whether parents are defined appropriately
@@ -59,11 +59,17 @@ check_inputs_child_node <- function(name, type, parents, args, time_varying,
   } else if (!is_node_parents(parents) & !time_varying) {
     stop("The 'parents' argument of a child node must be a character",
          " vector of length > 0.")
-  } else if (!(is_formula(formula) | is.null(formula))) {
-    stop("'formula' must be a valid formula object or NULL.")
+  } else if (!(is_formula(formula) | is.null(formula) |
+               is.character(formula))) {
+    stop("'formula' must be a valid formula object, a special formula or NULL.")
   }
 
   # type specific checks
+  if (is.function(type)) {
+    type <- extract_function_name(type)
+    type <- correct_type_str(type)
+  }
+
   type_check_fun_name <- paste0("check_inputs_node_", type)
 
   if (exists(type_check_fun_name, mode="function") &
@@ -78,15 +84,15 @@ check_inputs_child_node <- function(name, type, parents, args, time_varying,
 ## general checks for all regression based nodes
 check_inputs_node_regression <- function(parents, args, type) {
 
-  if (is.null(args$betas)) {
+  if (is.null(args$betas) & !is.character(args$formula)) {
     stop("'betas' must be defined when using type='", type, "'.")
-  } else if (is.null(args$intercept)) {
+  } else if (is.null(args$intercept) & !is.character(args$formula)) {
     stop("'intercept' must be defined when using type='", type, "'.")
   }
 
-  if (!is_betas(args$betas)) {
+  if (!is_betas(args$betas) & !is.character(args$formula)) {
     stop("'betas' must be a numeric vector when using type='", type, "'.")
-  } else if (!is_intercept(args$intercept)) {
+  } else if (!is_intercept(args$intercept) & !is.character(args$formula)) {
     stop("'intercept' must be a single number when using type='", type, "'.")
   } else if ((length(parents) != length(args$betas)) & is.null(args$formula)) {
     stop("'betas' must have the same length as 'parents' when using",
@@ -263,7 +269,7 @@ check_inputs_sim2data <- function(sim, use_saved_states, to, target_event,
   }
 
   # extract node_time_to_event objects
-  node_types <- lapply(sim$tx_nodes, FUN=function(x){x$type})
+  node_types <- lapply(sim$tx_nodes, FUN=function(x){x$type_str})
   tte_names <- names(sim$tte_past_events)
   save_past_events <- unlist(lapply(sim$tx_nodes[node_types=="time_to_event"],
                                     FUN=function(x){x$save_past_events}))

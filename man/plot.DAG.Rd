@@ -99,7 +99,7 @@ Whether to include time-varying nodes added to the \code{dag} using the \code{\l
 Whether to distinguish time-varying and time-fixed nodes by \code{fill} color. If \code{TRUE}, the color will be set automatically using the standard \code{ggplot2} palette, ignoring the color specified in \code{node_fill}. Ignored if \code{include_td_nodes=FALSE} or if there are no time-varying variables.
   }
   \item{...}{
-Currently not used.
+Further arguments passed to the \code{layout} function specified by the argument of the same name.
   }
 }
 \details{
@@ -120,9 +120,6 @@ Returns a standard \code{ggplot2} object.
 }
 \examples{
 library(simDAG)
-library(ggplot2)
-library(igraph)
-library(ggforce)
 
 # 2 root nodes, 1 child node
 dag <- empty_dag() +
@@ -130,6 +127,12 @@ dag <- empty_dag() +
   node("sex", type="rbernoulli", p=0.5) +
   node("smoking", type="binomial", parents=c("sex", "age"), betas=c(1.1, 0.4),
        intercept=-2)
+
+if (requireNamespace("ggplot2") & requireNamespace("ggforce")) {
+
+library(ggplot2)
+library(igraph)
+library(ggforce)
 
 plot(dag)
 
@@ -142,4 +145,5 @@ dag <- dag +
   node_td("lottery", type="time_to_event", parents=c("age", "smoking"))
 
 plot(dag)
+}
 }

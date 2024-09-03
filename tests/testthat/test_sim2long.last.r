@@ -7,11 +7,13 @@ test_that("general test case", {
 
   sim <- list(max_t=11,
               tx_nodes=list(list(name="A",
-                                 type="time_to_event",
+                                 type_str="time_to_event",
+                                 type_fun=node_time_to_event,
                                  event_duration=10,
                                  time_varying=TRUE),
                             list(name="B",
-                                 type="time_to_event",
+                                 type_str="time_to_event",
+                                 type_fun=node_time_to_event,
                                  event_duration=5,
                                  time_varying=TRUE)),
               data=data.table(.id=1,
@@ -41,12 +43,14 @@ test_that("adding time_since_last and event_count afterwards", {
   # NOTE: what if node_td has no parents?
   sim <- list(max_t=11,
               tx_nodes=list(list(name="A",
-                                 type="time_to_event",
+                                 type_str="time_to_event",
+                                 type_fun=node_time_to_event,
                                  event_duration=10,
                                  time_since_last=TRUE,
                                  time_varying=TRUE),
                             list(name="B",
-                                 type="time_to_event",
+                                 type_str="time_to_event",
+                                 type_fun=node_time_to_event,
                                  event_duration=5,
                                  event_count=TRUE,
                                  time_since_last=TRUE,
@@ -78,7 +82,7 @@ test_that("no time-to-event nodes in data", {
 
   dag <- empty_dag() +
     node("age", type="rnorm", mean=20, sd=10) +
-    node_td("some_nonsense", type="gaussian", formula=~age,
+    node_td("some_nonsense", type="gaussian", parents="age",
             betas=0.1, intercept=-1, error=5)
 
   sim <- sim_discrete_time(dag=dag, n_sim=10, max_t=20)

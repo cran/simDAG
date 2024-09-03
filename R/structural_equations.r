@@ -46,19 +46,27 @@ get_distr_default <- function(type) {
   return(type)
 }
 
+# some cosmetic changes to supplied formula
+prep_formula_str_eq <- function(formula) {
+  formula <- gsub("~", "", formula, fixed=TRUE)
+  formula <- gsub(" * ", "*", formula, fixed=TRUE)
+  return(formula)
+}
+
 ## structural equation for a root node
 str_eq_root <- function(node) {
 
   # define data generation function string
-  type <- get_distr_default(node$type)
+  type_str <- get_distr_default(node$type_str)
 
   # get param string
-  use_names <- !node$type %in% c("rnorm", "rbernoulli", "rcategorical",
-                                 "rconstant")
-  params <- get_param_str(node$params, use_names=use_names)
+  use_names <- !node$type_str %in% c("rnorm", "rbernoulli", "rcategorical",
+                                     "rconstant")
+  params <- node$params[!names(node$params) %in% c("output", "labels")]
+  params <- get_param_str(params, use_names=use_names)
 
   # put together
-  out <- paste0(node$name, " ~ ", type, "(", params, ")")
+  out <- paste0(node$name, " ~ ", type_str, "(", params, ")")
 
   return(out)
 }
@@ -66,7 +74,10 @@ str_eq_root <- function(node) {
 ## structural equation for binomial child node
 str_eq_binomial <- function(node) {
 
-  if (is.null(node$intercept)) {
+  if (!is.null(node$formula) && !is_formula(node$formula)) {
+    out <- paste0(node$name, " ~ Bernoulli(logit(",
+                  prep_formula_str_eq(node$formula), "))")
+  } else if (is.null(node$intercept)) {
     out <- paste0(node$name, " ~ Bernoulli(logit())")
   } else {
     beta_eq <- get_beta_plus_parents(betas=node$betas, parents=node$parents)
@@ -83,7 +94,11 @@ str_eq_binomial <- function(node) {
 
 ## structural equation for gaussian child node
 str_eq_gaussian <- function(node) {
-  if (is.null(node$intercept)) {
+
+  if (!is.null(node$formula) && !is_formula(node$formula)) {
+    out <- paste0(node$name, " ~ N(",
+                  prep_formula_str_eq(node$formula), ", ", node$error, ")")
+  } else if (is.null(node$intercept)) {
     out <- paste0(node$name, " ~ N()")
   } else {
     beta_eq <- get_beta_plus_parents(betas=node$betas, parents=node$parents)
@@ -95,7 +110,11 @@ str_eq_gaussian <- function(node) {
 
 ## structural equation for poisson node
 str_eq_poisson <- function(node) {
-  if (is.null(node$intercept)) {
+
+  if (!is.null(node$formula) && !is_formula(node$formula)) {
+    out <- paste0(node$name, " ~ Poisson(",
+                  prep_formula_str_eq(node$formula), ")")
+  } else if (is.null(node$intercept)) {
     out <- paste0(node$name, " ~ Poisson()")
   } else {
     beta_eq <- get_beta_plus_parents(betas=node$betas, parents=node$parents)
@@ -107,7 +126,12 @@ str_eq_poisson <- function(node) {
 
 ## structural equation for negative binomial node
 str_eq_negative_binomial <- function(node) {
-  if (is.null(node$intercept)) {
+
+  if (!is.null(node$formula) && !is_formula(node$formula)) {
+    out <- paste0(node$name, " ~ NegBinomial(",
+                  prep_formula_str_eq(node$formula),
+                  " + log(", node$theta, "))")
+  } else if (is.null(node$intercept)) {
     out <- paste0(node$name, " ~ NegBinomial()")
   } else {
     beta_eq <- get_beta_plus_parents(betas=node$betas, parents=node$parents)
@@ -196,9 +220,9 @@ str_eq_conditional_distr <- function(node) {
 ## structural equation for time-to-event / competing events node
 str_eq_time_to_event <- function(node) {
 
-  if (node$type=="time_to_event") {
+  if (node$type_str=="time_to_event") {
     gen <- "Bernoulli"
-  } else if (node$type=="competing_events") {
+  } else if (node$type_str=="competing_events") {
     gen <- "Multinomial"
   }
 
@@ -236,7 +260,12 @@ str_eq_time_to_event <- function(node) {
 
 ## structural equation for cox regression based nodes
 str_eq_cox <- function(node) {
-  beta_eq <- get_beta_plus_parents(betas=node$betas, parents=node$parents)
+
+  if (!is.null(node$formula) && !is_formula(node$formula)) {
+    beta_eq <- prep_formula_str_eq(node$formula)
+  } else {
+    beta_eq <- get_beta_plus_parents(betas=node$betas, parents=node$parents)
+  }
 
   if (node$surv_dist=="weibull") {
     right <- paste0("(-(log(Unif(0, 1))/(", node$lambda, "*exp(",
@@ -260,18 +289,19 @@ str_eq_cox <- function(node) {
 ## structural equation for custom time-varying nodes
 str_eq_td <- function(node) {
   args <- names(node)
-  args <- args[!args %in% c("name", "type", "parents", "time_varying")]
+  args <- args[!args %in% c("name", "type_str", "type_fun", "parents",
+                            "time_varying")]
   args <- paste0(args, collapse=", ")
 
-  if ("sim_time" %in% names(formals(paste0("node_", node$type)))) {
+  if ("sim_time" %in% names(formals(paste0("node_", node$type_str)))) {
     args <- paste0("t, ", args)
   }
 
   if (is.null(node$parents)) {
-    out <- paste0(node$name, "(t) ~ node_", node$type, "(", args, ")")
+    out <- paste0(node$name, "(t) ~ node_", node$type_str, "(", args, ")")
   } else {
     parents <- paste0(paste0(node$parents, "(t)"), collapse=", ")
-    out <- paste0(node$name, "(t) ~ node_", node$type, "(", parents, ", ",
+    out <- paste0(node$name, "(t) ~ node_", node$type_str, "(", parents, ", ",
                   args, ")")
   }
   return(out)
@@ -280,12 +310,13 @@ str_eq_td <- function(node) {
 ## structural equation for custom child nodes
 str_eq_child <- function(node) {
   args <- names(node)
-  args <- args[!args %in% c("name", "type", "parents", "time_varying")]
+  args <- args[!args %in% c("name", "type_str", "type_fun", "parents",
+                            "time_varying")]
   args <- paste0(args, collapse=", ")
 
   parents <- paste0(node$parents, collapse=", ")
 
-  out <- paste0(node$name, " ~ node_", node$type, "(", parents, ", ",
+  out <- paste0(node$name, " ~ node_", node$type_str, "(", parents, ", ",
                 args, ")")
   return(out)
 }
@@ -302,17 +333,17 @@ align_str_equations <- function(str_equations) {
 structural_equation <- function(node) {
   ## time-varying nodes
   if (node$time_varying) {
-    if (node$type %in% c("time_to_event", "competing_events")) {
+    if (node$type_str %in% c("time_to_event", "competing_events")) {
       out <- str_eq_time_to_event(node)
     } else {
       out <- str_eq_td(node)
     }
   ## child nodes
   } else if (!is.null(node$parents)) {
-    if (node$type %in% c("gaussian", "binomial", "conditional_prob",
-                         "conditional_distr", "multinomial", "poisson",
-                         "negative_binomial", "cox")) {
-      str_eq_fun <- get(paste0("str_eq_", node$type))
+    if (node$type_str %in% c("gaussian", "binomial", "conditional_prob",
+                             "conditional_distr", "multinomial", "poisson",
+                             "negative_binomial", "cox")) {
+      str_eq_fun <- get(paste0("str_eq_", node$type_str))
       out <- str_eq_fun(node)
     } else {
       out <- str_eq_child(node)

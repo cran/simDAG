@@ -183,15 +183,12 @@ test_that("helpful error message node processing working", {
 
   expect_error(sim_discrete_time(dag=dag, n_sim=10, max_t=120),
                paste0("An error occured when processing node 'car_crash'",
-                      " at time t = 100. The message was: Error in (",
+                      " at time t = 100. The message was:\nError in (",
                       "function (data, sim_time, base_p) : Error at",
                       " t = 100"), fixed=TRUE)
 })
 
 test_that("helpful error message adding node to data working", {
-
-  dag <- empty_dag() +
-    node_td("custom_nonsense", type="nonsense")
 
   node_nonsense <- function(data, sim_time) {
     if (sim_time < 100) {
@@ -203,10 +200,13 @@ test_that("helpful error message adding node to data working", {
 
   assign("node_nonsense", value=node_nonsense, envir=.GlobalEnv)
 
+  dag <- empty_dag() +
+    node_td("custom_nonsense", type="nonsense")
+
   expect_error(sim_discrete_time(dag=dag, n_sim=10, max_t=120),
                paste0("An error occured when trying to add the output of ",
                       "node 'custom_nonsense' at time t = 100 to the ",
-                      "current data. The message was: Error in ",
+                      "current data. The message was:\nError in ",
                       "`[<-.data.table`(`*tmp*`, , name, value = list(20, ",
                       "12)): Supplied 2 items to be assigned to 10 items ",
                       "of column 'custom_nonsense'. If you wish to ",
@@ -229,14 +229,11 @@ test_that("helpful error message when processing tx_transform_fun", {
   expect_error(sim_discrete_time(dag=dag, n_sim=10, max_t=120,
                                  tx_transform_fun=transform_fun),
                paste0("An error occured when calling the tx_transform() ",
-                      "function at t = 1. The message was: Error in ",
+                      "function at t = 1. The message was:\nError in ",
                       "(function (data) : failed instantly"), fixed=TRUE)
 })
 
 test_that("using a custom node", {
-
-  dag <- empty_dag() +
-    node_td("custom_nonsense", type="sim_time_multiplier")
 
   node_sim_time_multiplier <- function(data, sim_time) {
     return(sim_time * 2)
@@ -246,7 +243,59 @@ test_that("using a custom node", {
   assign("node_sim_time_multiplier", value=node_sim_time_multiplier,
          envir=.GlobalEnv)
 
+  dag <- empty_dag() +
+    node_td("custom_nonsense", type="sim_time_multiplier")
+
   sim <- sim_discrete_time(dag=dag, n_sim=100, max_t=20)
 
   expect_equal(sim$data$custom_nonsense, rep(40, 100))
+})
+
+test_that("using a custom node", {
+
+  sim_time_multiplier <- function(data, sim_time) {
+    return(sim_time * 2)
+  }
+
+  dag <- empty_dag() +
+    node_td("A", type=node_time_to_event, prob_fun=0.01) +
+    node_td("custom_nonsense", type=sim_time_multiplier)
+
+  sim <- sim_discrete_time(dag=dag, n_sim=100, max_t=20)
+
+  expect_equal(sim$data$custom_nonsense, rep(40, 100))
+  expect_true(is.logical(sim$data$A_event))
+})
+
+test_that("works with formulas", {
+  dag <- empty_dag() +
+    node("A", type="rnorm", mean=0, sd=1) +
+    node("B", type="rbernoulli", p=0.5, output="numeric") +
+    node("C", type="rcategorical", probs=c(0.3, 0.2, 0.5),
+         output="factor", labels=c("low", "medium", "high")) +
+    node_td("D", type="gaussian", formula= ~ -2 + A*1 + B*3, error=2)
+
+  set.seed(234245)
+
+  sim <- sim_discrete_time(dag, n_sim=100, max_t=50)
+  expect_equal(round(mean(sim$data$D), 3), -0.833)
+})
+
+test_that("helpful error message formula error", {
+
+  dag <- empty_dag() +
+    node("A", type="rbernoulli") +
+    node_td("B", type="gaussian", formula= ~ -1 + A*2 + C*3)
+
+  expect_error(sim_discrete_time(dag, n_sim=100, max_t=3),
+            paste0("An error occured when interpreting the formula of ",
+                   "node 'B'. The message was:\nError: Error in `[.data.table`",
+                   "(mod_mat, , args$parents, with = FALSE): column(s) not ",
+                   "found: [A, C]\nThis error may occur when one of the terms ",
+                   "in a supplied ", "formula does not match any variables ",
+                   "in the generated data.\n Please check whether all terms ",
+                   "in your supplied formula occur in the data generated up ",
+                   "to this point.\n The variables currently available in ",
+                   "data are:\n(Intercept), ATRUE, B, .id"), fixed=TRUE)
+
 })

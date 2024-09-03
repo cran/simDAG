@@ -3,7 +3,7 @@
 #' @importFrom data.table data.table
 #' @importFrom data.table setDT
 #' @export
-sim_from_dag <- function(dag, n_sim, sort_dag=TRUE, check_inputs=TRUE) {
+sim_from_dag <- function(dag, n_sim, sort_dag=FALSE, check_inputs=TRUE) {
 
   requireNamespace("data.table")
 
@@ -20,10 +20,10 @@ sim_from_dag <- function(dag, n_sim, sort_dag=TRUE, check_inputs=TRUE) {
 
     # call data generation function
     out <- tryCatch({
-      data.table(do.call(get(dag$root_nodes[[i]]$type), args))},
+      data.table(do.call(dag$root_nodes[[i]]$type_fun, args))},
       error=function(e){
         stop("An error occured when processing root node '",
-             dag$root_nodes[[i]]$name, "'. The message was: ", e)
+             dag$root_nodes[[i]]$name, "'. The message was:\n", e, call.=FALSE)
       }
     )
     colnames(out) <- dag$root_nodes[[i]]$name
@@ -52,19 +52,37 @@ sim_from_dag <- function(dag, n_sim, sort_dag=TRUE, check_inputs=TRUE) {
     # get relevant arguments
     args <- dag$child_nodes[[i]]
     args$data <- data
-    args$type <- NULL
+    args$type_str <- NULL
+    args$type_fun <- NULL
     args$time_varying <- NULL
 
-    if (dag$child_nodes[[i]]$type!="cox") {
+    if (dag$child_nodes[[i]]$type_str!="cox") {
       args$name <- NULL
+    }
+
+    # if a special formula is supplied, change arguments accordingly
+    form <- dag$child_nodes[[i]]$formula
+
+    if (!is.null(form) && !is_formula(form)) {
+      args <- args_from_formula(args=args, formula=form,
+                                node_type=dag$child_nodes[[i]]$type_str)
+      args$data <- tryCatch({
+        data_for_formula(data=data, args=args)},
+        error=function(e){
+          stop("An error occured when interpreting the formula of node '",
+               dag$child_nodes[[i]]$name, "'. The message was:\n", e,
+               call.=FALSE)
+        }
+      )
     }
 
     # call needed node function, add node name to possible errors
     node_out <- tryCatch({
-      do.call(get(paste0("node_", dag$child_nodes[[i]]$type)), args)},
+      do.call(dag$child_nodes[[i]]$type_fun, args)},
       error=function(e){
         stop("An error occured when processing node '",
-             dag$child_nodes[[i]]$name, "'. The message was: ", e)
+             dag$child_nodes[[i]]$name, "'. The message was:\n", e,
+             call.=FALSE)
       }
     )
     data <- add_node_to_data(data=data, new=node_out,
