@@ -510,7 +510,7 @@ form:</p>
 </div>
 <div id="using-functions-in-formula" class="section level1">
 <h1>Using Functions in formula</h1>
-<p>There is also limited support for including functions in the formula
+<p>There is also direct support for including functions in the formula
 as well. For example, it is allowed to call any function on the beta
 coefficients, which is useful to specify betas on a different scale (for
 example using Odds-Ratios instead of betas). For example:</p>
@@ -518,7 +518,44 @@ example using Odds-Ratios instead of betas). For example:</p>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;D&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">+</span> A<span class="sc">*</span><span class="fu">log</span>(<span class="fl">0.5</span>) <span class="sc">+</span> B<span class="sc">*</span><span class="fl">0.2</span>)</span></code></pre></div>
 <p>is valid syntax. Any function can be used in the place of
 <code>log()</code>, as long as it is a single function that is called on
-a beta-coefficient.</p>
+a beta-coefficient. It is also possible to use functions on the
+variables themselves. However, it is required to wrap them in a
+<code>I()</code> call. For example, using something like
+<code>~ -3 + log(A)*0.5 + B*0.2</code> would not work, but
+<code>~ -3 + I(log(A))*0.5 + B*0.2</code> is valid syntax.</p>
+</div>
+<div id="using-special-characters-in-formula" class="section level1">
+<h1>Using Special Characters in formula</h1>
+<p>Although not recommended, it is possible to use variable names
+containing special characters in <code>formula</code>, by escaping them
+using the usual R syntax. For example, if the user wanted to use
+<code>this-var</code> as a variable name and use that variable as a
+parent node in a <code>formula</code>, this could be done using the
+following code:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>dag_with_fun <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;this-var&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">+</span> A<span class="sc">*</span><span class="fu">log</span>(<span class="fl">0.5</span>) <span class="sc">+</span> B<span class="sc">*</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;D&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="dv">5</span> <span class="sc">+</span> <span class="st">`</span><span class="at">this-var</span><span class="st">`</span><span class="sc">*</span><span class="fl">0.3</span>)</span></code></pre></div>
+<p>There are, however, three special characters that may not be used in
+<code>formula</code>: spaces, <code>+</code> and <code>*</code>. Errors
+may be produced when using these characters in variable names. It is
+best to avoid special characters though, just to be safe.</p>
+</div>
+<div id="using-external-coefficients-advanced-usage" class="section level1">
+<h1>Using External Coefficients (Advanced Usage)</h1>
+<p>Sometimes it may be useful to define the causal coefficients in
+external variables, for example when writing a function that creates a
+<code>DAG</code> objects with some set coefficients. This is supported
+through the use of the <code>eval()</code> function as well. For
+example:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>beta_coef <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fl">0.5</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>dag_with_external <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;D&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">+</span> A<span class="sc">*</span><span class="fu">eval</span>(beta_coef) <span class="sc">+</span> B<span class="sc">*</span><span class="fl">0.2</span>)</span></code></pre></div>
+<p>is valid syntax. Note that this only works if the variable wrapped in
+the <code>eval()</code> function call is defined in the same environment
+in which the <code>DAG</code> object is being created. If this is not
+the case, some weird error messages may be produced, depending on the
+code used.</p>
 </div>
 
 

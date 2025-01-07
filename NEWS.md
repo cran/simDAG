@@ -73,3 +73,24 @@ New Features
 Documentation
 
 * Added a new vignette explaining in detail how the new enhanced formula interface for the `node()` function works.
+
+# simDAG 0.2.1
+
+Enhancements
+
+* External variables may now be used in the formula interface using `eval()` calls.
+* Added the `remove_not_at_risk` argument to the `sim2data()` function.
+* Change default of `t0_sort_dag` in `sim_discrete_time()` from `TRUE` to `FALSE` for more consistency with `sim_from_dag()`.
+
+Bug Fixes
+
+* Using `sim2data()` with time-dependent nodes of type `node_competing_events()` no longer results in an unwarranted error message.
+* Using the column name `"time"` in the `time` argument of `long2start_stop()` now works properly.
+
+New Features
+
+* Added the `node_identity()` function to allow users to directly calculate nodes as an R expression of other nodes without the need to define a new function.
+
+Documentation
+
+* Added more examples in the formula vignette.

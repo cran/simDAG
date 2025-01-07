@@ -44,6 +44,10 @@ check_inputs_root_node <- function(name, type) {
   } else if (!is_node_dist(type)) {
     stop("The 'type' parameter of a root node must be a single",
          " character string naming a defined function.")
+  } else if (!is.function(type) && type %in% c("identity", "node_identity")) {
+    stop("Nodes of type 'identity' cannot be used as root nodes, e.g. at",
+         " least one variable name has to be\nmentioned in 'formula'. Use",
+         " type='rconstant' instead to specify a constant value.")
   }
 }
 
@@ -247,7 +251,8 @@ check_inputs_long2start_stop <- function(data, id, time, varying) {
 
 ## check user inputs to sim2data function
 check_inputs_sim2data <- function(sim, use_saved_states, to, target_event,
-                                  keep_only_first, overlap) {
+                                  keep_only_first, overlap,
+                                  remove_not_at_risk) {
 
   # errors
   if (!inherits(sim, "simDT")) {
@@ -266,6 +271,9 @@ check_inputs_sim2data <- function(sim, use_saved_states, to, target_event,
     stop("'keep_only_first' must be either TRUE or FALSE.")
   } else if (!(is.logical(overlap) & length(overlap)==1)) {
     stop("'overlap' must be either TRUE or FALSE.")
+  } else if (!(is.logical(remove_not_at_risk) &
+               length(remove_not_at_risk)==1)) {
+    stop("'remove_not_at_risk' must be either TRUE or FALSE.")
   }
 
   # extract node_time_to_event objects
@@ -569,7 +577,8 @@ check_inputs_node_time_to_event <- function(data, parents, sim_time, name,
         length(body(prob_fun)) != 0)
 
     # check content of prob_fun_args
-    arg_names <- setdiff(names(formals(prob_fun)), c("data", "sim_time"))
+    arg_names <- setdiff(names(formals(prob_fun)), c("data", "sim_time",
+                                                     "past_states"))
     if (length(args) != 0) {
       for (i in seq_len(length(arg_names))) {
         if(!arg_names[i] %in% names(prob_fun_args) &

@@ -217,6 +217,14 @@ str_eq_conditional_distr <- function(node) {
   return(out)
 }
 
+## structural equation for identity nodes
+str_eq_identity <- function(node) {
+  form_str <- paste0(str_trim(deparse(node$formula)), collapse="")
+  form_str <- substr(form_str, 2, nchar(form_str))
+  out <- paste0(node$name, " ~ ", form_str)
+  return(out)
+}
+
 ## structural equation for time-to-event / competing events node
 str_eq_time_to_event <- function(node) {
 
@@ -321,6 +329,43 @@ str_eq_child <- function(node) {
   return(out)
 }
 
+## breaks very long structural equations into multiple lines for printing
+add_line_breaks <- function(str, char_max=60, pad=NULL) {
+
+  if (nchar(str) <= char_max) {
+    return(str)
+  }
+
+  # find last + symbol before the n_break character limit
+  last_plus <- regexpr("\\+[^\\+]*$", substr(str, 1, char_max))[[1]]
+
+  if (last_plus==-1) {
+    return(str)
+  }
+
+  # break string into two parts
+  part1 <- substr(str, 1, last_plus)
+  part2 <- substr(str, last_plus + 1, nchar(str))
+
+  # count characters before first (
+  if (is.null(pad)) {
+    pad <- regexpr("\\(", part1)[[1]][1]
+  }
+
+  # adjust second part
+  part2 <- paste0(paste0(rep(" ", pad), collapse=""), part2)
+
+  # if still to long, recursively apply same strategy to second part again
+  if (nchar(part2) >= char_max) {
+    part2 <- add_line_breaks(str=part2, char_max=char_max, pad=pad)
+  }
+
+  # put back together as one string on two lines
+  out <- paste0(part1, "\n", part2)
+
+  return(out)
+}
+
 ## align structural equations on tilde for printing
 align_str_equations <- function(str_equations) {
   tilde_pos <- unlist(gregexpr("~", str_equations))
@@ -342,7 +387,7 @@ structural_equation <- function(node) {
   } else if (!is.null(node$parents)) {
     if (node$type_str %in% c("gaussian", "binomial", "conditional_prob",
                              "conditional_distr", "multinomial", "poisson",
-                             "negative_binomial", "cox")) {
+                             "negative_binomial", "cox", "identity")) {
       str_eq_fun <- get(paste0("str_eq_", node$type_str))
       out <- str_eq_fun(node)
     } else {

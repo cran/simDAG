@@ -178,3 +178,61 @@ test_that("with special formula in reverse order", {
 
   expect_equal(data1, data2)
 })
+
+test_that("with special formula + only function calls on numbers", {
+
+  dag <- empty_dag() +
+    node("A", "rnorm", mean=20, sd=5) +
+    node("B", "rbernoulli", p=0.5) +
+    node("gauss", type="gaussian", formula=~ -100 + A*log(10) + BTRUE*log(11),
+         error=10)
+
+  set.seed(43525)
+
+  dat <- sim_from_dag(dag, n_sim=1000)
+
+  expect_equal(mean(dat$gauss), -52.60826, tolerance=0.001)
+})
+
+test_that("with special formula + external coefficients", {
+
+  some_var <- 10
+  some_var2 <- 11
+
+  dag <- empty_dag() +
+    node("A", "rnorm", mean=20, sd=5) +
+    node("B", "rbernoulli", p=0.5) +
+    node("gauss", type="gaussian", formula=~ -100 + A*eval(some_var) +
+           BTRUE*eval(some_var2), error=10)
+
+  set.seed(43525)
+
+  dat <- sim_from_dag(dag, n_sim=1000)
+
+  expect_equal(mean(dat$gauss), 106.147, tolerance=0.001)
+})
+
+test_that("with special formula + special characters in it", {
+
+  dag <- empty_dag() +
+    node("A", "rnorm", mean=20, sd=5) +
+    node("B-/", "rbernoulli", p=0.5, output="numeric") +
+    node("gauss", type="gaussian", formula=~ -100 + A*log(10) + `B-/`*log(11),
+         error=10)
+
+  set.seed(43525)
+
+  dat <- sim_from_dag(dag, n_sim=1000)
+
+  expect_equal(mean(dat$gauss), -52.60826, tolerance=0.001)
+})
+
+test_that("with special formula but NA in betas", {
+  expect_error({
+    dag <- empty_dag() +
+      node("A", type="rnorm") +
+      node("C", type="rbernoulli") +
+      node("B", type="gaussian", formula= ~ -2 + A*NA + C*2)
+  },
+  "One or more of the supplied beta coefficients in 'formula' are not numbers.")
+})

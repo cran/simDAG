@@ -2,6 +2,7 @@
 ## generate multiple datasets from a single dag objects using
 ## either the sim_from_dag() or sim_discrete_time() function
 ## with or without parallel processing
+#' @importFrom data.table setDTthreads
 #' @export
 sim_n_datasets <- function(dag, n_sim, n_repeats,
                            n_cores=parallel::detectCores(),
@@ -37,7 +38,14 @@ sim_n_datasets <- function(dag, n_sim, n_repeats,
     # set up cluster
     cl <- parallel::makeCluster(n_cores, outfile="")
     doSNOW::registerDoSNOW(cl)
-    pckgs <- c("data.table", "simDAG", "Rfast")
+
+    args <- list(...)
+    if ("sort_dag" %in% names(args)) {
+      pckgs <- c("data.table", "simDAG", "Rfast")
+    } else {
+      pckgs <- c("data.table", "simDAG")
+    }
+
     glob_funs <- ls(envir=.GlobalEnv)[vapply(ls(envir=.GlobalEnv), function(obj)
       "function"==class(eval(parse(text=obj)))[1], FUN.VALUE=logical(1))]
 
@@ -54,6 +62,8 @@ sim_n_datasets <- function(dag, n_sim, n_repeats,
     set.seed(seed)
     out <- foreach::foreach(i=seq_len(n_repeats), .packages=pckgs,
                             .export=glob_funs, .options.snow=opts) %dorng% {
+
+      setDTthreads(1)
 
       generate_one_dataset <- utils::getFromNamespace("generate_one_dataset",
                                                       "simDAG")

@@ -64,3 +64,14 @@ dag_with_formula <- dag +
 dag_with_fun <- dag +
   node("D", type="binomial", formula= ~ -3 + A*log(0.5) + B*0.2)
 
+## -----------------------------------------------------------------------------
+dag_with_fun <- dag +
+  node("this-var", type="binomial", formula= ~ -3 + A*log(0.5) + B*0.2) +
+  node("D", type="binomial", formula= ~ 5 + `this-var`*0.3)
+
+## -----------------------------------------------------------------------------
+beta_coef <- log(0.5)
+
+dag_with_external <- dag +
+  node("D", type="binomial", formula= ~ -3 + A*eval(beta_coef) + B*0.2)
+
