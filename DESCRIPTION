@@ -1,6 +1,6 @@
 Package: simDAG
 Title: Simulate Data from a DAG and Associated Node Information
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(
     person("Robin", "Denz", , "robin.denz@rub.de", role = c("aut", "cre")),
     person("Katharina", "Meiszl", , "meiszl@amib.rub-uni-bochum.de", role = c("aut"))
@@ -24,8 +24,8 @@ Contact: <robin.denz@rub.de>
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2025-01-07 17:49:49 UTC; Robin Denz
+Packaged: 2025-02-23 15:17:25 UTC; Robin Denz
 Author: Robin Denz [aut, cre],
   Katharina Meiszl [aut]
 Repository: CRAN
-Date/Publication: 2025-01-07 18:10:02 UTC
+Date/Publication: 2025-02-23 15:30:02 UTC
