@@ -28,11 +28,11 @@ If you want to simulate data that is easily described using a standard DAG witho
 
 \strong{\emph{What features are missing from this package?}}
 
-The package currently only implements some possible child nodes. In the future we would like to implement more child node types, such as nodes with generalized mixed linear models or more complex survival time models.
+The package currently only implements some possible child nodes. In the future we would like to implement more child node types, such as more complex survival time models and extending the already existing support for multilevel modeling to other node types.
 
-\strong{\emph{Why should I use this package instead of the \pkg{simCausal} package?}}
+\strong{\emph{Why should I use this package instead of the \pkg{simcausal} package?}}
 
-The \pkg{simCausal} package was a big inspiration for this package. In contrast to it, however, it allows quite a bit more flexibility. A big difference is that this package includes a comprehensive framework for discrete-time simulations and the \pkg{simCausal} package does not.
+The \pkg{simCausal} package was a big inspiration for this package. In contrast to it, however, it allows quite a bit more flexibility. A big difference is that this package includes a comprehensive framework for discrete-time simulations and the \pkg{simcausal} package does not.
 
 \strong{\emph{Where can I get more information?}}
 
@@ -43,6 +43,7 @@ The documentation pages contain a lot of information, relevant examples and some
   \item{\code{vignette(topic="v_sim_discrete_time", package="simDAG")}}
   \item{\code{vignette(topic="v_covid_example", package="simDAG")}}
   \item{\code{vignette(topic="v_using_formulas", package="simDAG")}}
+  \item{\code{vignette(topic="v_cookbook", package="simDAG")}}
 }
 
 We are also working on a separate article on this package that is going to be published in a peer-reviewed journal.

@@ -20,7 +20,7 @@ Any function that generates some vector of size \eqn{n} with \code{n==nrow(data)
   \item \strong{1.)} The function should have an argument called \code{n} which controls how many samples to generate.
 }
 
-Some examples that are already implemented in R outside of this package are \code{rnorm()}, \code{rgamma()} and \code{rbeta()}. The function may take any amount of further arguments, which will be passed through the three-dot syntax.
+Some examples that are already implemented in R outside of this package are \code{rnorm()}, \code{rgamma()} and \code{rbeta()}. The function may take any amount of further arguments, which will be passed through the three-dot syntax. Note that whenever the supplied function produces a \code{data.frame} (or similar object), the user has to ensure that the included columns are named properly.
 
 \strong{\emph{Child Nodes}}:
 
@@ -47,6 +47,8 @@ By time-dependent nodes we mean nodes that are created using the \code{\link{nod
 }
 
 Again, any number of additional arguments is allowed and will be passed through the three-dot syntax. Additionally, users may add an argument to this function called \code{sim_time}. If included in the function definition, the current time of the simulation will be passed to the function on every call made to it. Similarly, the argument \code{past_states} may be added. If done so, a list containing all previous states of the simulation (as saved using the \code{save_states} argument of the \code{\link{sim_discrete_time}}) function) will be passed to it internally, giving the user access to the data generated at previous points in time.
+
+Users may also use the enhanced \code{formula} interface directly with custom child nodes and custom time-dependent nodes. This is described in detail in the vignette on specifying formulas (see \code{vignette(topic="v_using_formulas", package="simDAG")}).
 }
 \value{
 Should return either a vector of length \code{nrow(data)} or a \code{data.table} or \code{data.frame} with \code{nrow(data)} rows.

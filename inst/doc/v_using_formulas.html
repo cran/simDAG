@@ -341,6 +341,27 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h4 class="author">Robin Denz</h4>
 
 
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#a-simple-example" id="toc-a-simple-example">A simple
+example</a></li>
+<li><a href="#using-a-categorical-parent-variable" id="toc-using-a-categorical-parent-variable">Using a Categorical Parent
+Variable</a></li>
+<li><a href="#using-interaction-effects" id="toc-using-interaction-effects">Using Interaction Effects</a></li>
+<li><a href="#using-cubic-terms" id="toc-using-cubic-terms">Using Cubic
+Terms</a></li>
+<li><a href="#using-functions-in-formula" id="toc-using-functions-in-formula">Using Functions in formula</a></li>
+<li><a href="#using-special-characters-in-formula" id="toc-using-special-characters-in-formula">Using Special Characters in
+formula</a></li>
+<li><a href="#using-random-effects-and-random-slopes" id="toc-using-random-effects-and-random-slopes">Using Random Effects and
+Random Slopes</a></li>
+<li><a href="#using-external-coefficients-advanced-usage" id="toc-using-external-coefficients-advanced-usage">Using External
+Coefficients (Advanced Usage)</a></li>
+<li><a href="#using-formulas-in-custom-node-types-advanced-usage" id="toc-using-formulas-in-custom-node-types-advanced-usage">Using
+Formulas in Custom Node Types (Advanced Usage)</a></li>
+</ul>
+</div>
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
@@ -522,7 +543,11 @@ a beta-coefficient. It is also possible to use functions on the
 variables themselves. However, it is required to wrap them in a
 <code>I()</code> call. For example, using something like
 <code>~ -3 + log(A)*0.5 + B*0.2</code> would not work, but
-<code>~ -3 + I(log(A))*0.5 + B*0.2</code> is valid syntax.</p>
+<code>~ -3 + I(log(A))*0.5 + B*0.2</code> is valid syntax. Although
+supported in most cases, we strongly advise against using function names
+with special characters. These might lead to weird errors when random
+effects or random slopes are also contained in the
+<code>formula</code>.</p>
 </div>
 <div id="using-special-characters-in-formula" class="section level1">
 <h1>Using Special Characters in formula</h1>
@@ -535,10 +560,62 @@ following code:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>dag_with_fun <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;this-var&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">+</span> A<span class="sc">*</span><span class="fu">log</span>(<span class="fl">0.5</span>) <span class="sc">+</span> B<span class="sc">*</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;D&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="dv">5</span> <span class="sc">+</span> <span class="st">`</span><span class="at">this-var</span><span class="st">`</span><span class="sc">*</span><span class="fl">0.3</span>)</span></code></pre></div>
-<p>There are, however, three special characters that may not be used in
-<code>formula</code>: spaces, <code>+</code> and <code>*</code>. Errors
-may be produced when using these characters in variable names. It is
-best to avoid special characters though, just to be safe.</p>
+<p>There are, however, six special characters that may not be used in
+<code>formula</code>: spaces, <code>+</code>, <code>*</code>,
+<code>(</code>, <code>)</code> and <code>|</code>. Errors may be
+produced when using these characters in variable names, because they are
+used internally to figure out which variables belong together and how
+(the latter three mostly for mixed model syntax). It is best to avoid
+special characters though, just to be safe.</p>
+</div>
+<div id="using-random-effects-and-random-slopes" class="section level1">
+<h1>Using Random Effects and Random Slopes</h1>
+<p>Currently, three node types (<code>&quot;gaussian&quot;</code>,
+<code>&quot;binomial&quot;</code> and <code>&quot;poisson&quot;</code>) directly allow the
+user to specify random effects and random slopes in the
+<code>formula</code>. These should be specified exactly as they would be
+in a regular call to the <code>lmer()</code> function. For example,
+consider the following <code>DAG</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>dag_mixed <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;School&quot;</span>, <span class="at">type=</span><span class="st">&quot;rcategorical&quot;</span>, <span class="at">probs=</span><span class="fu">rep</span>(<span class="fl">0.1</span>, <span class="dv">10</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>       <span class="at">labels=</span>LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">12</span>, <span class="at">sd=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Grade&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> Age<span class="sc">*</span><span class="fl">1.2</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>School),</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>       <span class="at">error=</span><span class="dv">1</span>, <span class="at">var_corr=</span><span class="fl">0.3</span>)</span></code></pre></div>
+<p>Here, we have a <code>School</code> variable in which students of
+different <code>Age</code>s are nested. To simulate the
+<code>Grade</code> of each student, we want to use a random intercept
+per <code>School</code>, so we simply add the classic
+<code>(1|School)</code> term to the <code>formula</code>. Whenever this
+is done, the <code>var_corr</code> argument also has to be specified,
+which allows users to control the standard deviation of the random
+effects. Internally, the <code>makeLmer()</code> and
+<code>doSim()</code> functions form the <code>simr</code> package are
+used to simulate these types of nodes. Please consult the documentation
+of that package for details on how to specify more complex mixed model
+structures, for example using multiple correlated random effects.</p>
+<p>In principle, arbitrary amounts of random effects can be added.
+Random slopes can similarly be defined using the standard syntax. In the
+following <code>DAG</code>, we use a random slope for <code>Age</code>
+per <code>School</code> in addition to the random effect of
+<code>School</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>var_corr <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>), <span class="dv">2</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>dag_mixed <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;School&quot;</span>, <span class="at">type=</span><span class="st">&quot;rcategorical&quot;</span>, <span class="at">probs=</span><span class="fu">rep</span>(<span class="fl">0.1</span>, <span class="dv">10</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>       <span class="at">labels=</span>LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">12</span>, <span class="at">sd=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Grade&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> Age<span class="sc">*</span><span class="fl">1.2</span> <span class="sc">+</span> (Age<span class="sc">|</span>School),</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>       <span class="at">error=</span><span class="dv">1</span>, <span class="at">var_corr=</span>var_corr)</span></code></pre></div>
+<p>Note that in this example, we defined the correlation between the
+random effect and slopes using arbitrarily picked numbers using the
+<code>var_corr</code> argument. Because of the much more complex DGP and
+the computational overhead required to re-structure the data internally,
+simulations including mixed model syntax is usually much slower than
+simulations without them. In small samples this is not an issue, but
+very large values for <code>n_sim</code> or using these specifications
+in discrete-time simulations with large <code>max_t</code> may be
+difficult in some cases.</p>
 </div>
 <div id="using-external-coefficients-advanced-usage" class="section level1">
 <h1>Using External Coefficients (Advanced Usage)</h1>
@@ -547,15 +624,164 @@ external variables, for example when writing a function that creates a
 <code>DAG</code> objects with some set coefficients. This is supported
 through the use of the <code>eval()</code> function as well. For
 example:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>beta_coef <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fl">0.5</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>dag_with_external <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;D&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">+</span> A<span class="sc">*</span><span class="fu">eval</span>(beta_coef) <span class="sc">+</span> B<span class="sc">*</span><span class="fl">0.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>beta_coef <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fl">0.5</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>dag_with_external <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;D&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">+</span> A<span class="sc">*</span><span class="fu">eval</span>(beta_coef) <span class="sc">+</span> B<span class="sc">*</span><span class="fl">0.2</span>)</span></code></pre></div>
 <p>is valid syntax. Note that this only works if the variable wrapped in
 the <code>eval()</code> function call is defined in the same environment
 in which the <code>DAG</code> object is being created. If this is not
 the case, some weird error messages may be produced, depending on the
-code used.</p>
+code used. Another option is to put the formula together as a string
+before passing it to <code>node()</code> like this:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>beta_coef <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fl">0.5</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>form_D <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;~ -3 + A*&quot;</span>, beta_coef, <span class="st">&quot;+ B*0.2&quot;</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>dag_with_external <span class="ot">&lt;-</span> dag <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;D&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span>form_D)</span></code></pre></div>
+<p>Since <code>formula</code> may always also be passed as a single
+string, this is perfectly valid syntax and might allow users even more
+flexibility when creating formulas inside functions.</p>
+</div>
+<div id="using-formulas-in-custom-node-types-advanced-usage" class="section level1">
+<h1>Using Formulas in Custom Node Types (Advanced Usage)</h1>
+<p>One of the great things about this package is that users can supply
+<em>any</em> function to the <code>type</code> argument of
+<code>node()</code> and <code>node_td()</code>, as long as it fulfills
+some minimal requirements (as described in <code>?node_custom</code>).
+Whenever such a function is supplied, users may still use the enhanced
+<code>formula</code> interface!</p>
+<p>Internally, whenever an enhanced <code>formula</code> is supplied to
+<code>node()</code> or <code>node_td()</code>, the formula is parsed to
+extract all variable names and beta-coefficients. If cubic terms,
+interactions or levels of categorical parent nodes are included in
+<code>formula</code>, the data will be re-structured in a way that it
+includes a single column for each term in <code>formula</code>. Consider
+the following example:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>custom_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(data, parents, betas, intercept) {</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">head</span>(data))</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">print</span>(parents)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="fu">print</span>(betas)</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  <span class="fu">print</span>(intercept)</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(data)))</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>}</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>dag_custom <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>  <span class="fu">node</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>), <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;C&quot;</span>, <span class="at">type=</span><span class="st">&quot;rcategorical&quot;</span>, <span class="at">probs=</span><span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&quot;lev1&quot;</span>, <span class="st">&quot;lev2&quot;</span>))</span></code></pre></div>
+<p>Here, we defined a custom function for a node called
+<code>custom_fun</code>, which really only returns 1, regardless of the
+input. However, it also prints the first few lines of the input
+<code>data</code>, the <code>parents</code>, the <code>betas</code> and
+the <code>intercept</code> it is passed, so that we can see whats going
+on under the hood. Next, we defined some arbitrary <code>DAG</code>
+containing two numerical root nodes and a binary root node. Here is what
+happens if we use <code>custom_fun</code> with a <code>formula</code>
+input:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>dag_custom2 <span class="ot">&lt;-</span> dag_custom <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span>custom_fun, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">5</span> <span class="sc">+</span> A<span class="sc">*</span><span class="dv">2</span> <span class="sc">+</span> B<span class="sc">*-</span><span class="fl">0.4</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag_custom2, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co">#&gt;              A          B</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&gt;          &lt;num&gt;      &lt;num&gt;</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co">#&gt; 1: -0.56047565  1.2240818</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">#&gt; 2: -0.23017749  0.3598138</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="co">#&gt; 3:  1.55870831  0.4007715</span></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="co">#&gt; 4:  0.07050839  0.1106827</span></span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co">#&gt; 5:  0.12928774 -0.5558411</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="co">#&gt; 6:  1.71506499  1.7869131</span></span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A&quot; &quot;B&quot;</span></span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co">#&gt; [1]  2.0 -0.4</span></span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="co">#&gt; [1] -5</span></span></code></pre></div>
+<p>We can see that it simply took the <code>data</code> that was
+required and printed it. Note that in the <code>node()</code>
+definition, we did not need to specify the <code>parents</code>,
+<code>betas</code> or <code>intercept</code> arguments of the custom
+node, all we had to do was pass it the enhanced <code>formula</code> and
+it happily extracted this information from it and passed it to
+<code>custom_fun</code> directly. The only requirement for this to work
+is that <code>custom_fun</code> does have these arguments. Now lets see
+what happens with special terms in <code>formula</code>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>dag_custom2 <span class="ot">&lt;-</span> dag_custom <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span>custom_fun, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">5</span> <span class="sc">+</span> A<span class="sc">*</span><span class="dv">2</span> <span class="sc">+</span> B<span class="sc">*-</span><span class="fl">0.4</span> <span class="sc">+</span> A<span class="sc">:</span>B<span class="sc">*</span><span class="fl">0.1</span> <span class="sc">+</span> </span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>         <span class="fu">I</span>(A<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*-</span><span class="fl">0.1</span> <span class="sc">+</span> Clev2<span class="sc">*</span><span class="fl">0.2</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag_custom2, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="co">#&gt;             A          B         A:B     I(A^2) Clev2</span></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="co">#&gt;         &lt;num&gt;      &lt;num&gt;       &lt;num&gt;      &lt;num&gt; &lt;num&gt;</span></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="co">#&gt; 1:  0.4264642 -0.6947070 -0.29626767 0.18187173     0</span></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a><span class="co">#&gt; 2: -0.2950715 -0.2079173  0.06135046 0.08706718     1</span></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="co">#&gt; 3:  0.8951257 -1.2653964 -1.13268875 0.80124995     1</span></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="co">#&gt; 4:  0.8781335  2.1689560  1.90463287 0.77111842     0</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="co">#&gt; 5:  0.8215811  1.2079620  0.99243873 0.67499547     0</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="co">#&gt; 6:  0.6886403 -1.1231086 -0.77341778 0.47422540     1</span></span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A&quot;      &quot;B&quot;      &quot;A:B&quot;    &quot;I(A^2)&quot; &quot;Clev2&quot; </span></span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="co">#&gt; [1]  2.0 -0.4  0.1 -0.1  0.2</span></span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="co">#&gt; [1] -5</span></span></code></pre></div>
+<p>Now we can see a slightly different picture. Instead of simply
+returning the relevant parts of <code>data</code>, the function has
+re-structured it in a way similar to the <code>model.matrix()</code>
+function, allowing us to directly apply the <code>betas</code> to it.
+Note that the <code>betas</code> will always be in the right order,
+meaning that the first entry in <code>betas</code> corresponds to the
+first term named in <code>parents</code>. The following code is an
+example how one could re-build a linear regression using this
+interface:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>custom_linreg <span class="ot">&lt;-</span> <span class="cf">function</span>(data, parents, betas, intercept) {</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  intercept <span class="sc">+</span> <span class="fu">rowSums</span>(<span class="fu">mapply</span>(<span class="st">&quot;*&quot;</span>, data, betas)) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>    <span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">nrow</span>(data), <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>}</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>dag_custom3 <span class="ot">&lt;-</span> dag_custom <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span>custom_linreg, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">5</span> <span class="sc">+</span> A<span class="sc">*</span><span class="dv">2</span> <span class="sc">+</span> B<span class="sc">*-</span><span class="fl">0.4</span> <span class="sc">+</span> A<span class="sc">:</span>B<span class="sc">*</span><span class="fl">0.1</span> <span class="sc">+</span> </span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>         <span class="fu">I</span>(A<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*-</span><span class="fl">0.1</span> <span class="sc">+</span> Clev2<span class="sc">*</span><span class="fl">0.2</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag_custom3, <span class="at">n_sim=</span><span class="dv">100</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="co">#&gt;             A          B      C         Y</span></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt;         &lt;num&gt;      &lt;num&gt; &lt;char&gt;     &lt;num&gt;</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="co">#&gt; 1:  0.3796395  1.0527115   lev1 -4.841552</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&gt; 2: -0.5023235 -1.0491770   lev1 -4.906313</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="co">#&gt; 3: -0.3332074 -1.2601552   lev1 -4.857700</span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="co">#&gt; 4: -1.0185754  3.2410399   lev2 -7.542767</span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="co">#&gt; 5: -1.0717912 -0.4168576   lev2 -6.029375</span></span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="co">#&gt; 6:  0.3035286  0.2982276   lev2 -4.522188</span></span></code></pre></div>
+<p>Here, we simply calculate the linear predictor using the sum of the
+rows after multiplying each value with the corresponding
+<code>betas</code> coefficient and add a normally distributed error term
+with standard deviation of 1 afterwards. Of course users can use this
+type of strategy for much more complex node types. Note that the
+intercept is not required to be there. By omitting it from the supplied
+function, it will automatically no longer be required in
+<code>formula</code> (and will be ignored if still specified):</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># same as before, but without an intercept (same as setting intercept=0)</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>custom_linreg2 <span class="ot">&lt;-</span> <span class="cf">function</span>(data, parents, betas) {</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="fu">rowSums</span>(<span class="fu">mapply</span>(<span class="st">&quot;*&quot;</span>, data, betas)) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>    <span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">nrow</span>(data), <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>}</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>dag_custom4 <span class="ot">&lt;-</span> dag_custom <span class="sc">+</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span>custom_linreg2, <span class="at">formula=</span> <span class="sc">~</span> A<span class="sc">*</span><span class="dv">2</span> <span class="sc">+</span> B<span class="sc">*-</span><span class="fl">0.4</span> <span class="sc">+</span> A<span class="sc">:</span>B<span class="sc">*</span><span class="fl">0.1</span> <span class="sc">+</span> </span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>         <span class="fu">I</span>(A<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*-</span><span class="fl">0.1</span> <span class="sc">+</span> Clev2<span class="sc">*</span><span class="fl">0.2</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag_custom4, <span class="at">n_sim=</span><span class="dv">100</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="co">#&gt;             A          B      C          Y</span></span>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="co">#&gt;         &lt;num&gt;      &lt;num&gt; &lt;char&gt;      &lt;num&gt;</span></span>
+<span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a><span class="co">#&gt; 1:  0.8719650 -0.8338436   lev1  2.4685174</span></span>
+<span id="cb20-16"><a href="#cb20-16" tabindex="-1"></a><span class="co">#&gt; 2: -0.3484724  0.5787224   lev1 -0.3442883</span></span>
+<span id="cb20-17"><a href="#cb20-17" tabindex="-1"></a><span class="co">#&gt; 3:  0.5185038 -1.0875807   lev2  2.2053315</span></span>
+<span id="cb20-18"><a href="#cb20-18" tabindex="-1"></a><span class="co">#&gt; 4: -0.3906850  1.4840309   lev1 -3.1403262</span></span>
+<span id="cb20-19"><a href="#cb20-19" tabindex="-1"></a><span class="co">#&gt; 5: -1.0927872 -1.1862066   lev2 -1.1321410</span></span>
+<span id="cb20-20"><a href="#cb20-20" tabindex="-1"></a><span class="co">#&gt; 6:  1.2100105  0.1010792   lev2  3.4132667</span></span></code></pre></div>
+<p>Note that if you passed the <code>custom_linreg</code> function to
+the <code>node()</code> call above instead, you would receive an error
+message because of the missing intercept. All of this of course also
+works with time-dependent nodes specified using <code>node_td()</code>
+calls.</p>
 </div>
 
 

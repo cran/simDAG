@@ -24,7 +24,7 @@ A single character string specifying the type of the node. Depending on whether 
 A character vector of names, specifying the parents of the node or \code{NULL} (default). If \code{NULL}, the node is treated as a root node. For convenience it is also allowed to set \code{parents=""} to indicate that the node is a root node.
   }
   \item{formula}{
-An optional \code{formula} object to describe how the node should be generated or \code{NULL} (default). If supplied it should start with \code{~}, having nothing else on the left hand side. The right hand side should define the entire structural equation, including the betas and intercepts. It may contain any valid formula syntax, such as \code{~ -2 + A*3 + B*4} or \code{~ -2 + A*3 + B*4 + I(A^2)*0.3 + A:B*1.1}, allowing arbitrary non-linear effects, arbitrary interactions and multiple coefficients for categorical variables. If this argument is defined, there is no need to define the \code{betas} and \code{intercept} argument. The \code{parents} argument should still be specified whenever a categorical variable is used in the formula. This argument is currently only supported for nodes of type \code{"binomial"}, \code{"gaussian"}, \code{"poisson"}, \code{"negative_binomial"} and \code{"cox"}. It is also supported for nodes of type \code{"identity"}, but slightly different input is expected in that case. See examples and the associated vignette for an in-depth explanation.
+An optional \code{formula} object to describe how the node should be generated or \code{NULL} (default). If supplied it should start with \code{~}, having nothing else on the left hand side. The right hand side should define the entire structural equation, including the betas and intercepts. It may contain any valid formula syntax, such as \code{~ -2 + A*3 + B*4} or \code{~ -2 + A*3 + B*4 + I(A^2)*0.3 + A:B*1.1}, allowing arbitrary non-linear effects, arbitrary interactions and multiple coefficients for categorical variables. Additionally, for some node types, random effects and random slopes are supported. If this argument is defined, there is no need to define the \code{betas} and \code{intercept} argument. The \code{parents} argument should still be specified whenever a categorical variable is used in the formula. This argument is supported for build-in nodes of type \code{"binomial"}, \code{"gaussian"}, \code{"poisson"}, \code{"negative_binomial"}, \code{"cox"}, \code{"aftreg"}, \code{"ahreg"}, \code{"ehreg"}, \code{"poreg"} and \code{"ypreg"} and for any custom node defined by the user. It is also supported for nodes of type \code{"identity"}, but slightly different input is expected in that case. See examples and the associated vignette for an in-depth explanation.
   }
   \item{...}{
 Further named arguments needed to specify the node. Those can be parameters of distribution functions such as the \code{p} argument in the \code{\link{rbernoulli}} function for root nodes or arbitrary named arguments such as the \code{betas} argument of the \code{\link{node_gaussian}} function.
@@ -61,18 +61,25 @@ For convenience, this package additionally includes three custom root-node funct
 Currently, the following node types are implemented directly for convenience:
 
 \itemize{
-  \item{"\link[=node_gaussian]{gaussian}": A node based on linear regression.}
-  \item{"\link[=node_binomial]{binomial}": A node based on logistic regression.}
+  \item{"\link[=node_gaussian]{gaussian}": A node based on (mixed) linear regression.}
+  \item{"\link[=node_binomial]{binomial}": A node based on (mixed) logistic regression.}
   \item{"\link[=node_conditional_prob]{conditional_prob}": A node based on conditional probabilities.}
   \item{"\link[=node_conditional_distr]{conditional_distr}": A node based on conditional draws from different distributions.}
   \item{"\link[=node_multinomial]{multinomial}": A node based on multinomial regression.}
-  \item{"\link[=node_poisson]{poisson}": A node based on poisson regression.}
+  \item{"\link[=node_poisson]{poisson}": A node based on (mixed) poisson regression.}
   \item{"\link[=node_negative_binomial]{negative_binomial}": A node based on negative binomial regression.}
-  \item{"\link[=node_cox]{cox}": A node based on cox-regression.}
+  \item{"\link[=node_zeroinfl]{zeroinfl}": A node based on a zero-inflated poisson or negative binomial regression.}
   \item{"\link[=node_identity]{identity}": A node that is just some R expression of other nodes.}
+  \item{"\link[=node_mixture]{mixture}": A node that is a mixture of different node definitions.}
+  \item{"\link[=node_cox]{cox}": A node based on cox-regression.}
+  \item{"\link[=node_aftreg]{aftreg}": A node based on an accelerated failure time model.}
+  \item{"\link[=node_ahreg]{ahreg}": A node based on an accelerated hazard model.}
+  \item{"\link[=node_ehreg]{ehreg}": A node based on a extended hazard model.}
+  \item{"\link[=node_poreg]{poreg}": A node based on a proportional odds model.}
+  \item{"\link[=node_ypreg]{ypreg}": A node based on a Young and Prentice model.}
 }
 
-For custom child node types, see below.
+For custom child node types, see below or \code{?node_custom}.
 
 \strong{\emph{Implemented Time-Dependent Node Types}}:
 
@@ -91,7 +98,7 @@ It is very simple to write a new custom \code{node_function} to be used instead,
 
 \strong{\emph{Using child nodes as parents for other nodes}}:
 
-If the data generated by a child node is categorical (such as when using \code{node_multinomial}) they can still be used as parents of other nodes for most standard node types without issues. All the user has to do is to use \code{formula} argument to supply an enhanced formula, instead of defining the \code{parents} and \code{betas} argument directly. This works well for all node types that directly support \code{formula} input. For other node types, users may need to write custom functions to make this work. See the associated vignette: \code{vignette(topic="v_using_formulas", package="simDAG")} for more information on how to correctly use formulas.
+If the data generated by a child node is categorical (such as when using \code{node_multinomial}) they can still be used as parents of other nodes for most standard node types without issues. All the user has to do is to use \code{formula} argument to supply an enhanced formula, instead of defining the \code{parents} and \code{betas} argument directly. This works well for all node types that directly support \code{formula} input and for all custom nodes specified by the user. See the associated vignette: \code{vignette(topic="v_using_formulas", package="simDAG")} for more information on how to correctly use formulas.
 
 \strong{\emph{Cyclic causal structures}}:
 

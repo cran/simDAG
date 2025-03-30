@@ -1,7 +1,7 @@
 
 ## generate data from a DAG with defined nodes
 #' @importFrom data.table data.table
-#' @importFrom data.table setDT
+#' @importFrom data.table as.data.table
 #' @export
 sim_from_dag <- function(dag, n_sim, sort_dag=FALSE, check_inputs=TRUE) {
 
@@ -26,7 +26,10 @@ sim_from_dag <- function(dag, n_sim, sort_dag=FALSE, check_inputs=TRUE) {
              dag$root_nodes[[i]]$name, "'. The message was:\n", e, call.=FALSE)
       }
     )
-    colnames(out) <- dag$root_nodes[[i]]$name
+
+    if (ncol(out)==1) {
+      colnames(out) <- dag$root_nodes[[i]]$name
+    }
 
     data[[i]] <- out
   }
@@ -49,6 +52,9 @@ sim_from_dag <- function(dag, n_sim, sort_dag=FALSE, check_inputs=TRUE) {
   # go through DAG step by step
   for (i in index_children) {
 
+    # get the names of the nodes generating function
+    fun_pos_args <- names(formals(dag$child_nodes[[i]]$type_fun))
+
     # get relevant arguments
     args <- dag$child_nodes[[i]]
     args$data <- data
@@ -56,7 +62,7 @@ sim_from_dag <- function(dag, n_sim, sort_dag=FALSE, check_inputs=TRUE) {
     args$type_fun <- NULL
     args$time_varying <- NULL
 
-    if (dag$child_nodes[[i]]$type_str!="cox") {
+    if (!"name" %in% fun_pos_args) {
       args$name <- NULL
     }
 
@@ -75,6 +81,15 @@ sim_from_dag <- function(dag, n_sim, sort_dag=FALSE, check_inputs=TRUE) {
                call.=FALSE)
         }
       )
+    }
+
+    # remove intercept if not needed
+    if (!"intercept" %in% fun_pos_args) {
+      args$intercept <- NULL
+    }
+    # remove temporary mixed model stuff if there
+    if (!is.null(args$mixed_terms)) {
+      args$mixed_terms <- NULL
     }
 
     # call needed node function, add node name to possible errors

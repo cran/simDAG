@@ -7,7 +7,7 @@ knitr::opts_chunk$set(
 ## ---- include=TRUE, fig.align="center", fig.cap=c("A generalized flow-chart of the discrete-time simulation approach"), echo=FALSE, out.width=500----
 knitr::include_graphics("./images_v_sim_discrete_time/flow_chart.png")
 
-## ---- include=TRUE, fig.align="center", fig.cap=c("A small DAG with time-varying age"), echo=FALSE, out.width=700----
+## ---- include=TRUE, fig.align="center", fig.cap=c("A small DAG with time-varying age"), echo=FALSE, out.width=600----
 knitr::include_graphics("./images_v_sim_discrete_time/simple_dag.png")
 
 ## -----------------------------------------------------------------------------

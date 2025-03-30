@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Robin Denz" />
+
+
+<title>simDAG Cookbook</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">simDAG Cookbook</h1>
+<h4 class="author">Robin Denz</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#simulating-randomized-controlled-trials" id="toc-simulating-randomized-controlled-trials">Simulating Randomized
+Controlled Trials</a>
+<ul>
+<li><a href="#two-treatment-groups" id="toc-two-treatment-groups">Two
+Treatment Groups</a></li>
+<li><a href="#three-or-more-treatment-groups" id="toc-three-or-more-treatment-groups">Three or More Treatment
+Groups</a></li>
+<li><a href="#multiple-outcome-measurements" id="toc-multiple-outcome-measurements">Multiple Outcome
+Measurements</a></li>
+<li><a href="#non-compliance-to-treatment-assignment" id="toc-non-compliance-to-treatment-assignment">Non-Compliance to
+Treatment Assignment</a></li>
+<li><a href="#with-cluster-randomization" id="toc-with-cluster-randomization">With Cluster Randomization</a></li>
+</ul></li>
+<li><a href="#simulating-observational-studies" id="toc-simulating-observational-studies">Simulating Observational
+Studies</a>
+<ul>
+<li><a href="#crossectional-data" id="toc-crossectional-data">Crossectional Data</a></li>
+<li><a href="#longitudinal-data" id="toc-longitudinal-data">Longitudinal
+Data</a></li>
+</ul></li>
+<li><a href="#miscellaneous-simulations" id="toc-miscellaneous-simulations">Miscellaneous Simulations</a>
+<ul>
+<li><a href="#simulating-multi-level-data" id="toc-simulating-multi-level-data">Simulating Multi-Level
+Data</a></li>
+<li><a href="#simulating-mixture-distributions" id="toc-simulating-mixture-distributions">Simulating Mixture
+Distributions</a></li>
+<li><a href="#simulating-outliers" id="toc-simulating-outliers">Simulating Outliers</a></li>
+<li><a href="#simulating-missing-values" id="toc-simulating-missing-values">Simulating Missing Values</a></li>
+<li><a href="#simulating-measurement-error" id="toc-simulating-measurement-error">Simulating Measurement
+Error</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The <code>simDAG</code> package can be used to generate all kinds of
+data, as shown in the many examples and other vignettes of this package.
+In this vignette we will further illustrate the capabilities of the
+package, by giving very short and simplified examples on how to use
+<code>simDAG</code> to generate multiple different kinds of data. The
+vignette can be seen as a sort of “cookbook”, in the sense that it
+includes the building blocks for many different possible data generation
+processes (DGP), which users can expand on for their specific needs.
+Note that the examples shown are not meant to be realistic, they are
+only meant to show the general structure of the required code.</p>
+<p>This vignette assumes that the reader is already somewhat familiar
+with the <code>simDAG</code> syntax. More detailed explanations of how
+to simulate data using a time-fixed DAG and DAGs including
+time-dependent variables is given in other vignettes and the
+documentation of the functions. We recommend consulting these vignettes
+first to get a feeling for the required syntax before diving into these
+specific examples.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(simDAG)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span></code></pre></div>
+</div>
+<div id="simulating-randomized-controlled-trials" class="section level1">
+<h1>Simulating Randomized Controlled Trials</h1>
+<p>First, we will give some examples on how data for randomized
+controlled trials (RCT) could be generated. In a classic RCT, the
+treatment of interest (below named <code>Treatment</code>) is randomly
+assigned to the individuals of the study, making it a “root node” (a
+variable with no direct causes) in the terminology of DAGs.</p>
+<div id="two-treatment-groups" class="section level2">
+<h2>Two Treatment Groups</h2>
+<p>Below is an example for an RCT with two treatment groups, a binary
+outcome and two baseline covariates (<code>Age</code> and
+<code>Sex</code>):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">55</span>, <span class="at">sd=</span><span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Outcome&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">12</span> <span class="sc">+</span> Age<span class="sc">*</span><span class="fl">0.2</span> <span class="sc">+</span> Sex<span class="sc">*</span><span class="fl">1.1</span> <span class="sc">+</span> Treatment<span class="sc">*-</span><span class="fl">0.5</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;         Age    Sex Treatment Outcome</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt;       &lt;num&gt; &lt;lgcl&gt;    &lt;lgcl&gt;  &lt;lgcl&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 1: 54.10358   TRUE     FALSE    TRUE</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; 2: 53.99942  FALSE     FALSE   FALSE</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; 3: 48.99740  FALSE      TRUE   FALSE</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; 4: 57.47850  FALSE      TRUE   FALSE</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt; 5: 59.82293  FALSE      TRUE    TRUE</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; 6: 56.46213  FALSE     FALSE    TRUE</span></span></code></pre></div>
+</div>
+<div id="three-or-more-treatment-groups" class="section level2">
+<h2>Three or More Treatment Groups</h2>
+<p>The example from earlier can easily be made a little more complex, by
+including three treatment groups instead of just two. This can be
+achieved by using the <code>rcategorical()</code> function as node type
+instead of the <code>rbernoulli()</code> function.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">55</span>, <span class="at">sd=</span><span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>, <span class="at">output=</span><span class="st">&quot;numeric&quot;</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;rcategorical&quot;</span>, <span class="at">probs=</span><span class="fu">c</span>(<span class="fl">0.33333</span>, <span class="fl">0.33333</span>, <span class="fl">0.33333</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>       <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&quot;Placebo&quot;</span>, <span class="st">&quot;Med1&quot;</span>, <span class="st">&quot;Med2&quot;</span>), <span class="at">output=</span><span class="st">&quot;factor&quot;</span>) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Outcome&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">12</span> <span class="sc">+</span> Age<span class="sc">*</span><span class="fl">0.2</span> <span class="sc">+</span> Sex<span class="sc">*</span><span class="fl">1.1</span> <span class="sc">+</span> TreatmentMed1<span class="sc">*-</span><span class="fl">0.5</span> <span class="sc">+</span> </span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>         TreatmentMed2<span class="sc">*-</span><span class="dv">1</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;         Age   Sex Treatment Outcome</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;       &lt;num&gt; &lt;num&gt;    &lt;fctr&gt;  &lt;lgcl&gt;</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 1: 48.82329     1      Med2   FALSE</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; 2: 57.53600     0      Med1   FALSE</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; 3: 50.56135     1      Med1   FALSE</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; 4: 55.77965     1   Placebo    TRUE</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; 5: 58.75004     0      Med2   FALSE</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; 6: 56.18307     0      Med2   FALSE</span></span></code></pre></div>
+<p>By setting <code>probs=c(0.33333, 0.33333, 0.33333)</code>, each
+treatment group is choosen with a probability of 0.33333, meaning that
+the resulting groups should be roughly of equal size in expectation.</p>
+</div>
+<div id="multiple-outcome-measurements" class="section level2">
+<h2>Multiple Outcome Measurements</h2>
+<p>The previous two examples assumed that there was a single fixed time
+at which the binary outcome was measured. Below we switch things up a
+bit by using a continuous outcome that is measured at 5 different points
+in time after baseline. The syntax is nearly the same as before, with
+the major difference being that we now use a <code>node_td()</code> call
+to define the outcome, because it is time-dependent. Additionally,
+because of this inclusion of a time-dependent node, we have to use the
+<code>sim_discrete_time()</code> function instead of the
+<code>sim_from_dag()</code> function. Finally, the
+<code>sim2data()</code> has to be called to obtain the desired output in
+the long-format.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">55</span>, <span class="at">sd=</span><span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>, <span class="at">output=</span><span class="st">&quot;numeric&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;Outcome&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>          <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">12</span> <span class="sc">+</span> Age<span class="sc">*</span><span class="fl">0.2</span> <span class="sc">+</span> Sex<span class="sc">*</span><span class="fl">1.1</span> <span class="sc">+</span> Treatment<span class="sc">*-</span><span class="fl">0.5</span>, <span class="at">error=</span><span class="dv">1</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>, <span class="at">max_t=</span><span class="dv">5</span>, <span class="at">save_states=</span><span class="st">&quot;all&quot;</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim, <span class="at">to=</span><span class="st">&quot;long&quot;</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Key: &lt;.id, .time&gt;</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;      .id .time      Age   Sex Treatment   Outcome</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt;    &lt;num&gt; &lt;num&gt;    &lt;lgcl&gt;     &lt;num&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; 1:     1     1 47.82822     0     FALSE -2.504335</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; 2:     1     2 47.82822     0     FALSE -2.158093</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; 3:     1     3 47.82822     0     FALSE -2.350866</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; 4:     1     4 47.82822     0     FALSE -1.686581</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; 5:     1     5 47.82822     0     FALSE -1.876626</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 6:     2     1 54.03705     1     FALSE -2.187397</span></span></code></pre></div>
+</div>
+<div id="non-compliance-to-treatment-assignment" class="section level2">
+<h2>Non-Compliance to Treatment Assignment</h2>
+<p>Previously we assumed that the treatment was assigned at baseline and
+never changed throughout the study. In real RCTs, individuals are often
+assigned to <em>treatment strategies</em> instead (for example: one pill
+per week). Some individuals might not adhere to their assigned treatment
+strategy, by for example “switching back” to not taking the pill.</p>
+<p>The following code shows one possible way to simulate such data. In
+the shown DGP, individuals are assigned to a treatment strategy at
+baseline. Here, <code>Treatment = FALSE</code> refers to the control
+condition in which the individual should not take any pills. In the
+intervention group (<code>Treatment = TRUE</code>), however, the
+individual is assigned to take a pill every week. On average, 5% of
+these individuals stop taking their pills with each passing week. Once
+they stop, they never start taking them again. The continuous outcome at
+each observation time depends on how many pills each individual took in
+total. None of the individuals in the control group start taking pills.
+For simplicity, the simulation is run without any further covariates for
+5 weeks.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># function to calculate the probability of taking the pill at t,</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># given the current treatment status of the person</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>prob_treat <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">fifelse</span>(<span class="sc">!</span>data<span class="sc">$</span>Treatment_event, <span class="dv">0</span>, <span class="fl">0.95</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>}</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Treatment_event&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;Treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;Treatment_event&quot;</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>          <span class="at">prob_fun=</span>prob_treat, <span class="at">event_count=</span><span class="cn">TRUE</span>, <span class="at">event_duration=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;Outcome&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> </span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>            Treatment_event_count<span class="sc">*-</span><span class="fl">0.3</span>, <span class="at">error=</span><span class="dv">2</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>, <span class="at">max_t=</span><span class="dv">5</span>, <span class="at">save_states=</span><span class="st">&quot;all&quot;</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim, <span class="at">to=</span><span class="st">&quot;long&quot;</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; Key: &lt;.id, .time&gt;</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;      .id .time Treatment   Outcome Treatment_event_count</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt;    &lt;lgcl&gt;     &lt;num&gt;                 &lt;num&gt;</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; 1:     1     1      TRUE -4.160177                     1</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; 2:     1     2      TRUE -1.259056                     2</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; 3:     1     3      TRUE -2.397425                     3</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; 4:     1     4      TRUE -3.564521                     4</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; 5:     1     5      TRUE -2.224830                     5</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt; 6:     2     1     FALSE -1.541366                     0</span></span></code></pre></div>
+<p>What this DAG essentially means is that first, the
+<code>Treatment_event</code> column is generated, which includes the
+assigned treatment at baseline. We called it
+<code>Treatment_event</code> here instead of just
+<code>Treatment</code>, because the value in this column should be
+updated with each iteration and nodes of type
+<code>&quot;time_to_event&quot;</code> always split the node into two columns:
+status and time. By setting <code>event_count=TRUE</code> in the
+<code>node_td()</code> call for the <code>Treatment</code> node, a count
+of the amount of pills taken up to <span class="math inline">\(t\)</span> is directly calculated at each point in
+time (column <code>Treatment_event_count</code>), which can then be used
+directly to generate the <code>Outcome</code> node.</p>
+<p>This simulation could be made more realistic (or just more complex),
+by for example adding either of the following things:</p>
+<ul>
+<li>making the probability of switching dependent on the outcome at
+<span class="math inline">\(t - 1\)</span></li>
+<li>making the probability of switching dependent on other
+variables</li>
+<li>allowing patients to switch back to taking the pill after
+discontinuation</li>
+<li>allowing patients in the control group to switch to the
+treatment</li>
+</ul>
+<p>These additions are left as an exercise to the user.</p>
+</div>
+<div id="with-cluster-randomization" class="section level2">
+<h2>With Cluster Randomization</h2>
+<p>Instead of randomly assigning <em>individuals</em> to the treatment,
+many trials actually randomly assign the treatment at the level of
+clinics or other forms of <em>clusters</em>, which is fittingly called
+cluster randomization. This may be implemented in <code>simDAG</code>
+using the following syntax:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Clinic&quot;</span>, <span class="at">type=</span><span class="st">&quot;rcategorical&quot;</span>, <span class="at">probs=</span><span class="fu">rep</span>(<span class="fl">0.02</span>, <span class="dv">50</span>)) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;identity&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> Clinic <span class="sc">&gt;=</span> <span class="dv">25</span>) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Outcome&quot;</span>, <span class="at">type=</span><span class="st">&quot;poisson&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> Treatment<span class="sc">*</span><span class="dv">4</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Clinic),</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>       <span class="at">var_corr=</span><span class="fl">0.5</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; Lade nötigen Namensraum: simr</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;    Clinic Treatment Outcome</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;     &lt;int&gt;    &lt;lgcl&gt;   &lt;int&gt;</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; 1:     33      TRUE      15</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; 2:      2     FALSE       1</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 3:     16     FALSE       0</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; 4:     24     FALSE       3</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; 5:     49      TRUE      17</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; 6:     31      TRUE      12</span></span></code></pre></div>
+<p>In this DGP, each individual is randomly assigned to one of 50
+Clinics with equal probability. All patients in clinics numbered 0-24
+are assigned to the control group, while the other patients are assigned
+to the treatment group. The outcome is then generated using a Poisson
+regression with a random intercept based on the clinic.</p>
+</div>
+</div>
+<div id="simulating-observational-studies" class="section level1">
+<h1>Simulating Observational Studies</h1>
+<p>In all previous examples, the variable of interest was a treatment
+that was randomly assigned and did not depend on other variables
+(excluding the <code>Clinic</code> for the cluster randomization
+example). In observational studies, the variable of interest is usually
+not randomly assigned. Below are some examples for generating such
+observational study data.</p>
+<div id="crossectional-data" class="section level2">
+<h2>Crossectional Data</h2>
+<p>In the following example, the treatment probability is dependent on
+both a categorical and a continuous variable, which both also cause the
+outcome:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;cat&quot;</span>, <span class="at">type=</span><span class="st">&quot;rcategorical&quot;</span>, <span class="at">probs=</span><span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>       <span class="at">labels=</span>LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;cont&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbeta&quot;</span>, <span class="at">shape1=</span><span class="fl">0.2</span>, <span class="at">shape2=</span><span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="fl">0.2</span> <span class="sc">+</span> catB<span class="sc">*</span><span class="fl">0.3</span> <span class="sc">+</span> catC<span class="sc">*</span><span class="dv">1</span> <span class="sc">+</span> cont<span class="sc">*</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;outcome&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="dv">3</span> <span class="sc">+</span> catB<span class="sc">*</span><span class="fl">1.1</span> <span class="sc">+</span> catC<span class="sc">*</span><span class="fl">0.2</span> <span class="sc">+</span> cont<span class="sc">*-</span><span class="fl">0.1</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>       <span class="at">error=</span><span class="dv">1</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">100</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;       cat         cont treatment  outcome</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt;        &lt;num&gt;    &lt;lgcl&gt;    &lt;num&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 1:      C 3.563297e-03      TRUE 4.563690</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 2:      C 2.438739e-01      TRUE 2.971591</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; 3:      A 5.213387e-01      TRUE 2.457812</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; 4:      C 7.783988e-01     FALSE 2.023251</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; 5:      C 2.070797e-01      TRUE 4.646090</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; 6:      A 1.712023e-08     FALSE 2.873736</span></span></code></pre></div>
+<p>If the goal was to estimate the causal effect of the treatment on the
+outcome, we would need to adjust for both <code>cat</code> and
+<code>cont</code> here, using for example a linear regression model
+(same as in the DGP) or something like inverse probability of treatment
+weighting.</p>
+</div>
+<div id="longitudinal-data" class="section level2">
+<h2>Longitudinal Data</h2>
+<p>Here we give a small example for a longitudinal non-randomized study
+in which the <code>treatment</code> at <span class="math inline">\(t\)</span> is dependent on past values of itself,
+and on past values of the <code>outcome</code>. Additionally, the
+<code>outcome</code> is dependent on past values of itself and on the
+current <code>treatment</code>. We use the discrete-time simulation
+approach implemented in the <code>sim_discrete_time()</code> function to
+achieve this:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="do">## function that generates the probability of treatment at t </span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="do">## for all individuals, given the current state of the simulation</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>prob_treat <span class="ot">&lt;-</span> <span class="cf">function</span>(data, base_p, rr_treat, rr_outcome) {</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  base_p <span class="sc">*</span> rr_treat<span class="sc">^</span>(data<span class="sc">$</span>treatment_event) <span class="sc">*</span> rr_outcome<span class="sc">^</span>(data<span class="sc">$</span>outcome_event)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>}</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="do">## function that generates the probability of treatment at t </span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="do">## for all individuals, given the current state of the simulation</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>prob_outcome <span class="ot">&lt;-</span> <span class="cf">function</span>(data, base_p, rr_treat, rr_outcome) {</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  base_p <span class="sc">*</span> rr_treat<span class="sc">^</span>(data<span class="sc">$</span>treatment_event) <span class="sc">*</span> rr_outcome<span class="sc">^</span>(data<span class="sc">$</span>outcome_event)</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>}</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_treat,</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;outcome_event&quot;</span>), <span class="at">event_duration=</span><span class="dv">1</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.05</span>, <span class="at">rr_treat=</span><span class="dv">2</span>, <span class="at">rr_outcome=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;outcome&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_outcome,</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;treatment_event&quot;</span>),</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">1</span>, <span class="at">immunity_duration=</span><span class="dv">40</span>,</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>          <span class="at">base_p=</span><span class="fl">0.01</span>, <span class="at">rr_treat=</span><span class="fl">0.3</span>, <span class="at">rr_outcome=</span><span class="fl">1.2</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag, <span class="at">n_sim=</span><span class="dv">100</span>, <span class="at">max_t=</span><span class="dv">500</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim, <span class="at">to=</span><span class="st">&quot;start_stop&quot;</span>, <span class="at">overlap=</span><span class="cn">TRUE</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt;      .id start  stop treatment outcome</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;num&gt;    &lt;lgcl&gt;  &lt;lgcl&gt;</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt; 1:     1     1     5     FALSE   FALSE</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt; 2:     1     5     6      TRUE   FALSE</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt; 3:     1     6    16     FALSE   FALSE</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt; 4:     1    16    17      TRUE   FALSE</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt; 5:     1    17    27     FALSE   FALSE</span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt; 6:     1    27    28      TRUE   FALSE</span></span></code></pre></div>
+<p>In this simulation, all individuals start out with no
+<code>treatment</code> and without having experienced the
+<code>outcome</code>. The baseline probability to get the treatment is
+0.05 (<code>base_p=0.05</code>). It is twice as likely that someone who
+got the <code>treatment</code> in the last period of time gets it again
+in the next period of time (<code>rr_treat=2</code>), and it is much
+less likely that someone who experienced the <code>outcome</code> at
+<span class="math inline">\(t-1\)</span> will start treatment
+(<code>rr_outcome=0.5</code>). Similarly, the baseline probability of
+the <code>outcome</code> is <code>base_p=0.01</code>, with a much lower
+probability of experiencing it when currently receiving the
+<code>treatment</code> (<code>rr_treat=0.3</code>) and a slightly higher
+chance of experiencing it again when having it at <span class="math inline">\(t-1\)</span> (<code>rr_outcome=1.2</code>).</p>
+</div>
+</div>
+<div id="miscellaneous-simulations" class="section level1">
+<h1>Miscellaneous Simulations</h1>
+<div id="simulating-multi-level-data" class="section level2">
+<h2>Simulating Multi-Level Data</h2>
+<p>The <code>simDAG</code> package directly supports the inclusion of
+arbitrary mixed model syntax in the <code>formula</code> interface of
+nodes of type <code>&quot;gaussian&quot;</code>, <code>&quot;binomial&quot;</code> and
+<code>&quot;poisson&quot;</code>, which makes it relatively straightforward to
+simulate multi-level data as well. In the following example, we consider
+students that are nested in different schools. The outcome is a
+continuous score of some kind.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;school&quot;</span>, <span class="at">type=</span><span class="st">&quot;rcategorical&quot;</span>, <span class="at">probs=</span><span class="fu">rep</span>(<span class="fl">0.1</span>, <span class="dv">10</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>       <span class="at">labels=</span>LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;female&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">12</span>, <span class="at">sd=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;score&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> female<span class="sc">*</span><span class="dv">3</span> <span class="sc">+</span> age<span class="sc">*</span><span class="fl">0.1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>school),</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>       <span class="at">var_corr=</span><span class="fl">0.5</span>, <span class="at">error=</span><span class="dv">1</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt;    school female       age      score</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt; &lt;lgcl&gt;     &lt;num&gt;      &lt;num&gt;</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; 1:      I  FALSE 10.630016 -1.0475656</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 2:      J  FALSE 12.514398 -0.9447349</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; 3:      B  FALSE 19.428092 -0.1196652</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; 4:      A   TRUE 10.549850 -0.3101672</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; 5:      E  FALSE 15.268302  2.3198466</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; 6:      F   TRUE  9.177084  3.8763334</span></span></code></pre></div>
+<p>In this example, there is a single random effect for school, with a
+standard deviation of 0.5. This example could be expanded to include a
+random slope for age per school, by exchanging <code>(1|school)</code>
+with <code>(age|school)</code>, although we would then also need to
+adjust the <code>var_corr</code> argument accordingly. More examples are
+given in the formula vignette.</p>
+</div>
+<div id="simulating-mixture-distributions" class="section level2">
+<h2>Simulating Mixture Distributions</h2>
+<p>Instead of using random effects and random slopes, another
+possibility to simulate a sort of “mixed” variables is to directly model
+it using different regression models for different individuals. This can
+be done using the <code>&quot;mixture&quot;</code> node type. Consider the
+following example:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;strata&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="fu">c</span>(<span class="st">&quot;var1&quot;</span>, <span class="st">&quot;var2&quot;</span>), <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span><span class="st">&quot;mixture&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;strata&quot;</span>, <span class="st">&quot;var1&quot;</span>, <span class="st">&quot;var2&quot;</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>       <span class="at">distr=</span><span class="fu">list</span>(</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>         <span class="st">&quot;strata==0&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>                           <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> var1<span class="sc">*</span><span class="dv">2</span> <span class="sc">+</span> var2<span class="sc">*-</span><span class="fl">0.5</span>, <span class="at">error=</span><span class="dv">1</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>         <span class="st">&quot;strata==1&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>                           <span class="at">formula=</span> <span class="sc">~</span> <span class="dv">5</span> <span class="sc">+</span> var1<span class="sc">*-</span><span class="dv">1</span> <span class="sc">+</span> var2<span class="sc">*</span><span class="fl">2.3</span>, <span class="at">error=</span><span class="fl">1.5</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>       ))</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt;    strata        var1         var2          Y</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;    &lt;lgcl&gt;       &lt;num&gt;        &lt;num&gt;      &lt;num&gt;</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; 1:   TRUE -0.07074341  0.447906259  4.2715207</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 2:  FALSE -0.78074064 -0.252091165 -3.5806737</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; 3:  FALSE  0.47068990 -1.028442360 -0.2300883</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; 4:   TRUE  0.22370260  1.448593774  8.9315921</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; 5:   TRUE  1.30191347 -0.009235286  4.4649921</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; 6:   TRUE  0.60680890  0.735649599  5.1541787</span></span></code></pre></div>
+<p>Using the <code>distr</code> argument, we can easily define to which
+simulated individuals the corresponding node definitions should be
+applied to. In the example above, we defined different linear regression
+models for individuals with <code>strata==0</code> and for individuals
+with <code>strata==1</code>. It would also be possible to use entirely
+different node types etc.</p>
+</div>
+<div id="simulating-outliers" class="section level2">
+<h2>Simulating Outliers</h2>
+<p>One possibility to introduce a kind of outliers to a variable, is by
+defining the variable that should contain it as a kind of mixture
+distribution, made up of two parts, similar to how zero-inflated models
+work. First, values are generated from the general distribution. Then,
+if that variable exceeds some value, sample different values for it. A
+very simple example:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span><span class="st">&quot;mixture&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>       <span class="at">distr=</span><span class="fu">list</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>         <span class="st">&quot;TRUE&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> A<span class="sc">*</span><span class="fl">0.1</span> <span class="sc">+</span> B<span class="sc">*</span><span class="dv">1</span> <span class="sc">+</span> C<span class="sc">*-</span><span class="dv">2</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>                      <span class="at">error=</span><span class="dv">1</span>),</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>         <span class="st">&quot;Y &gt; 3&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">10000</span>, <span class="at">sd=</span><span class="dv">500</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>       ))</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10000</span>)</span></code></pre></div>
+<p>Here, we first simulate 3 standard normal variables <code>A</code>,
+<code>B</code> and <code>C</code>, which will be used as predictor
+variables for our desired outcome <code>Y</code>. For <code>Y</code>
+itself, we use the <code>&quot;mixture&quot;</code> node type, which allows us to
+define the node as a mix of multiple node types, based on some
+conditions, which are generated from one by one. Because we set the
+first condition to <code>TRUE</code>, the linear model next to it gets
+applied to all individuals in the first run, generating values from the
+specified linear model for all individuals. In the next run we condition
+on <code>Y</code> itself, instructing the function to only simulate new
+values for <code>Y &gt; 3</code>. These values are drawn from a normal
+distribution with a very high mean.</p>
+</div>
+<div id="simulating-missing-values" class="section level2">
+<h2>Simulating Missing Values</h2>
+<p>Real data usually includes at least some missing values in key
+variables. Below is a very simple example on how users could include
+missing values in their data:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_missing&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">fifelse</span>(A_missing, <span class="cn">NA</span>, A_real))</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt;      A_real A_missing A_observed</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt;       &lt;num&gt;    &lt;lgcl&gt;      &lt;num&gt;</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; 1: 8.989272     FALSE   8.989272</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; 2: 9.786513     FALSE   9.786513</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt; 3: 7.859934     FALSE   7.859934</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; 4: 7.611410      TRUE         NA</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; 5: 7.012871     FALSE   7.012871</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt; 6: 8.122936      TRUE         NA</span></span></code></pre></div>
+<p>In this DAG, the real values of node <code>A</code> are generated
+first. Afterwards, an indicator of whether the corresponding values is
+observed is drawn randomly for each individual in node
+<code>A_missing</code>. The actually observed value, denoted
+<code>A_observed</code>, is then generated by simply using either the
+value of <code>A_real</code> or a simple <code>NA</code> if
+<code>A_missing==TRUE</code>. The missingness shown here would
+correspond to <strong>missing completely at random</strong> (MCAR) in
+the categorisation by XX. Although this might seem a little cumbersome
+at first, it does allow quite a lot of flexibility in the specification
+of different missingness mechanisms. For example, to simulate
+<strong>missing at random</strong> (MAR) patterns, we could use the
+following code instead:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;B_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_missing&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;B_missing&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">5</span> <span class="sc">+</span> A_real<span class="sc">*</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">fifelse</span>(A_missing, <span class="cn">NA</span>, A_real)) <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;B_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">fifelse</span>(B_missing, <span class="cn">NA</span>, B_real))</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt;         A_real B_real A_missing B_missing A_observed B_observed</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt;          &lt;num&gt; &lt;lgcl&gt;    &lt;lgcl&gt;    &lt;lgcl&gt;      &lt;num&gt;     &lt;lgcl&gt;</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; 1: -1.58662145   TRUE     FALSE     FALSE -1.5866215       TRUE</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; 2: -0.78509572  FALSE     FALSE     FALSE -0.7850957      FALSE</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; 3: -1.55153510   TRUE     FALSE     FALSE -1.5515351       TRUE</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; 4:  1.32864019   TRUE     FALSE     FALSE  1.3286402       TRUE</span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; 5: -0.04299984   TRUE      TRUE     FALSE         NA       TRUE</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; 6: -0.34161559  FALSE     FALSE     FALSE -0.3416156      FALSE</span></span></code></pre></div>
+<p>Here, the missingness in <code>A_observed</code> is again MCAR,
+because it is independent of everything. The missingness in
+<code>B_observed</code>, however, is MAR because the probability of
+missingness is dependent on the actually observed value of
+<code>A_real</code>.</p>
+</div>
+<div id="simulating-measurement-error" class="section level2">
+<h2>Simulating Measurement Error</h2>
+<p>Measurement error refers to situations in which variables of interest
+are not measured perfectly. For example, the disease of interest may
+only be detected in 90% of all patients with the disease and may falsely
+be detected in 1% of all patients without the disease. The same strategy
+shown for missing values could be used to simulate such data using
+<code>simDAG</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>probs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">TRUE</span><span class="st">`</span><span class="ot">=</span><span class="fl">0.9</span>, <span class="st">`</span><span class="at">FALSE</span><span class="st">`</span><span class="ot">=</span><span class="fl">0.01</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;conditional_prob&quot;</span>, <span class="at">parents=</span><span class="st">&quot;Disease_real&quot;</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>       <span class="at">probs=</span>probs)</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt;    Disease_real Disease_observed</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt;          &lt;lgcl&gt;           &lt;lgcl&gt;</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt; 1:        FALSE            FALSE</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt; 2:         TRUE             TRUE</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt; 3:         TRUE             TRUE</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; 4:         TRUE             TRUE</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt; 5:        FALSE            FALSE</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt; 6:         TRUE             TRUE</span></span></code></pre></div>
+<p>In this example, the disease is present in 50% of all individuals. By
+using a node with <code>type=&quot;conditional_prob&quot;</code> we can easily
+draw new values for the observed disease status by specifying the
+<code>probs</code> argument correctly. We could similarly extend this
+example to make the probability of misclassification dependent on
+another variable:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># first TRUE / FALSE refers to Sex = TRUE / FALSE</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co"># second TRUE / FALSE refers to Disease = TRUE / FALSE</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>probs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">TRUE.TRUE=</span><span class="fl">0.9</span>, <span class="at">TRUE.FALSE=</span><span class="fl">0.01</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>              <span class="at">FALSE.TRUE=</span><span class="fl">0.8</span>, <span class="at">FALSE.FALSE=</span><span class="fl">0.05</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;conditional_prob&quot;</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>       <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;Sex&quot;</span>, <span class="st">&quot;Disease_real&quot;</span>), <span class="at">probs=</span>probs)</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt;       Sex Disease_real Disease_observed</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt;    &lt;lgcl&gt;       &lt;lgcl&gt;           &lt;lgcl&gt;</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; 1:  FALSE         TRUE             TRUE</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; 2:  FALSE        FALSE            FALSE</span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; 3:   TRUE        FALSE            FALSE</span></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a><span class="co">#&gt; 4:   TRUE        FALSE            FALSE</span></span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a><span class="co">#&gt; 5:  FALSE        FALSE            FALSE</span></span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="co">#&gt; 6:  FALSE        FALSE             TRUE</span></span></code></pre></div>
+<p>In this extended example, <code>Sex</code> is equally distributed
+among the population (with <code>TRUE</code> = “female” and
+<code>FALSE</code> = “male”). In this example, the probability of being
+diagnosed with the disease (<code>Disease_observed</code>) if the
+disease is actually present is 0.9 for females and only 0.8 for males.
+Similarly, the probability of being diagnosed if the disease is not
+present is 0.01 for females and 0.05 for males.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

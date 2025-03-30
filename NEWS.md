@@ -101,3 +101,29 @@ Bug Fixes
 
 * When specifying a node as both a root or child node and as a time-dependent node, it is no longer counted twice in `print.DAG()`
 * Fix small error in tests due to changes in `data.table`
+
+# simDAG 0.3.0
+
+New Features
+
+* Support for random effects and random slopes (mixed model syntax) has been added to the `formula` interface of `node()` and `node_td()` when using nodes of type `"gaussian"`, `"binomial"` or `"poisson"`. 
+* Added seven new node types: `node_aftreg()`, `node_ahreg()`, `node_poreg()`, `node_ypreg()`, `node_ehreg()`, `node_zeroinfl()` and `node_mixture()`.
+
+Enhancements
+
+* Added the `reference` argument to `rbernoulli()` and `rcategorical()` to make it easier to specify the reference category when coding the output as a factor variable.
+* `+.DAG` now checks whether the `DAG` would become cyclic when adding a `node()` and returns an error if it does.
+* Added the `include_td_nodes` and `include_root_nodes` arguments to `as.igraph.DAG()`.
+* Changed the default of `n_cores` in the `sim_n_datasets()` function to 1 from `parallel::detectCores()`
+* Function input to the `cens_dist` argument in the `node_cox()` function is now allowed.
+* The argument `as_two_cols` was added to the `node_cox()` function to allow users to return only the time-to-event as a single column if no censoring is applied.
+
+Bug Fixes
+
+* Fixed a bug that occurred when a user-specified root node function returned a `data.frame`-like object with more than one column.
+* Fixed a bug when printing the structural equation of a poisson node, in which the `exp()` call did not show up when the node was defined using the `formula` argument.
+
+Documentation
+
+* Added new "cookbook" vignette to showcase more possible use cases of the package.
+* Visual update of the DAGs shown in the vignette figures.

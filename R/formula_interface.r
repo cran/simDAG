@@ -69,33 +69,65 @@ str2numeric <- function(string) {
   return(out)
 }
 
+## check if the node needs an intercept
+node_needs_intercept <- function(node_type) {
+
+  if (!is.function(node_type)) {
+    fun_name <- paste0("node_", node_type)
+
+    if (!exists(fun_name)) {
+      fun_name <- node_type
+    }
+    node_type <- get(fun_name)
+  }
+
+  return("intercept" %in% names(formals(node_type)))
+}
+
 ## parse custom formulas into betas, formula parts and intercept
 # NOTE: expects formula to be a string, sanitized with sanitize_formula()
 parse_formula <- function(formula, node_type) {
+
+  if (!supports_mixed_terms(node_type) && has_mixed_terms(formula)) {
+    stop("Random effects and random slopes are currently only supported in",
+         " 'formula' for nodes of type 'gaussian', 'binomial', or",
+         " 'poisson', not ", node_type, ".")
+  }
 
   # clean up formula
   formstr <- gsub("~", "", formula, fixed=TRUE)
   formstr <- gsub(" ", "", formstr, fixed=TRUE)
 
+  # processing of random effects and slopes
+  if (has_mixed_terms(formstr)) {
+    mixed_terms <- extract_mixed_terms(formstr)
+    formstr <- str_replace_all(formstr, mixed_terms)
+    formstr <- remove_mistaken_plus(formstr)
+  } else {
+    mixed_terms <- NULL
+  }
+
   # split into additive parts
   formvec <- strsplit(formstr, "+", fixed=TRUE)[[1]]
 
+  if (length(formvec) <= 1) {
+    stop("A 'formula' cannot consist soley of random effects and/or random",
+         " slopes. At least one fixed effect must also be supplied.")
+  }
+
   # extract and check intercept
-  ind <- grepl("*", formvec, fixed=TRUE)
+  has_star <- grepl("*", formvec, fixed=TRUE)
+  needs_intercept <- node_needs_intercept(node_type)
 
-  is_cox_node <- (is.function(node_type) &&
-                  is_same_object(node_type, node_cox)) ||
-    (!is.function(node_type) && node_type=="cox")
-
-  if (is_cox_node) {
+  if (!needs_intercept) {
     intercept <- NULL
   } else {
-    intercept <- formvec[!ind]
+    intercept <- formvec[!has_star]
     check_intercept(intercept)
   }
 
   # split rest further by variable / value pairs
-  formvec <- formvec[ind]
+  formvec <- formvec[has_star]
   formlist <- strsplit(formvec[grepl("*", formvec, fixed=TRUE)], "*",
                        fixed=TRUE)
   check_formlist(formlist)
@@ -124,9 +156,10 @@ parse_formula <- function(formula, node_type) {
   check_betas(betas)
 
   out <- list(formula_parts=formula_parts,
+              mixed_terms=mixed_terms,
               betas=betas)
 
-  if (!is_cox_node) {
+  if (needs_intercept) {
     out$intercept <- as.numeric(intercept)
   }
 
@@ -141,7 +174,25 @@ args_from_formula <- function(args, formula, node_type) {
   args$parents <- form_parsed$formula_parts
   args$betas <- form_parsed$betas
   args$intercept <- form_parsed$intercept
-  args$formula <- NULL
+
+  # adjust formula for mixed models, or remove it
+  if (length(form_parsed$mixed_terms) > 0 &
+      node_type %in% c("gaussian", "binomial", "poisson")) {
+
+    args$mixed_terms <- form_parsed$mixed_terms
+    args$formula <- get_formula_for_node_lmer(
+      formula_parts=form_parsed$formula_parts,
+      mixed_terms=form_parsed$mixed_terms
+    )
+
+    if (!"var_corr" %in% names(args)) {
+      stop("'var_corr' must be specified when random effects or random",
+           " slopes are included in 'formula'.", call.=FALSE)
+    }
+
+  } else {
+    args$formula <- NULL
+  }
 
   return(args)
 }
@@ -150,9 +201,25 @@ args_from_formula <- function(args, formula, node_type) {
 #' @importFrom data.table as.data.table
 data_for_formula <- function(data, args) {
 
+  # extract variables mentioned in mixed effects parts, if included
+  if (!is.null(args$mixed_terms)) {
+    form_mixed <- stats::as.formula(paste0(
+      "~ ", paste0(args$mixed_terms, collapse=" + ")
+    ))
+    mixed_parents <- all.vars(form_mixed)
+    not_in_parents <- mixed_parents[!mixed_parents %in% args$parents]
+    all_parents <- c(args$parents, not_in_parents)
+  }
+
   # just return the relevant parts of the data.table if possible
   if (all(args$parents %in% colnames(data))) {
-    return(data[, args$parents, with=FALSE])
+    if (is.null(args$mixed_terms)) {
+      out <- data[, args$parents, with=FALSE]
+    } else {
+      out <- data[, all_parents, with=FALSE]
+    }
+
+    return(out)
   }
 
   # add all variables to model matrix
@@ -200,7 +267,15 @@ data_for_formula <- function(data, args) {
                            " point.\n",
                            " The variables currently available in data are:\n",
                            paste0(colnames(mod_mat), collapse=", "),
-                           call.=FALSE)})
+                           call.=FALSE)}
+  )
+
+  # if it will be used for mixed models, append terms from those
+  if (!is.null(args$mixed_terms)) {
+    mod_mat <- as.data.frame(mod_mat)
+    mod_mat <- cbind(mod_mat, data[, not_in_parents, with=FALSE])
+  }
+
   return(mod_mat)
 }
 
@@ -296,20 +371,26 @@ is_enhanced_formula <- function(string) {
   # 2. contains *FUNCTION(NUMBER)
   # 3. contains eval(VARIABLE)
   # 4. contains NUMBER*
+  # 5. contains | (for random effects / slopes)
   out <-
     grepl("\\*-?\\d+(\\.\\d+)?", string) ||
     grepl("\\*[a-zA-Z0-9_\\.]+\\(-?\\d+(\\.\\d+)?\\)", string) ||
     grepl("eval\\([a-zA-Z0-9_\\.]*\\)", string) ||
-    grepl("\\d+\\)?\\s*\\*", string)
+    grepl("\\d+\\)?\\s*\\*", string) ||
+    grepl("|", string, fixed=TRUE)
   return(out)
 }
 
 ## get parents out of a special formula object
 parents_from_formula <- function(formula, node_type) {
 
-  formula_parts <- parse_formula(formula, node_type=node_type)$formula_parts
-  raw_formula <- stats::as.formula(paste0("~ ", paste0(formula_parts,
-                                   collapse=" + ")))
+  parsed <- parse_formula(formula, node_type=node_type)
+
+  formula_parts1 <- parsed$formula_parts
+  raw_formula <- stats::as.formula(
+    paste0("~ ", paste0(c(parsed$formula_parts, parsed$mixed_terms),
+                        collapse=" + "))
+  )
 
   return(all.vars(raw_formula))
 }

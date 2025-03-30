@@ -133,6 +133,11 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=FALSE,
         args$data <- data[, args$parents, with=FALSE]
       }
 
+      # remove temporary mixed model stuff if there
+      if (!is.null(args$mixed_terms)) {
+        args$mixed_terms <- NULL
+      }
+
       # get function
       node_type_fun <- fun_list[[i]]
       fun_pos_args <- names(formals(node_type_fun))
@@ -147,9 +152,16 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=FALSE,
       if (!"parents" %in% fun_pos_args) {
         args$parents <- NULL
       }
+
       if (tx_node_types[i]=="time_to_event" |
           tx_node_types[i]=="competing_events") {
         args$envir <- envir
+      } else {
+        # only done for nodes of other types to allow this argument
+        # in prob_fun()
+        if (!"intercept" %in% fun_pos_args) {
+          args$intercept <- NULL
+        }
       }
 
       # call needed node function and make possible errors more
