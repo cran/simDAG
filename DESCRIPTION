@@ -1,6 +1,6 @@
 Package: simDAG
 Title: Simulate Data from a DAG and Associated Node Information
-Version: 0.3.0
+Version: 0.3.1
 Authors@R: c(
     person("Robin", "Denz", , "robin.denz@rub.de", role = c("aut", "cre")),
     person("Katharina", "Meiszl", , "meiszl@amib.rub-uni-bochum.de", role = c("aut"))
@@ -15,7 +15,7 @@ License: GPL (>= 3)
 URL: https://github.com/RobinDenz1/simDAG,
         https://robindenz1.github.io/simDAG/
 BugReports: https://github.com/RobinDenz1/siMDAG/issues
-Imports: data.table (>= 1.15.0), Rfast, rlang, igraph
+Imports: data.table (>= 1.15.0), Rfast, rlang, igraph (>= 2.0.0)
 Suggests: knitr, rmarkdown, testthat (>= 3.0.0), vdiffr (>= 1.0.0),
         ggplot2, ggforce, MASS, covr, foreach, doSNOW, doRNG, parallel,
         utils, simr, rsurv
@@ -25,8 +25,8 @@ Contact: <robin.denz@rub.de>
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2025-03-30 15:41:57 UTC; Robin Denz
+Packaged: 2025-05-28 07:13:24 UTC; Robin Denz
 Author: Robin Denz [aut, cre],
   Katharina Meiszl [aut]
 Repository: CRAN
-Date/Publication: 2025-03-30 16:00:01 UTC
+Date/Publication: 2025-05-28 08:00:06 UTC

@@ -1,11 +1,11 @@
-## ---- include=FALSE-----------------------------------------------------------
+## ----include=FALSE------------------------------------------------------------
 knitr::opts_chunk$set(
   collapse=TRUE,
   comment="#>",
   fig.align="center"
 )
 
-## ---- include=TRUE, fig.align="center", fig.cap=c("A small DAG with four nodes"), echo=FALSE, out.width=600----
+## ----include=TRUE, fig.align="center", fig.cap=c("A small DAG with four nodes"), echo=FALSE, out.width=600----
 knitr::include_graphics("./images_v_sim_from_dag/simple_dag.png")
 
 ## -----------------------------------------------------------------------------
@@ -67,7 +67,7 @@ est_dag <- dag_from_data(dag=dag, data=sim_dat)
 ## -----------------------------------------------------------------------------
 sim_dat2 <- sim_from_dag(dag=est_dag$dag, n_sim=10000)
 
-## ---- include=TRUE, fig.align="center", fig.cap=c("A small DAG with four nodes"), echo=FALSE, out.width=600----
+## ----include=TRUE, fig.align="center", fig.cap=c("A small DAG with four nodes"), echo=FALSE, out.width=600----
 knitr::include_graphics("./images_v_sim_from_dag/time_dep_dag.png")
 
 ## -----------------------------------------------------------------------------

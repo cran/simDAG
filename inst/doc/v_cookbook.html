@@ -398,7 +398,9 @@ documentation of the functions. We recommend consulting these vignettes
 first to get a feeling for the required syntax before diving into these
 specific examples.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(simDAG)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">23414</span>)</span></code></pre></div>
 </div>
 <div id="simulating-randomized-controlled-trials" class="section level1">
 <h1>Simulating Randomized Controlled Trials</h1>
@@ -423,12 +425,12 @@ outcome and two baseline covariates (<code>Age</code> and
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="fu">head</span>(data)</span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;         Age    Sex Treatment Outcome</span></span>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt;       &lt;num&gt; &lt;lgcl&gt;    &lt;lgcl&gt;  &lt;lgcl&gt;</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 1: 54.10358   TRUE     FALSE    TRUE</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; 2: 53.99942  FALSE     FALSE   FALSE</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; 3: 48.99740  FALSE      TRUE   FALSE</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; 4: 57.47850  FALSE      TRUE   FALSE</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt; 5: 59.82293  FALSE      TRUE    TRUE</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; 6: 56.46213  FALSE     FALSE    TRUE</span></span></code></pre></div>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 1: 52.44476   TRUE      TRUE   FALSE</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; 2: 54.20709   TRUE     FALSE   FALSE</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; 3: 56.40461   TRUE      TRUE    TRUE</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; 4: 50.26406  FALSE     FALSE   FALSE</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt; 5: 61.16070   TRUE      TRUE    TRUE</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; 6: 60.00081   TRUE      TRUE    TRUE</span></span></code></pre></div>
 </div>
 <div id="three-or-more-treatment-groups" class="section level2">
 <h2>Three or More Treatment Groups</h2>
@@ -449,12 +451,12 @@ instead of the <code>rbernoulli()</code> function.</p>
 <span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="fu">head</span>(data)</span>
 <span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;         Age   Sex Treatment Outcome</span></span>
 <span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;       &lt;num&gt; &lt;num&gt;    &lt;fctr&gt;  &lt;lgcl&gt;</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 1: 48.82329     1      Med2   FALSE</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; 2: 57.53600     0      Med1   FALSE</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; 3: 50.56135     1      Med1   FALSE</span></span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; 4: 55.77965     1   Placebo    TRUE</span></span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; 5: 58.75004     0      Med2   FALSE</span></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; 6: 56.18307     0      Med2   FALSE</span></span></code></pre></div>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 1: 57.72406     1      Med1   FALSE</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; 2: 60.79561     0   Placebo    TRUE</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; 3: 58.59577     1   Placebo    TRUE</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; 4: 48.17102     1      Med1   FALSE</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; 5: 57.22410     0      Med1    TRUE</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; 6: 60.58842     0      Med2   FALSE</span></span></code></pre></div>
 <p>By setting <code>probs=c(0.33333, 0.33333, 0.33333)</code>, each
 treatment group is choosen with a probability of 0.33333, meaning that
 the resulting groups should be roughly of equal size in expectation.</p>
@@ -485,12 +487,12 @@ the long-format.</p>
 <span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Key: &lt;.id, .time&gt;</span></span>
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;      .id .time      Age   Sex Treatment   Outcome</span></span>
 <span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt;    &lt;num&gt; &lt;num&gt;    &lt;lgcl&gt;     &lt;num&gt;</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; 1:     1     1 47.82822     0     FALSE -2.504335</span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; 2:     1     2 47.82822     0     FALSE -2.158093</span></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; 3:     1     3 47.82822     0     FALSE -2.350866</span></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; 4:     1     4 47.82822     0     FALSE -1.686581</span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; 5:     1     5 47.82822     0     FALSE -1.876626</span></span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 6:     2     1 54.03705     1     FALSE -2.187397</span></span></code></pre></div>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; 1:     1     1 61.94304     1     FALSE 1.8466496</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; 2:     1     2 61.94304     1     FALSE 0.7907009</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; 3:     1     3 61.94304     1     FALSE 3.3109942</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; 4:     1     4 61.94304     1     FALSE 0.6094475</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; 5:     1     5 61.94304     1     FALSE 0.5008469</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 6:     2     1 56.87963     1      TRUE 0.8499893</span></span></code></pre></div>
 </div>
 <div id="non-compliance-to-treatment-assignment" class="section level2">
 <h2>Non-Compliance to Treatment Assignment</h2>
@@ -527,14 +529,14 @@ For simplicity, the simulation is run without any further covariates for
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim, <span class="at">to=</span><span class="st">&quot;long&quot;</span>)</span>
 <span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="fu">head</span>(data)</span>
 <span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; Key: &lt;.id, .time&gt;</span></span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;      .id .time Treatment   Outcome Treatment_event_count</span></span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt;    &lt;lgcl&gt;     &lt;num&gt;                 &lt;num&gt;</span></span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; 1:     1     1      TRUE -4.160177                     1</span></span>
-<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; 2:     1     2      TRUE -1.259056                     2</span></span>
-<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; 3:     1     3      TRUE -2.397425                     3</span></span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; 4:     1     4      TRUE -3.564521                     4</span></span>
-<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; 5:     1     5      TRUE -2.224830                     5</span></span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt; 6:     2     1     FALSE -1.541366                     0</span></span></code></pre></div>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;      .id .time Treatment    Outcome Treatment_event_count</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt;    &lt;lgcl&gt;      &lt;num&gt;                 &lt;num&gt;</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; 1:     1     1      TRUE -3.4368080                     1</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; 2:     1     2      TRUE -0.5167935                     2</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; 3:     1     3      TRUE -4.4188412                     3</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; 4:     1     4      TRUE -2.9598534                     4</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; 5:     1     5      TRUE -1.0813427                     5</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt; 6:     2     1     FALSE -1.7865979                     0</span></span></code></pre></div>
 <p>What this DAG essentially means is that first, the
 <code>Treatment_event</code> column is generated, which includes the
 assigned treatment at baseline. We called it
@@ -574,16 +576,15 @@ using the following syntax:</p>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Outcome&quot;</span>, <span class="at">type=</span><span class="st">&quot;poisson&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> Treatment<span class="sc">*</span><span class="dv">4</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Clinic),</span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>       <span class="at">var_corr=</span><span class="fl">0.5</span>)</span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; Lade nötigen Namensraum: simr</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;    Clinic Treatment Outcome</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;     &lt;int&gt;    &lt;lgcl&gt;   &lt;int&gt;</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; 1:     33      TRUE      15</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; 2:      2     FALSE       1</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 3:     16     FALSE       0</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; 4:     24     FALSE       3</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; 5:     49      TRUE      17</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; 6:     31      TRUE      12</span></span></code></pre></div>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt;    Clinic Treatment Outcome</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;     &lt;int&gt;    &lt;lgcl&gt;   &lt;int&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; 1:     16     FALSE       0</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; 2:     11     FALSE       0</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; 3:     41      TRUE      26</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 4:     36      TRUE      61</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; 5:     30      TRUE      12</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; 6:     13     FALSE       0</span></span></code></pre></div>
 <p>In this DGP, each individual is randomly assigned to one of 50
 Clinics with equal probability. All patients in clinics numbered 0-24
 are assigned to the control group, while the other patients are assigned
@@ -617,12 +618,12 @@ outcome:</p>
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">head</span>(data)</span>
 <span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;       cat         cont treatment  outcome</span></span>
 <span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt;        &lt;num&gt;    &lt;lgcl&gt;    &lt;num&gt;</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 1:      C 3.563297e-03      TRUE 4.563690</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 2:      C 2.438739e-01      TRUE 2.971591</span></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; 3:      A 5.213387e-01      TRUE 2.457812</span></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; 4:      C 7.783988e-01     FALSE 2.023251</span></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; 5:      C 2.070797e-01      TRUE 4.646090</span></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; 6:      A 1.712023e-08     FALSE 2.873736</span></span></code></pre></div>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 1:      B 0.0485645707      TRUE 3.862287</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 2:      C 0.4544629918      TRUE 3.426110</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; 3:      B 0.0007678235     FALSE 4.866626</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; 4:      C 0.2277772334      TRUE 3.601459</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; 5:      B 0.4191175999     FALSE 2.892944</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; 6:      B 0.1157079692      TRUE 4.361019</span></span></code></pre></div>
 <p>If the goal was to estimate the causal effect of the treatment on the
 outcome, we would need to adjust for both <code>cat</code> and
 <code>cont</code> here, using for example a linear regression model
@@ -664,12 +665,12 @@ achieve this:</p>
 <span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="fu">head</span>(data)</span>
 <span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt;      .id start  stop treatment outcome</span></span>
 <span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;num&gt;    &lt;lgcl&gt;  &lt;lgcl&gt;</span></span>
-<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt; 1:     1     1     5     FALSE   FALSE</span></span>
-<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt; 2:     1     5     6      TRUE   FALSE</span></span>
-<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt; 3:     1     6    16     FALSE   FALSE</span></span>
-<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt; 4:     1    16    17      TRUE   FALSE</span></span>
-<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt; 5:     1    17    27     FALSE   FALSE</span></span>
-<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt; 6:     1    27    28      TRUE   FALSE</span></span></code></pre></div>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt; 1:     1     1     2      TRUE   FALSE</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt; 2:     1     2     9     FALSE   FALSE</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt; 3:     1     9    10      TRUE   FALSE</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt; 4:     1    10    26     FALSE   FALSE</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt; 5:     1    26    27      TRUE   FALSE</span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt; 6:     1    27    28     FALSE   FALSE</span></span></code></pre></div>
 <p>In this simulation, all individuals start out with no
 <code>treatment</code> and without having experienced the
 <code>outcome</code>. The baseline probability to get the treatment is
@@ -708,12 +709,12 @@ continuous score of some kind.</p>
 <span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="fu">head</span>(data)</span>
 <span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt;    school female       age      score</span></span>
 <span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt; &lt;lgcl&gt;     &lt;num&gt;      &lt;num&gt;</span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; 1:      I  FALSE 10.630016 -1.0475656</span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 2:      J  FALSE 12.514398 -0.9447349</span></span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; 3:      B  FALSE 19.428092 -0.1196652</span></span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; 4:      A   TRUE 10.549850 -0.3101672</span></span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; 5:      E  FALSE 15.268302  2.3198466</span></span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; 6:      F   TRUE  9.177084  3.8763334</span></span></code></pre></div>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; 1:      C  FALSE  8.735638 -1.8241772</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 2:      A  FALSE 13.501810  0.3734982</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; 3:      C   TRUE 14.643271  1.2323782</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; 4:      H  FALSE 14.163423 -1.2998525</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; 5:      H  FALSE 10.664800 -0.3658555</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; 6:      C  FALSE 12.018570 -1.4457534</span></span></code></pre></div>
 <p>In this example, there is a single random effect for school, with a
 standard deviation of 0.5. This example could be expanded to include a
 random slope for age per school, by exchanging <code>(1|school)</code>
@@ -740,14 +741,14 @@ following example:</p>
 <span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>       ))</span>
 <span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
 <span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt;    strata        var1         var2          Y</span></span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;    &lt;lgcl&gt;       &lt;num&gt;        &lt;num&gt;      &lt;num&gt;</span></span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; 1:   TRUE -0.07074341  0.447906259  4.2715207</span></span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 2:  FALSE -0.78074064 -0.252091165 -3.5806737</span></span>
-<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; 3:  FALSE  0.47068990 -1.028442360 -0.2300883</span></span>
-<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; 4:   TRUE  0.22370260  1.448593774  8.9315921</span></span>
-<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; 5:   TRUE  1.30191347 -0.009235286  4.4649921</span></span>
-<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; 6:   TRUE  0.60680890  0.735649599  5.1541787</span></span></code></pre></div>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt;    strata        var1        var2          Y</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;    &lt;lgcl&gt;       &lt;num&gt;       &lt;num&gt;      &lt;num&gt;</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; 1:  FALSE  0.16587088  0.30421837 -3.4419755</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 2:   TRUE  1.55093448 -0.04545811  3.7593377</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; 3:  FALSE -0.02274296  0.49655368 -2.7491275</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; 4:   TRUE -1.11160689 -0.32075814  6.1598696</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; 5:  FALSE  0.97717480 -0.08131991  0.2643924</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; 6:  FALSE  0.34815247 -1.25855594 -2.1650117</span></span></code></pre></div>
 <p>Using the <code>distr</code> argument, we can easily define to which
 simulated individuals the corresponding node definitions should be
 applied to. In the example above, we defined different linear regression
@@ -798,14 +799,14 @@ missing values in their data:</p>
 <span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
 <span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
 <span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt;      A_real A_missing A_observed</span></span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt;       &lt;num&gt;    &lt;lgcl&gt;      &lt;num&gt;</span></span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; 1: 8.989272     FALSE   8.989272</span></span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; 2: 9.786513     FALSE   9.786513</span></span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt; 3: 7.859934     FALSE   7.859934</span></span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; 4: 7.611410      TRUE         NA</span></span>
-<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; 5: 7.012871     FALSE   7.012871</span></span>
-<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt; 6: 8.122936      TRUE         NA</span></span></code></pre></div>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt;       A_real A_missing A_observed</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt;        &lt;num&gt;    &lt;lgcl&gt;      &lt;num&gt;</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; 1:  8.863667     FALSE   8.863667</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; 2:  8.749032     FALSE   8.749032</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt; 3: 13.558146     FALSE  13.558146</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; 4:  4.216364     FALSE   4.216364</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; 5:  9.335568     FALSE   9.335568</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt; 6: 11.699485     FALSE  11.699485</span></span></code></pre></div>
 <p>In this DAG, the real values of node <code>A</code> are generated
 first. Afterwards, an indicator of whether the corresponding values is
 observed is drawn randomly for each individual in node
@@ -831,14 +832,14 @@ following code instead:</p>
 <span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a></span>
 <span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
 <span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt;         A_real B_real A_missing B_missing A_observed B_observed</span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt;          &lt;num&gt; &lt;lgcl&gt;    &lt;lgcl&gt;    &lt;lgcl&gt;      &lt;num&gt;     &lt;lgcl&gt;</span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; 1: -1.58662145   TRUE     FALSE     FALSE -1.5866215       TRUE</span></span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; 2: -0.78509572  FALSE     FALSE     FALSE -0.7850957      FALSE</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; 3: -1.55153510   TRUE     FALSE     FALSE -1.5515351       TRUE</span></span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; 4:  1.32864019   TRUE     FALSE     FALSE  1.3286402       TRUE</span></span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; 5: -0.04299984   TRUE      TRUE     FALSE         NA       TRUE</span></span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; 6: -0.34161559  FALSE     FALSE     FALSE -0.3416156      FALSE</span></span></code></pre></div>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt;        A_real B_real A_missing B_missing A_observed B_observed</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt;         &lt;num&gt; &lt;lgcl&gt;    &lt;lgcl&gt;    &lt;lgcl&gt;      &lt;num&gt;     &lt;lgcl&gt;</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; 1:  0.2336307  FALSE     FALSE     FALSE  0.2336307      FALSE</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; 2: -1.4156727  FALSE     FALSE     FALSE -1.4156727      FALSE</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; 3:  0.4807302   TRUE     FALSE     FALSE  0.4807302       TRUE</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; 4: -0.6150736  FALSE     FALSE     FALSE -0.6150736      FALSE</span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; 5: -1.1016110  FALSE     FALSE     FALSE -1.1016110      FALSE</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; 6: -2.2881100   TRUE     FALSE     FALSE -2.2881100       TRUE</span></span></code></pre></div>
 <p>Here, the missingness in <code>A_observed</code> is again MCAR,
 because it is independent of everything. The missingness in
 <code>B_observed</code>, however, is MAR because the probability of
@@ -865,9 +866,9 @@ shown for missing values could be used to simulate such data using
 <span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt;    Disease_real Disease_observed</span></span>
 <span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt;          &lt;lgcl&gt;           &lt;lgcl&gt;</span></span>
 <span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt; 1:        FALSE            FALSE</span></span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt; 2:         TRUE             TRUE</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt; 2:        FALSE            FALSE</span></span>
 <span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt; 3:         TRUE             TRUE</span></span>
-<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; 4:         TRUE             TRUE</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; 4:        FALSE            FALSE</span></span>
 <span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt; 5:        FALSE            FALSE</span></span>
 <span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt; 6:         TRUE             TRUE</span></span></code></pre></div>
 <p>In this example, the disease is present in 50% of all individuals. By
@@ -892,11 +893,11 @@ another variable:</p>
 <span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt;       Sex Disease_real Disease_observed</span></span>
 <span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt;    &lt;lgcl&gt;       &lt;lgcl&gt;           &lt;lgcl&gt;</span></span>
 <span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; 1:  FALSE         TRUE             TRUE</span></span>
-<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; 2:  FALSE        FALSE            FALSE</span></span>
-<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; 3:   TRUE        FALSE            FALSE</span></span>
-<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a><span class="co">#&gt; 4:   TRUE        FALSE            FALSE</span></span>
-<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a><span class="co">#&gt; 5:  FALSE        FALSE            FALSE</span></span>
-<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="co">#&gt; 6:  FALSE        FALSE             TRUE</span></span></code></pre></div>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; 2:  FALSE         TRUE            FALSE</span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; 3:  FALSE         TRUE            FALSE</span></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a><span class="co">#&gt; 4:  FALSE        FALSE            FALSE</span></span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a><span class="co">#&gt; 5:  FALSE         TRUE             TRUE</span></span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="co">#&gt; 6:  FALSE         TRUE             TRUE</span></span></code></pre></div>
 <p>In this extended example, <code>Sex</code> is equally distributed
 among the population (with <code>TRUE</code> = “female” and
 <code>FALSE</code> = “male”). In this example, the probability of being

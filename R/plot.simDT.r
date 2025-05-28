@@ -26,11 +26,11 @@ plot.simDT <- function(x, right_boxes=TRUE,
                        hline_type="dashed", hline_color="black",
                        hline_alpha=1, ...) {
 
-  requireNamespace("ggplot2")
+  requireNamespace("ggplot2", quietly=TRUE)
 
   if (!inherits(x, "simDT")) {
     stop("'x' must be a simDT object created using the sim_discrete_time()",
-         " function.")
+         " function.", call.=FALSE)
   }
 
   tx_names <- unlist(lapply(x$tx_nodes, FUN=function(x){x$name}))

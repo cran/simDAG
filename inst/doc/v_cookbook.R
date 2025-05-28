@@ -1,13 +1,15 @@
-## ---- include=FALSE-----------------------------------------------------------
+## ----include=FALSE------------------------------------------------------------
 knitr::opts_chunk$set(
   collapse=TRUE,
   comment="#>",
   fig.align="center"
 )
 
-## ---- message=FALSE, warning=FALSE--------------------------------------------
+## ----message=FALSE, warning=FALSE---------------------------------------------
 library(simDAG)
 library(data.table)
+
+set.seed(23414)
 
 ## -----------------------------------------------------------------------------
 dag <- empty_dag() +
