@@ -10,6 +10,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![R-CMD-check](https://github.com/RobinDenz1/simDAG/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/RobinDenz1/simDAG/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/RobinDenz1/simDAG/graph/badge.svg)](https://app.codecov.io/gh/RobinDenz1/simDAG)
+[![](https://img.shields.io/badge/doi-10.48550/arXiv.2506.01498-green.svg)](https://doi.org/10.48550/arXiv.2506.01498)
 <!-- badges: end -->
 
 # simDAG <img src="man/figures/logo.png" height="240" align="right" />
@@ -96,10 +97,6 @@ summary(mod_bmi)
 #> Call:
 #> glm(formula = bmi ~ age + sex, family = "gaussian", data = sim_dat)
 #> 
-#> Deviance Residuals: 
-#>     Min       1Q   Median       3Q      Max  
-#> -8.4802  -1.3555   0.0005   1.3423   8.6826  
-#> 
 #> Coefficients:
 #>             Estimate Std. Error t value Pr(>|t|)    
 #> (Intercept) 11.89194    0.07954  149.51   <2e-16 ***
@@ -126,10 +123,6 @@ summary(mod_death)
 #> Call:
 #> glm(formula = death ~ age + bmi, family = "binomial", data = sim_dat)
 #> 
-#> Deviance Residuals: 
-#>     Min       1Q   Median       3Q      Max  
-#> -4.4111   0.0035   0.0066   0.0126   0.2883  
-#> 
 #> Coefficients:
 #>             Estimate Std. Error z value Pr(>|z|)    
 #> (Intercept) -14.6833     3.5538  -4.132  3.6e-05 ***
@@ -148,11 +141,16 @@ summary(mod_death)
 ```
 
 The estimated coefficients are also very close to the ones we specified.
-More examples can be found in the documentation and the vignette.
+More examples can be found in the documentation and the multiple
+vignettes.
 
 ## Citation
 
-Use `citation("simDAG")` to get the relevant citation information.
+If you use this package, please cite the associated article:
+
+Denz, Robin and Nina Timmesfeld (2025). Simulating Complex Crossectional
+and Longitudinal Data using the simDAG R Package. arXiv preprint, doi:
+10.48550/arXiv.2506.01498.
 
 ## License
 
