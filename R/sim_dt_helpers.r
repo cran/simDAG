@@ -9,7 +9,7 @@ add_node_to_data <- function(data, new, name) {
   } else {
     data[, name] <- new
   }
-  return(data)
+  return(copy(data))
 }
 
 ## add some parent nodes that should be passed automatically
@@ -19,6 +19,10 @@ add_missing_parents <- function(node) {
   if (node$type_str=="time_to_event" | node$type_str=="competing_events") {
     parents <- c(".id", node$parents,
                  paste0(node$name, c("_event", "_time")))
+    if ("unif" %in% names(node) && is.character(node$unif) &&
+        !node$unif %in% node$parents) {
+      parents <- c(parents, node$unif)
+    }
   } else {
     parents <- node$parents
   }
@@ -48,7 +52,8 @@ clean_node_args <- function(node) {
   node <- add_missing_parents(node)
 
   # formula stuff
-  if (!is.null(node$formula) && !is_formula(node$formula)) {
+  if (!is.null(node$formula) && !is_formula(node$formula) &&
+      !is_identity_node(node$type_str)) {
     node <- args_from_formula(args=node, formula=node$formula,
                               node_type=node$type_str)
   }

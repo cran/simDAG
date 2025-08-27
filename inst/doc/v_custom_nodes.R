@@ -72,6 +72,10 @@ dag <- empty_dag() +
   node_td(name="Something", type=node_custom_root_td, n=n_sim, mean=10, sd=5)
 
 ## -----------------------------------------------------------------------------
+dag <- empty_dag() +
+  node_td(name="Something", type=rnorm, mean=10, sd=5)
+
+## -----------------------------------------------------------------------------
 node_custom_child <- function(data, parents) {
   out <- numeric(nrow(data))
   out[data$other_event] <- rnorm(n=sum(data$other_event), mean=10, sd=3)

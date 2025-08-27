@@ -100,7 +100,8 @@ parse_formula <- function(formula, node_type) {
   formstr <- gsub(" ", "", formstr, fixed=TRUE)
 
   # processing of random effects and slopes
-  if (has_mixed_terms(formstr)) {
+  includes_mixed <- has_mixed_terms(formstr)
+  if (includes_mixed) {
     mixed_terms <- extract_mixed_terms(formstr)
     formstr <- str_replace_all(formstr, mixed_terms)
     formstr <- remove_mistaken_plus(formstr)
@@ -111,7 +112,7 @@ parse_formula <- function(formula, node_type) {
   # split into additive parts
   formvec <- strsplit(formstr, "+", fixed=TRUE)[[1]]
 
-  if (length(formvec) <= 1) {
+  if (length(formvec) <= 1 & includes_mixed) {
     stop("A 'formula' cannot consist soley of random effects and/or random",
          " slopes. At least one fixed effect must also be supplied.",
          call.=FALSE)
@@ -201,7 +202,10 @@ args_from_formula <- function(args, formula, node_type) {
 
 ## create a fitting dataset for special formula based nodes
 #' @importFrom data.table as.data.table
-data_for_formula <- function(data, args) {
+#' @importFrom data.table setnames
+data_for_formula <- function(data, args, networks=list()) {
+
+  name <- term <- NULL
 
   # extract variables mentioned in mixed effects parts, if included
   if (!is.null(args$mixed_terms)) {
@@ -253,11 +257,46 @@ data_for_formula <- function(data, args) {
     form_dat <- paste0(form_dat, " + ", paste0(form_cubic, collapse=" + "))
   }
 
+  # check for network terms
+  form_net <- get_net_terms(args$parents)
+
+  if (length(form_net) > 0) {
+
+    # add network terms to data
+    d_net <- rbindlist(lapply(form_net, FUN=function(x) {eval(str2lang(x))}),
+                       fill=TRUE)
+    d_net[, term := form_net]
+
+    # if there is just one network in the DAG, use it by default
+    if (anyNA(d_net$name)) {
+      if (length(networks)==1) {
+        d_net[is.na(name), name := names(networks)]
+      } else if (length(networks) > 1) {
+        stop("If more than one network() was added to the DAG object",
+             " every net() call needs to specify which network should",
+             " be used with the 'net' argument.", call.=FALSE)
+      } else if (length(networks)==0) {
+        stop("One or more net() terms were found in 'formula',",
+             " but no network() was found in the supplied 'dag'.",
+             call.=FALSE)
+      }
+    }
+    data <- add_network_info(data=data, d_net_terms=d_net, networks=networks)
+
+    # add network terms to formula
+    form_dat <- paste0(form_dat, " + `",
+                       paste0(form_net, collapse="` + `"), "`")
+  }
+
   # get full model matrix
   # (and print helpful error if column not found)
   mod_mat <- as.data.table(stats::model.matrix.lm(stats::as.formula(form_dat),
                                                   data=data,
                                                   na.action="na.pass"))
+
+  if (length(form_net) > 0) {
+    setnames(mod_mat, old=paste0("`", form_net, "`"), new=form_net)
+  }
 
   mod_mat <- tryCatch({
     mod_mat[, args$parents, with=FALSE]},

@@ -460,40 +460,85 @@ instead.</p>
 <h2>Child node types</h2>
 <p>The <code>simDAG</code> package implements the following types of
 <code>child_nodes</code> directly:</p>
-<ul>
-<li><code>node_gaussian()</code>: A node based on (mixed) linear
-regression (continuous data).</li>
-<li><code>node_binomial()</code>: A node based on (mixed) logistic
-regression (binary data).</li>
-<li><code>node_multinomial()</code>: A node based on multinomial
-logistic regression (categorical data).</li>
-<li><code>node_poisson()</code>: A node based on (mixed) poisson
-regression (count data).</li>
-<li><code>node_negative_binomial()</code>: A node based on negative
-binomial regression (count data).</li>
-<li><code>node_zeroinfl()</code>: A node based on a zero-inflated
-poisson / negative binomial regression (count data)</li>
-<li><code>node_cox()</code>: A node based on cox regression
-(time-to-event data).</li>
-<li><code>node_aftreg()</code>: A node based on accelerated failure time
-regression (time-to-event data)</li>
-<li><code>node_ahreg()</code>: A node based on accelerated hazards
-regression (time-to-event data)</li>
-<li><code>node_ehreg()</code>: A node based on an extended hazards model
-(time-to-event data)</li>
-<li><code>node_poreg()</code>: A node based on an proportional odds
-model (time-to-event data)</li>
-<li><code>node_ypreg()</code>: A node based on a Yang and Prentice model
-(time-to-event data)</li>
-<li><code>node_conditional_prob()</code>: A node based on conditional
-probabilities (binary / categorical data).</li>
-<li><code>node_conditional_distr()</code>: A node based on conditional
-distributions (any data type).</li>
-<li><code>node_mixture()</code>: A node that can be defined as a mixture
-of any other node type (any data type)</li>
-<li><code>node_identity()</code>: A node that is just some
-<code>R</code> expression of other nodes (any data type).</li>
-</ul>
+<table>
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><code>node_gaussian()</code></td>
+<td>A node based on (mixed) linear regression (continuous data)</td>
+</tr>
+<tr class="even">
+<td><code>node_binomial()</code></td>
+<td>A node based on (mixed) logistic regression (binary data)</td>
+</tr>
+<tr class="odd">
+<td><code>node_multinomial()</code></td>
+<td>A node based on multinomial logistic regression (categorical
+data)</td>
+</tr>
+<tr class="even">
+<td><code>node_poisson()</code></td>
+<td>A node based on (mixed) poisson regression (count data)</td>
+</tr>
+<tr class="odd">
+<td><code>node_negative_binomial()</code></td>
+<td>A node based on negative binomial regression (count data)</td>
+</tr>
+<tr class="even">
+<td><code>node_zeroinfl()</code></td>
+<td>A node based on a zero-inflated poisson / negative binomial
+regression (count data)</td>
+</tr>
+<tr class="odd">
+<td><code>node_cox()</code></td>
+<td>A node based on cox regression (time-to-event data)</td>
+</tr>
+<tr class="even">
+<td><code>node_aftreg()</code></td>
+<td>A node based on accelerated failure time regression (time-to-event
+data)</td>
+</tr>
+<tr class="odd">
+<td><code>node_ahreg()</code></td>
+<td>A node based on accelerated hazards regression (time-to-event
+data)</td>
+</tr>
+<tr class="even">
+<td><code>node_ehreg()</code></td>
+<td>A node based on an extended hazards model (time-to-event data)</td>
+</tr>
+<tr class="odd">
+<td><code>node_poreg()</code></td>
+<td>A node based on an proportional odds model (time-to-event data)</td>
+</tr>
+<tr class="even">
+<td><code>node_ypreg()</code></td>
+<td>A node based on a Yang and Prentice model (time-to-event data)</td>
+</tr>
+<tr class="odd">
+<td><code>node_conditional_prob()</code></td>
+<td>A node based on conditional probabilities (binary / categorical
+data)</td>
+</tr>
+<tr class="even">
+<td><code>node_conditional_distr()</code></td>
+<td>A node based on conditional distributions (any data type)</td>
+</tr>
+<tr class="odd">
+<td><code>node_mixture()</code></td>
+<td>A node that can be defined as a mixture of any other node type (any
+data type)</td>
+</tr>
+<tr class="even">
+<td><code>node_identity()</code></td>
+<td>A node that is just some <code>R</code> expression of other nodes
+(any data type)</td>
+</tr>
+</tbody>
+</table>
 <p>All of these nodes have their own documentation page containing a
 detailed description on how data is generated from them. Although this
 collection of nodes covers a lot of data types, it is still a somewhat

@@ -75,6 +75,17 @@ check_inputs_child_node <- function(name, type, parents, args, time_varying,
 
   # type specific checks
   if (is.function(type)) {
+    internals <- c("type_str", "type_fun", "time_varying", "index")
+    internals_in_formals <- names(formals(type))[names(formals(type)) %in%
+                                                   internals]
+    if (length(internals_in_formals) > 0) {
+      stop("The function supplied to 'type' includes the following",
+           " problematic named arguments:\n",
+           paste0(internals_in_formals, collapse="', '"), ".\n",
+           " These arguments are used as variables internally and",
+           " can therefore not be used by users. Please re-name those",
+           " arguments and re-run your code.", call.=FALSE)
+    }
     type <- extract_function_name(type)
     type <- correct_type_str(type)
   }
@@ -258,7 +269,7 @@ check_inputs_long2start_stop <- function(data, id, time, varying) {
   }
 
   if (length(varying)==0) {
-    warning("No time-varying variables specified.")
+    warning("No time-varying variables specified.", call.=FALSE)
   }
 }
 
@@ -318,22 +329,27 @@ check_inputs_sim2data <- function(sim, use_saved_states, to, target_event,
   if (length(tte_names) < length(sim$tx_nodes) & sim$save_states!="all") {
     warn_cols <- unlist(lapply(sim$tx_nodes[node_types!="time_to_event"],
                                FUN=function(x){x$name}))
-    warning("Resulting data may be inaccurate for the following columns: '",
-            paste0(warn_cols, collapse="', '"), "'\nbecause save_states!='all'",
-            " in sim_discrete_time() function call. See details.")
+    if (is.null(remove_vars) || (!is.null(remove_vars) &&
+                                 !all(warn_cols %in% remove_vars))) {
+      warning("Resulting data may be inaccurate for the following columns: '",
+              paste0(warn_cols, collapse="', '"),
+              "'\nbecause save_states!='all' in sim_discrete_time() ",
+              "function call. See details.", call.=FALSE)
+    }
   }
 
   # raise warning when using save_past_events = FALSE
   if (sim$save_states!="all" && any(save_past_events==FALSE) ) {
     warning("Resulting data may be inaccurate because save_past_events",
             " was set to FALSE in one or more nodes in the original",
-            " sim_discrete_time() function call. See details.")
+            " sim_discrete_time() function call. See details.",
+            call.=FALSE)
   }
 
   if (sim$save_states=="at_t") {
     warning("The output of this function may be inaccurate if",
             " save_states='at_t' was used in the original sim_discrete_time()",
-            " function call. See documentation.")
+            " function call. See documentation.", call.=FALSE)
   }
 }
 
@@ -447,6 +463,13 @@ check_inputs_plot.DAG <- function(dag, node_size, node_names, arrow_node_dist,
 
   size_dag <- length(names_DAG(dag, include_tx_nodes=include_td_nodes))
 
+  # get rid of temporary warnings due to deprecation
+  if (utils::packageVersion("ggplot2") < "3.5.2") {
+    is_theme <- ggplot2::is.theme
+  } else {
+    is_theme <- ggplot2::is_theme
+  }
+
   if (size_dag < 2) {
     stop("The supplied DAG must have at least two nodes.", call.=FALSE)
   } else if (!((length(node_names) == size_dag && is.character(node_names)) |
@@ -460,7 +483,7 @@ check_inputs_plot.DAG <- function(dag, node_size, node_names, arrow_node_dist,
   } else if (!(length(arrow_node_dist)==1 && is.numeric(arrow_node_dist) &&
                arrow_node_dist >= 0)) {
     stop("'arrow_node_dist' must a single number >= 0.", call.=FALSE)
-  } else if (!ggplot2::is.theme(gg_theme)) {
+  } else if (!is_theme(gg_theme)) {
     stop("'gg_theme' must be a ggplot2 theme object.", call.=FALSE)
   }
 }
@@ -517,6 +540,10 @@ check_inputs_sim_discrete_time <- function(n_sim, dag, t0_sort_dag,
                 (ncol(t0_data) != 0))
     stopifnot("'t0_data' needs to include at least one row." =
                 (nrow(t0_data) != 0))
+    if (!is.null(n_sim)) {
+      warning("An object was supplied to 't0_data', so the argument 'n_sim'",
+              " will be ignored.", call.=FALSE)
+    }
   }
 
   # check content of t0_transform_fun
@@ -705,5 +732,36 @@ check_inputs_sim_n_datasets <- function(dag, n_repeats, n_cores,
     stop("'data_format_args' must be a list.", call.=FALSE)
   } else if (!(length(progressbar)==1 && is.logical(progressbar))) {
     stop("'progressbar' must be either TRUE or FALSE.", call.=FALSE)
+  }
+}
+
+## check inputs for the network() and network_td() functions
+check_inputs_network <- function(name, net, time_varying, args) {
+
+  if (!(length(name)==1 & is.character(name))) {
+    stop("'name' must be a single character string.", call.=FALSE)
+  } else if (!time_varying & !(igraph::is_igraph(net) |
+                               is.function(net))) {
+    stop("'net' must be an igraph object or a function that",
+         " creates such an object.", call.=FALSE)
+  } else if (time_varying & !is.function(net)) {
+    stop("'net' must be a function creating an igraph object when using",
+         " network_td(). See documentation.", call.=FALSE)
+  }
+
+  # check if net function is valid
+  if (is.function(net) && !"n_sim" %in% names(formals(net))) {
+    stop("If 'net' is a function, it needs to have a named argument called",
+         " 'n_sim', specifying the size of the network.", call.=FALSE)
+  }
+
+  # warn if internals are supplied
+  internals <- c("sim_time", "past_states", "network", "past_networks")
+  if (any(internals %in% names(args))) {
+    warning("The arguments named 'sim_time', 'past_states', 'network',",
+            " and 'past_networks' are passed internally whenever",
+            " the function supplied to the 'net' argument in a network()",
+            " or network_td() call contains them. One of those was also",
+            " passed through the ... syntax and will be ignored.", call.=FALSE)
   }
 }

@@ -199,7 +199,7 @@ dag <- empty_dag() +
 # }
 # 
 # params <- within(params, {
-#   max_t <- factor(max_t);
+#   max_t <- factor(max_t)
 # })
 # 
 # ggplot(params, aes(x=n, y=time, color=max_t)) +

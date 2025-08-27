@@ -16,7 +16,8 @@ child_nodes <- list(list(parents=c("sex", "age"),
                          betas=c(2.1, 1.4),
                          intercept=14,
                          error=2,
-                         time_varying=FALSE))
+                         time_varying=FALSE,
+                         ..index..=1))
 dag <- list(root_nodes=root_nodes,
             child_nodes=child_nodes,
             tx_nodes=list())
@@ -112,6 +113,25 @@ test_that("helpful error message formula error", {
 
 })
 
+test_that("helpful error message network error", {
+
+  gen_network <- function(n_sim) {
+    igraph::sample_gnm(n=10, m=30)
+  }
+
+  dag <- empty_dag() +
+    network("net1", net=gen_network) +
+    node(c("A", "C"), type="rbernoulli") +
+    node("B", type="gaussian", formula= ~ -1 + A*2 + C*3)
+
+  expect_error(sim_from_dag(dag, n_sim=100),
+               paste0("An error occured when initializing the network",
+                      " 'net1'. The message was:\nError: The igraph object",
+                      " created by calling the function defined by the",
+                      " 'net' argument should have exactly 100 ",
+                      "vertices, not 10."), fixed=TRUE)
+})
+
 on_ci <- getFromNamespace("on_ci", ns="testthat")
 on_cran <- getFromNamespace("on_cran", ns="testthat")
 
@@ -120,7 +140,7 @@ on_cran <- getFromNamespace("on_cran", ns="testthat")
 # https://github.com/eddelbuettel/rcppziggurat/issues/22
 # so it has nothing to do with the simDAG package or the functionality tested
 # here
-if (!(on_ci())) {
+#if (!(on_ci())) {
 
   test_that("sort_dag working", {
     child_nodes <- list(list(parents=c("sex", "age", "income"),
@@ -130,7 +150,8 @@ if (!(on_ci())) {
                              betas=c(2.1, 1.4, 0.1),
                              intercept=14,
                              error=2,
-                             time_varying=FALSE),
+                             time_varying=FALSE,
+                             ..index..=1),
                         list(parents=c("sex", "age"),
                              type_str="gaussian",
                              type_fun=node_gaussian,
@@ -138,7 +159,8 @@ if (!(on_ci())) {
                              betas=c(0.1, 0.7),
                              intercept=100,
                              error=10,
-                             time_varying=FALSE))
+                             time_varying=FALSE,
+                             ..index..=2))
     dag$child_nodes <- child_nodes
 
     sim_dat <- sim_from_dag(n_sim=20, dag=dag, sort_dag=TRUE)
@@ -147,4 +169,4 @@ if (!(on_ci())) {
     expect_true(ncol(sim_dat)==4)
     expect_error(sim_from_dag(n_sim=20, dag=dag, sort_dag=FALSE))
   })
-}
+#}

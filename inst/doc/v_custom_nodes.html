@@ -533,8 +533,9 @@ are:</p>
 <ul>
 <li><strong>1.)</strong> Its’ name should start with <code>node_</code>
 (if you want to use a string to define it in <code>type</code>).</li>
-<li><strong>2.)</strong> It should contain an argument called
-<code>data</code> (contains the already generated data).</li>
+<li><strong>2.)</strong> If it is a child node, it should contain an
+argument called <code>data</code> (contains the already generated
+data).</li>
 <li><strong>3.)</strong> If it is a child node, it should contain an
 argument called <code>parents</code> (contains a vector of the child
 nodes parents). This is not necessary for nodes that are independently
@@ -544,7 +545,7 @@ generated.</li>
 with any number of columns and <code>n_sim</code> rows.</li>
 </ul>
 <p>Again, any number of additional arguments is allowed and will be
-passed through the three-dot syntax. Additionally, there are two
+passed through the three-dot syntax. Additionally, there are multiple
 build-in arguments that users may specify in custom time-dependent
 nodes, which are then used internally. First, users may add an argument
 to this function called <code>sim_time</code>. If included in the
@@ -555,7 +556,9 @@ previous states of the simulation (as saved using the
 <code>save_states</code> argument of the
 <code>sim_discrete_time()</code> function) will be passed to it
 internally, giving the user access to the data generated at previous
-points in time.</p>
+points in time. Similarly, the arguments <code>n</code> (corresponding
+to <code>n_sim</code>) or <code>dag</code> (corresponding to the
+supplied DAG) may be used.</p>
 </div>
 <div id="examples-2" class="section level2">
 <h2>Examples</h2>
@@ -571,22 +574,30 @@ look like this:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>n_sim <span class="ot">&lt;-</span> <span class="dv">100</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="at">name=</span><span class="st">&quot;Something&quot;</span>, <span class="at">type=</span>node_custom_root_td, <span class="at">n=</span>n_sim, <span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">5</span>)</span></code></pre></div>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="at">name=</span><span class="st">&quot;Something&quot;</span>, <span class="at">type=</span>node_custom_root_td, <span class="at">n=</span>n_sim, <span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">5</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; Warning: Values for the arguments &#39;sim_time&#39;, &#39;past_states&#39;, &#39;dag&#39; and &#39;n&#39; are</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; passed internally whenever present in a node function (&#39;type&#39; argument of the</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; node_td() call). Any value specified in the node_td() call will be overwritten</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; during the simulation.</span></span></code></pre></div>
+<p>Equivalently, and more simply, we could use (because <code>n</code>
+is passed automatically):</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="at">name=</span><span class="st">&quot;Something&quot;</span>, <span class="at">type=</span>rnorm, <span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">5</span>)</span></code></pre></div>
 </div>
 <div id="time-dependent-child-nodes" class="section level3">
 <h3>Time-Dependent Child Nodes</h3>
 <p>Below is an example for a function that can be used to define a
 custom time-dependent child node:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>node_custom_child <span class="ot">&lt;-</span> <span class="cf">function</span>(data, parents) {</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">nrow</span>(data))</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  out[data<span class="sc">$</span>other_event] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">sum</span>(data<span class="sc">$</span>other_event), <span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">3</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  out[<span class="sc">!</span>data<span class="sc">$</span>other_event] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">sum</span>(<span class="sc">!</span>data<span class="sc">$</span>other_event), <span class="at">mean=</span><span class="dv">5</span>, <span class="at">sd=</span><span class="dv">10</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">return</span>(out)</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>}</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;other&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;whatever&quot;</span>, <span class="at">type=</span><span class="st">&quot;custom_child&quot;</span>, <span class="at">parents=</span><span class="st">&quot;other_event&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>node_custom_child <span class="ot">&lt;-</span> <span class="cf">function</span>(data, parents) {</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">nrow</span>(data))</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  out[data<span class="sc">$</span>other_event] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">sum</span>(data<span class="sc">$</span>other_event), <span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">3</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  out[<span class="sc">!</span>data<span class="sc">$</span>other_event] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">sum</span>(<span class="sc">!</span>data<span class="sc">$</span>other_event), <span class="at">mean=</span><span class="dv">5</span>, <span class="at">sd=</span><span class="dv">10</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="fu">return</span>(out)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>}</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;other&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;whatever&quot;</span>, <span class="at">type=</span><span class="st">&quot;custom_child&quot;</span>, <span class="at">parents=</span><span class="st">&quot;other_event&quot;</span>)</span></code></pre></div>
 <p>This function takes a random draw from a normal distribution with
 different specifications based on whether a previously updated
 time-dependent node called <code>other</code> is currently
@@ -597,12 +608,12 @@ time-dependent node called <code>other</code> is currently
 <p>Below we give an example on how the <code>sim_time</code> argument
 may be used. The following function simply returns the square of the
 current simulation time as output:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>node_square_sim_time <span class="ot">&lt;-</span> <span class="cf">function</span>(data, sim_time, n_sim) {</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">rep</span>(sim_time<span class="sc">^</span><span class="dv">2</span>, <span class="at">n=</span>n_sim))</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>}</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;unclear&quot;</span>, <span class="at">type=</span>node_square_sim_time, <span class="at">n_sim=</span><span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>node_square_sim_time <span class="ot">&lt;-</span> <span class="cf">function</span>(data, sim_time, n_sim) {</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">rep</span>(sim_time<span class="sc">^</span><span class="dv">2</span>, <span class="at">n=</span>n_sim))</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>}</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;unclear&quot;</span>, <span class="at">type=</span>node_square_sim_time, <span class="at">n_sim=</span><span class="dv">100</span>)</span></code></pre></div>
 <p>Note that we did not (and should not!) actually define the
 <code>sim_time</code> argument in the <code>node_td()</code> definition
 of the node, because it will be passed internally, just like
@@ -618,16 +629,16 @@ events of interest.</p>
 <code>past_states</code> argument, which allows users direct access to
 past states of the simulation. Below is an example of how this might be
 used:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>node_prev_state <span class="ot">&lt;-</span> <span class="cf">function</span>(data, past_states, sim_time) {</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="cf">if</span> (sim_time <span class="sc">&lt;</span> <span class="dv">3</span>) {</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">nrow</span>(data)))</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>    <span class="fu">return</span>(past_states[[sim_time<span class="dv">-2</span>]]<span class="sc">$</span>A <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">nrow</span>(data)))</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  }</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>}</span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;A&quot;</span>, <span class="at">type=</span>node_prev_state, <span class="at">parents=</span><span class="st">&quot;A&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>node_prev_state <span class="ot">&lt;-</span> <span class="cf">function</span>(data, past_states, sim_time) {</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="cf">if</span> (sim_time <span class="sc">&lt;</span> <span class="dv">3</span>) {</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">nrow</span>(data)))</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>    <span class="fu">return</span>(past_states[[sim_time<span class="dv">-2</span>]]<span class="sc">$</span>A <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">nrow</span>(data)))</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  }</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>}</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;A&quot;</span>, <span class="at">type=</span>node_prev_state, <span class="at">parents=</span><span class="st">&quot;A&quot;</span>)</span></code></pre></div>
 <p>This function simply returns the value used two simulation time steps
 ago plus a normally distributed random value. To make this happen, we
 actually use both the <code>sim_time</code> argument
@@ -641,7 +652,7 @@ simulation is the <code>save_states</code> argument of the
 states should be saved internally. If users want to use previous states,
 these need to be saved, so the argument should in almost all cases be
 set to <code>save_states=&quot;all&quot;</code>, as shown below:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag, <span class="at">n_sim=</span><span class="dv">100</span>, <span class="at">max_t=</span><span class="dv">10</span>, <span class="at">save_states=</span><span class="st">&quot;all&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag, <span class="at">n_sim=</span><span class="dv">100</span>, <span class="at">max_t=</span><span class="dv">10</span>, <span class="at">save_states=</span><span class="st">&quot;all&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -670,7 +681,14 @@ lot.</li>
 many cases, it is a lot easier to just use a node of type
 <code>identity</code> instead of defining a new function.</li>
 <li>The structural equations printed for custom nodes may be
-uninformative.</li>
+uninformative. Keep this in mind when inspecting the output of
+<code>summary.DAG()</code>.</li>
+<li>In some special cases, your custom node function may require
+information from the supplied <code>dag</code> as well. If this is the
+case, just add a named argument called <code>dag</code> to your function
+and the supplied <code>dag</code> will be passed to it automatically
+whenever <code>sim_from_dag()</code> or <code>sim_discrete_time()</code>
+are used.</li>
 </ul>
 </div>
 

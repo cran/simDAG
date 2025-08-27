@@ -746,11 +746,14 @@ effect on any of the other variables</li>
 <li>Changing the constant raising of the probabilities in the form of a
 relative risk to a more realistic non-linear time-dependent relative
 risk</li>
+<li>Modelling the spread of <code>covid</code> by imposing a
+<code>network()</code> structure on the individuals to relax the
+assumption that individuals are independent of each other</li>
 </ul>
 <p>There are of course many more possible extensions, all of which can
 be implemented by augmenting the respective <code>prob_fun</code>
 arguments and updating the <code>dag</code> accordingly. In fact, in the
-real monte-carlo simulation we conducted, that is exactly what we did.
+real Monte-Carlo simulation we conducted, that is exactly what we did.
 We used empirical data to model time-dependent base-probabilities and
 more. How much complexity you really need is completely up to you. We
 hope that the <code>simDAG</code> package can help you with whatever you

@@ -1,4 +1,27 @@
 
+# simDAG 0.4.0
+
+New Features
+
+* Added the `network()`, `network_td()` and `net()` functions to allow simulations with network based dependencies among individuals. This includes static and dynamic networks in regular `DAG`s and discrete-time simulations.
+
+Enhancements
+
+* Added the `kind` argument to `node_identity()` to allow different kinds of input to the `formula` argument.
+* Added the `include_networks` argument to `dag2matrix()` and `as.igraph()`, due to the new networks-based simulation features.
+* Added the `unif` argument to `node_time_to_event()` to allow users to generate multiple time-to-event nodes at once that are basically using the same "seed" value for the random number generator.
+
+Bug Fixes
+
+* Fixed a minor bug that occurred when using `node + DAG` (in this order).
+* Fixed a faulty error message produced when using `formula` with just one predictor in nodes that do not need an intercept.
+* Fixed a faulty error message when using a string of a `formula` with `node_identity()` in `sim_discrete_time()`.
+
+Documentation
+
+* Added a new vignette to describe the new networks-based simulation features.
+* Updated existing documentation pages to include networks-based simulation features.
+
 # simDAG 0.3.2
 
 Documentation

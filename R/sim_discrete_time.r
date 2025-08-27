@@ -8,6 +8,7 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=FALSE,
                               tx_nodes_order=NULL,
                               tx_transform_fun=NULL, tx_transform_args=list(),
                               save_states="last", save_states_at=NULL,
+                              save_networks=FALSE,
                               verbose=FALSE, check_inputs=TRUE) {
 
   if (!inherits(dag, "DAG")) {
@@ -38,17 +39,49 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=FALSE,
   if (is.null(t0_data) & length(dag$root_nodes)==0 &
       length(dag$child_nodes)==0) {
     data <- data.table(.id=seq(1, n_sim))
+    t0_networks <- NULL
   } else if (is.null(t0_data)) {
     dag$tx_nodes <- NULL
-    data <- sim_from_dag(n_sim=n_sim,
-                         dag=dag,
-                         sort_dag=t0_sort_dag,
-                         check_inputs=check_inputs)
-    data.table::setDT(data)
+    ldata <- sim_from_dag(n_sim=n_sim,
+                          dag=dag,
+                          sort_dag=t0_sort_dag,
+                          check_inputs=check_inputs,
+                          return_networks=TRUE)
+    data <- as.data.table(ldata$data)
+    t0_networks <- ldata$networks
+    rm(ldata)
   } else {
     data <- data.table::setDT(t0_data)
+    t0_networks <- NULL
+    n_sim <- nrow(data)
   }
   t0_var_names <- colnames(data)
+
+  # initiate static networks, if needed
+  if (length(dag$child_nodes) == 0 & length(dag$networks) > 0) {
+    dag$networks <- tryCatch({
+      create_networks(networks=dag$networks,
+                      n_sim=n_sim,
+                      sim_time=0)},
+      error=function(e){
+        stop("An error occured when creating one or more static networks at",
+             " t = 0. The message was:\n", e, call.=FALSE)
+      }
+    )
+  } else {
+    dag$networks <- t0_networks
+  }
+
+  # initiate dynamic networks, if needed
+  dag$td_networks <- tryCatch({
+    create_networks(networks=dag$td_networks,
+                    n_sim=n_sim,
+                    sim_time=0)},
+    error=function(e){
+      stop("An error occured when creating one or more dynamic networks at",
+           " t = 0. The message was:\n", e, call.=FALSE)
+    }
+  )
 
   # perform an arbitrary data transformation right at the start
   if (!is.null(t0_transform_fun)) {
@@ -58,18 +91,13 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=FALSE,
 
   # initialize list for saving past states of the simulation
   if (save_states=="last") {
-    past_states <- NULL
+    past_states <- past_networks <- NULL
   } else if (save_states=="all") {
-    past_states <- vector(mode="list", length=max_t)
+    past_states <- past_networks <- vector(mode="list", length=max_t)
   } else if (save_states=="at_t" & !is.null(save_states_at)) {
-    past_states <- vector(mode="list", length=length(save_states_at))
+    past_states <- past_networks <- vector(mode="list",
+                                           length=length(save_states_at))
     state_count <- 1
-  }
-
-  # use custom order of execution if specified,
-  # otherwise just loop over node list
-  if (is.null(tx_nodes_order)) {
-    tx_nodes_order <- seq_len(length(tx_nodes))
   }
 
   # get relevant node names
@@ -99,14 +127,23 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=FALSE,
   # competing_events nodes
   past_comp_events_list <- setup_past_events_list(names=tx_node_names[
     tx_node_types=="competing_events"], max_t=max_t)
-
   past_comp_causes_list <- past_comp_events_list
+
+  # add time-dependent networks to tx_nodes
+  tx_nodes <- c(tx_nodes, dag$td_networks)
+
+  # use custom order of execution if specified,
+  # otherwise just loop over node list
+  if (is.null(tx_nodes_order)) {
+    tx_nodes_order <- get_order_from_index(tx_nodes)
+  }
 
   # create and assign id
   data[, .id := seq(1, nrow(data))]
 
   # start the main loop
   for (t in seq_len(max_t)) {
+
     # execute each node function one by one
     for (i in tx_nodes_order) {
 
@@ -114,21 +151,44 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=FALSE,
         cat("t = ", t, " node = ", tx_nodes[[i]]$name, "\n", sep="")
       }
 
+      # update time-dependent networks
+      if (inherits(tx_nodes[[i]], "DAG.network")) {
+        network_i <- tryCatch({
+          update_network(network=tx_nodes[[i]],
+                         n_sim=n_sim,
+                         sim_time=t,
+                         data=data,
+                         past_states=past_states,
+                         past_networks=past_networks)},
+          error=function(e){
+            stop("An error occured when updating the network '",
+                 tx_nodes[[i]]$name, "' at time t = ", t,
+                 ". The message was:\n", e, call.=FALSE)
+          }
+        )
+        dag$td_networks[[tx_nodes[[i]]$name]] <- network_i
+        next
+      }
+
       # get relevant arguments
       args <- arg_list[[i]]
 
       if (!is.null(tx_nodes[[i]]$formula) &&
-          !is_formula(tx_nodes[[i]]$formula)) {
+          !is_formula(tx_nodes[[i]]$formula) &&
+          tx_nodes[[i]]$type_str != "identity") {
 
         # augment data for formula input
         args$data <- tryCatch({
-          data_for_formula(data=data, args=args)},
+          data_for_formula(data=data, args=args,
+                           networks=c(dag$networks, dag$td_networks))},
           error=function(e){
             stop("An error occured when interpreting the formula of node '",
-                 tx_nodes[[i]]$name, "'. The message was:\n", e,
-                 call.=FALSE)
+                 tx_nodes[[i]]$name, "' at time t = ", t, ". The message ",
+                 "was:\n", e, call.=FALSE)
           }
         )
+      } else if (tx_nodes[[i]]$type_str == "identity") {
+        args$data <- data
       } else {
         args$data <- data[, args$parents, with=FALSE]
       }
@@ -143,25 +203,33 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=FALSE,
       fun_pos_args <- names(formals(node_type_fun))
 
       # add or remove internal arguments if needed
+      args$..index.. <- NULL
       if ("sim_time" %in% fun_pos_args) {
         args$sim_time <- t
       }
       if ("past_states" %in% fun_pos_args) {
         args$past_states <- past_states
       }
+      if ("dag" %in% fun_pos_args) {
+        args$dag <- dag
+      }
+      if ("n" %in% fun_pos_args) {
+        args$n <- n_sim
+      }
       if (!"parents" %in% fun_pos_args) {
         args$parents <- NULL
+      }
+      if (!"data" %in% fun_pos_args) {
+        args$data <- NULL
       }
 
       if (tx_node_types[i]=="time_to_event" |
           tx_node_types[i]=="competing_events") {
         args$envir <- envir
-      } else {
-        # only done for nodes of other types to allow this argument
-        # in prob_fun()
-        if (!"intercept" %in% fun_pos_args) {
-          args$intercept <- NULL
-        }
+      # only done for nodes of other types to allow this argument
+      # in prob_fun()
+      } else if (!"intercept" %in% fun_pos_args) {
+        args$intercept <- NULL
       }
 
       # call needed node function and make possible errors more
@@ -201,13 +269,22 @@ sim_discrete_time <- function(dag, n_sim=NULL, t0_sort_dag=FALSE,
     # save intermediate simulation states, if specified
     if (save_states=="all") {
       past_states[[t]] <- data
+
+      if (save_networks) {
+        past_networks[[t]] <- dag$td_networks
+      }
     } else if (save_states=="at_t" & t %in% save_states_at) {
       past_states[[state_count]] <- data
+
+      if (save_networks) {
+        past_networks[[state_count]] <- dag$td_networks
+      }
       state_count <- state_count + 1
     }
   }
 
   out <- list(past_states=past_states,
+              past_networks=past_networks,
               save_states=save_states,
               data=data,
               tte_past_events=past_events_list,

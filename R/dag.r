@@ -5,7 +5,9 @@ empty_dag <- function() {
 
   dag <- list(root_nodes=list(),
               child_nodes=list(),
-              tx_nodes=list())
+              tx_nodes=list(),
+              networks=list(),
+              td_networks=list())
   class(dag) <- "DAG"
 
   return(dag)
@@ -16,9 +18,10 @@ empty_dag <- function() {
 add_node <- function(dag, node) {
 
   # check if correct object types
-  if (!inherits(node, "DAG.node")) {
+  if (!(inherits(node, "DAG.node") | inherits(node, "DAG.network"))) {
     stop("'node' must be a DAG.node object created using either the node() or",
-         " node_td() function.", call.=FALSE)
+         " node_td() function or a DAG.network object created using the",
+         " network() or network_td() function.", call.=FALSE)
   } else if (!inherits(dag, "DAG")) {
     stop("'dag' must be a DAG object created using the empty_dag() function.",
          call.=FALSE)
@@ -26,30 +29,48 @@ add_node <- function(dag, node) {
 
   dag_names <- names_DAG(dag)
 
-  if (node$name %in% dag_names & (!node$time_varying |
-      (node$time_varying &
+  if (!inherits(node, "DAG.network") && node$name %in% dag_names &&
+      (!node$time_varying | (node$time_varying &
        node$type_str %in% c("time_to_event", "competing_events")))) {
-    stop("A node with the name ", node$name, " is already present in the",
-         " DAG object and will not be overwritten.", call.=FALSE)
+    stop("A node / network with the name ", node$name,
+         " is already present in the DAG object and will not be overwritten.",
+         call.=FALSE)
   }
 
-  # add to child, root or tx node lists inside DAG
-  if (node$time_varying) {
-    dag$tx_nodes[[length(dag$tx_nodes) + 1]] <- node
-  } else if (length(node$parents) == 0 || all(node$parents=="")) {
-    dag$root_nodes[[length(dag$root_nodes) + 1]] <- node
-  } else {
-    dag$child_nodes[[length(dag$child_nodes) + 1]] <- node
+  # add network to networks or td_networks lists inside DAG
+  if (inherits(node, "DAG.network")) {
+    if (node$time_varying) {
+      node$..index.. <- length(dag$tx_nodes) + length(dag$td_networks) + 1
+      dag$td_networks[[node$name]] <- node
+    } else {
+      node$..index.. <- length(dag$child_nodes) + length(dag$networks) + 1
+      dag$networks[[node$name]] <- node
+    }
+  }
+
+  # add node to child, root or tx_nodes lists inside DAG
+  if (inherits(node, "DAG.node")) {
+    if (node$time_varying) {
+      node$..index.. <- length(dag$tx_nodes) + length(dag$td_networks) + 1
+      dag$tx_nodes[[length(dag$tx_nodes) + 1]] <- node
+    } else if (length(node$parents) == 0 || all(node$parents=="")) {
+      dag$root_nodes[[length(dag$root_nodes) + 1]] <- node
+    } else {
+      node$..index.. <- length(dag$child_nodes) + length(dag$networks) + 1
+      dag$child_nodes[[length(dag$child_nodes) + 1]] <- node
+    }
   }
 
   # if not acyclic after adding node, return error
-  g <- as.igraph(x=dag, include_root_nodes=TRUE, include_td_nodes=FALSE)
+  g <- as.igraph(x=dag, include_root_nodes=TRUE, include_td_nodes=FALSE,
+                 include_networks=TRUE)
 
   if (!igraph::is_acyclic(g)) {
     cycle <- paste0(find_cycle(graph=g, start=node$name), collapse=" -> ")
-    stop("Adding node '", node$name, "' as specified is impossible, ",
-         "because it would make the DAG cyclic through the path:\n",
-         cycle, call.=FALSE)
+    node_type <- ifelse(inherits(node, "DAG.node"), "node", "network")
+    stop("Adding ", node_type, " '", node$name,
+         "' as specified is impossible, because it would make the DAG",
+         " cyclic through the path:\n", cycle, call.=FALSE)
   }
 
   return(dag)
@@ -59,25 +80,29 @@ add_node <- function(dag, node) {
 #' @export
 `+.DAG` <- function(object_1, object_2) {
 
-  if (inherits(object_1, "DAG") & inherits(object_2, "DAG.node") &
+  if (inherits(object_1, "DAG") &
+      inherits(object_2, c("DAG.node", "DAG.network")) &
       is.character(object_2[[1]])) {
     out <- add_node(dag=object_1, node=object_2)
-  } else if (inherits(object_1, "DAG") & inherits(object_2, "DAG.node")) {
+  } else if (inherits(object_1, "DAG") &
+             inherits(object_2, c("DAG.node", "DAG.network"))) {
     out <- object_1
     for (i in seq_len(length(object_2))) {
       out <- add_node(dag=out, node=object_2[[i]])
     }
-  } else if (inherits(object_1, "DAG.node") & inherits(object_2, "DAG") &
+  } else if (inherits(object_1, c("DAG.node", "DAG.network")) &
+             inherits(object_2, "DAG") &
              is.character(object_1[[1]])) {
     out <- add_node(dag=object_2, node=object_1)
-  } else if (inherits(object_1, "DAG.node") & inherits(object_2, "DAG")) {
+  } else if (inherits(object_1, c("DAG.node", "DAG.network")) &
+             inherits(object_2, "DAG")) {
     out <- object_2
-    for (i in seq_len(length(object_2))) {
+    for (i in seq_len(length(object_1))) {
       out <- add_node(dag=out, node=object_1[[i]])
     }
   } else {
-    stop("Only output created using the node() or node_td() functions can",
-         " be added to a DAG object.", call.=FALSE)
+    stop("Only output created using the node(), node_td(), network() and",
+         " network_td() functions can be added to a DAG object.", call.=FALSE)
   }
   return(out)
 }
@@ -98,6 +123,7 @@ print.DAG <- function(x, ...) {
   n_child_nodes <- length(child_names)
   n_tx_nodes <- length(tx_names)
   n_total_nodes <- n_root_nodes + n_child_nodes + n_tx_nodes
+  n_networks <- length(x$networks)
 
   if (is_empty_dag(x)) {
     cat("An empty DAG object without any nodes.\n")
@@ -107,6 +133,7 @@ print.DAG <- function(x, ...) {
     cat("  - ", n_root_nodes, " of which are root nodes\n")
     cat("  - ", n_child_nodes, " of which are child nodes\n")
     cat("  - ", n_tx_nodes, " of which are time-varying nodes\n")
+    cat("  - ", n_networks, " imposed network structure(s)\n")
   }
 }
 
@@ -155,9 +182,10 @@ summary.DAG <- function(object, char_max=60, ...) {
 #' @importFrom igraph as.igraph
 #' @export
 as.igraph.DAG <- function(x, include_root_nodes=TRUE, include_td_nodes=TRUE,
-                          ...) {
+                          include_networks=FALSE, ...) {
   mat <- dag2matrix(dag=x, include_root_nodes=include_root_nodes,
-                    include_td_nodes=include_td_nodes)
+                    include_td_nodes=include_td_nodes,
+                    include_networks=include_networks)
   g <- igraph::graph_from_adjacency_matrix(mat, mode="directed")
   return(g)
 }
