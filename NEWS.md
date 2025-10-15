@@ -1,4 +1,20 @@
 
+# simDAG 0.4.1
+
+New Features
+
+* Added the `link` argument to `node_gaussian()`, `node_binomial()`, `node_poisson()`, `node_negative_binomial()` and `node_zeroinfl()` to allow different link functions when generating data from these nodes.
+* Added the `as.dagitty.DAG()` function to allow direct conversion of `DAG` objects to `dagitty` objects.
+
+Bug Fixes
+
+* Previously, the `sim_n_datasets()` function used `stats::runif(1)` as a default for the `seed` argument. Because seeds are coerced to integers in `set.seed()`, this essentially meant the `seed` argument was always set to 0 (unless changed by the user), which was not intended. We changed the default to be `NULL`, which is equivalent to not setting a `seed`. This might change results obtained using previous versions. To get the same result as in previous versions, use `seed=0` or `seed=stats::runif(1)`.
+* Fixed a bug that occurred when calling `node()` or `node_td()` inside a function with objects passed to `parents` or `formula`. 
+
+Documentation
+
+* Added explanations for how to simulate data for Cox models with time-varying covariates and Aalen additive hazards models with time-varying covariates to the cookbook vignette.
+
 # simDAG 0.4.0
 
 New Features

@@ -8,6 +8,7 @@ knitr::opts_chunk$set(
 ## ----message=FALSE, warning=FALSE---------------------------------------------
 library(simDAG)
 library(data.table)
+library(survival)
 
 set.seed(23414)
 
@@ -93,7 +94,7 @@ prob_treat <- function(data, base_p, rr_treat, rr_outcome) {
   base_p * rr_treat^(data$treatment_event) * rr_outcome^(data$outcome_event)
 }
 
-## function that generates the probability of treatment at t 
+## function that generates the probability of the outcome at t 
 ## for all individuals, given the current state of the simulation
 prob_outcome <- function(data, base_p, rr_treat, rr_outcome) {
   base_p * rr_treat^(data$treatment_event) * rr_outcome^(data$outcome_event)
@@ -110,6 +111,49 @@ dag <- empty_dag() +
 
 sim <- sim_discrete_time(dag, n_sim=100, max_t=500)
 data <- sim2data(sim, to="start_stop", overlap=TRUE)
+head(data)
+
+## -----------------------------------------------------------------------------
+## function that generates the probability of the outcome at t 
+## for all individuals, given the current state of the simulation
+prob_Y <- function(data, base_p, rr_treat) {
+  base_p * rr_treat^(data$A_event)
+}
+
+dag <- empty_dag() +
+  node_td("A", type="time_to_event", prob_fun=0.01,
+          event_duration=20) +
+  node_td("Y", type="time_to_event", prob_fun=prob_Y,
+          parents=c("A_event"),
+          event_duration=Inf, base_p=0.01, rr_treat=0.5)
+
+sim <- sim_discrete_time(dag, n_sim=500, max_t=500)
+data <- sim2data(sim, to="start_stop", overlap=TRUE, target_event="Y",
+                 keep_only_first=TRUE)
+head(data)
+
+## -----------------------------------------------------------------------------
+mod <- coxph(Surv(start, stop, Y) ~ A, data=data)
+summary(mod)
+
+## -----------------------------------------------------------------------------
+## function that generates the probability of the outcome at t 
+## for all individuals, given the current state of the simulation
+prob_Y <- function(data, intercept, beta_treat) {
+  h <- intercept + beta_treat*data$A_event
+  return(1 - exp(-(h)))
+}
+
+dag <- empty_dag() +
+  node_td("A", type="time_to_event", prob_fun=0.01,
+          event_duration=20) +
+  node_td("Y", type="time_to_event", prob_fun=prob_Y,
+          parents=c("A_event"),
+          event_duration=Inf, intercept=0.001, beta_treat=0.05)
+
+sim <- sim_discrete_time(dag, n_sim=500, max_t=500)
+data <- sim2data(sim, to="start_stop", overlap=TRUE, target_event="Y",
+                 keep_only_first=TRUE)
 head(data)
 
 ## -----------------------------------------------------------------------------
