@@ -623,6 +623,15 @@ check_inputs_sim_discrete_time <- function(n_sim, dag, t0_sort_dag,
     stopifnot("'save_states' must be either 'last', 'all' or 'at_t'." =
                 is.element(save_states, c("last", "all", "at_t")))
   }
+
+  # no next_time nodes allowed
+  types <- vapply(tx_nodes, FUN=function(x){x$type_str},
+                  FUN.VALUE=character(1))
+  if ("next_time" %in% types) {
+    stop("Nodes of type='next_time' are not allowed in sim_discrete_time()",
+         ". Use sim_discrete_event() instead or re-define the DAG.",
+         call.=FALSE)
+  }
 }
 
 ## checking the inputs of the node_time_to_event function
@@ -638,9 +647,9 @@ check_inputs_node_time_to_event <- function(data, parents, sim_time, name,
               (length(sim_time) == 1 && is.numeric(sim_time)))
   stopifnot("'name' must be a single character." =
               (length(name) == 1 && is.character(name)))
-  stopifnot("'prob_fun' must be a function or a single number." =
-              is.function(prob_fun) | (is.numeric(prob_fun) &
-                                         length(prob_fun)==1))
+  stopifnot("'prob_fun' must be a function, a single number or NULL." =
+              is.null(prob_fun) || is.function(prob_fun) ||
+              (is.numeric(prob_fun) & length(prob_fun)==1))
   stopifnot("'event_duration' must be a single integer > 0." =
               (length(event_duration) == 1 && is.numeric(event_duration) &&
                 event_duration > 0))
@@ -760,8 +769,10 @@ check_inputs_sim_n_datasets <- function(dag, n_repeats, n_cores,
   } else if (!(length(n_cores)==1 && is.numeric(n_cores) &&
                n_cores >= 1)) {
     stop("'n_cores' must be a single positive number.", call.=FALSE)
-  } else if (!(length(data_format)==1 && is.character(data_format))) {
-    stop("'data_format' must be a single character string.", call.=FALSE)
+  } else if (!(is.function(data_format) ||
+               (length(data_format)==1 && is.character(data_format)))) {
+    stop("'data_format' must be a single character string or a function.",
+         call.=FALSE)
   } else if (!is.list(data_format_args)) {
     stop("'data_format_args' must be a list.", call.=FALSE)
   } else if (!(length(progressbar)==1 && is.logical(progressbar))) {
@@ -797,5 +808,107 @@ check_inputs_network <- function(name, net, time_varying, args) {
             " the function supplied to the 'net' argument in a network()",
             " or network_td() call contains them. One of those was also",
             " passed through the ... syntax and will be ignored.", call.=FALSE)
+  }
+}
+
+## check inputs for the sim_discrete_event() function
+check_inputs_sim_discrete_event <- function(dag, n_sim, t0_sort_dag,
+                                            t0_data, t0_transform_fun,
+                                            t0_transform_args, max_t,
+                                            censor_at_max_t, redraw_at_t,
+                                            include_event_counts) {
+
+  # rudimentary type checks
+  if (!is.null(t0_data)) {
+    stopifnot("'t0_data' must be a data.frame." = is.data.frame(t0_data))
+  }
+  if (!is.null(t0_transform_fun)) {
+    stopifnot("'t0_transform_fun' must be a function." =
+                is.function(t0_transform_fun))
+  }
+  stopifnot("'t0_transform_args' must be a list." = is.list(t0_transform_args))
+  stopifnot("'max_t' must be a single number > 0." =
+              (length(max_t) == 1 && is.numeric(max_t) && max_t > 0))
+  stopifnot("'censor_at_max_t' should be either TRUE or FALSE." =
+              length(censor_at_max_t) == 1 && is.logical(censor_at_max_t))
+  stopifnot("'include_event_counts' should be either TRUE or FALSE." =
+              length(include_event_counts) == 1 &&
+              is.logical(include_event_counts))
+
+  if (!(is.null(redraw_at_t) | (!is.null(redraw_at_t) &&
+                                length(redraw_at_t) > 0 &&
+                                is.numeric(redraw_at_t) &&
+                                all(redraw_at_t > 0)))) {
+    stop("'redraw_at_t' must be either NULL or a numeric vector",
+         " containing only positive numbers.", call.=FALSE)
+  }
+
+  # needs some time-varying nodes
+  if (!is_time_varying_dag(dag)) {
+    stop("'dag' must contain at least one time-varying node added using",
+         " the node_td() function. For dag objects with no time-varying",
+         " nodes, please use the sim_from_dag() function instead.",
+         call.=FALSE)
+  }
+
+  # all time-varying nodes need to be of type = "next_time"
+  tx_types <- vapply(dag$tx_nodes, FUN=function(x){x$type_str},
+                     FUN.VALUE=character(1))
+  if (!all(tx_types=="next_time")) {
+    stop("All time-varying nodes added using the node_td() function",
+         " should be of type='next_time' when using sim_discrete_event().",
+         " If other node types are needed, use the sim_discrete_time()",
+         " function instead.", call.=FALSE)
+  }
+
+  # time-dependent networks not supported
+  if (length(dag$td_networks) > 0) {
+    stop("Time-dependent networks are currently not supported in",
+         " the sim_discrete_event() function.", call.=FALSE)
+  }
+
+  # check for internally used names
+  tx_names <- names_DAG_level(dag, level="tx")
+  internal_names <- c(".id", ".time", ".trunc_time", ".time_of_next_event",
+                      ".time_of_next_change", ".min_time_of_next_event",
+                      ".min_time_of_next_change", ".event_duration",
+                      ".immunity_duration", ".kind", ".col", ".change",
+                      ".event_count", ".time_cuts", "start", "stop",
+                      ".is_new_event", ".is_new_change")
+  not_allowed <- tx_names[tx_names %in% internal_names]
+  if (length(not_allowed) > 0) {
+    stop("The following node names are used internally by sim_discrete_event()",
+         " and can therefore not be used as node names: '",
+         paste0(not_allowed, collapse="', '"), "'.\n",
+         "Please re-name those nodes and re-run the function.", call.=FALSE)
+  }
+
+  # check content of t0_data
+  if (is.data.frame(t0_data)) {
+    stopifnot("'t0_data' needs to include at least one variable." =
+                (ncol(t0_data) != 0))
+    stopifnot("'t0_data' needs to include at least one row." =
+                (nrow(t0_data) != 0))
+    if (!is.null(n_sim)) {
+      warning("An object was supplied to 't0_data', so the argument 'n_sim'",
+              " will be ignored.", call.=FALSE)
+    }
+  }
+
+  # check content of t0_transform_fun
+  if (is.function(t0_transform_fun)) {
+    stopifnot(
+      "'t0_transform_fun' needs to include at least one line." =
+        length(body(t0_transform_fun)) != 0)
+
+    # check content of t0_transform_args
+    names_fun <- names(formals(t0_transform_fun))
+    names_args <- names(t0_transform_args)
+    if (!all(names_args %in% names_fun)) {
+      stop("The following arguments are in 't0_transform_args' but are",
+           " not defined in 't0_transform_fun': ",
+           paste0(names_args[!names_args %in% names_fun], collapse=","),
+           call.=FALSE)
+    }
   }
 }

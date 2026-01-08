@@ -49,14 +49,20 @@ clean_node_args <- function(node) {
   # get function
   fun_pos_args <- names(formals(node$type_fun))
 
-  node <- add_missing_parents(node)
-
   # formula stuff
   if (!is.null(node$formula) && !is_formula(node$formula) &&
       !is_identity_node(node$type_str)) {
+    node_type <- fifelse(node$type_str=="time_to_event", "binomial",
+                         node$type_str)
     node <- args_from_formula(args=node, formula=node$formula,
-                              node_type=node$type_str)
+                              node_type=node_type)
+
+    if (node$type_str=="time_to_event") {
+      node$parents_binom <- node$parents
+    }
   }
+
+  node <- add_missing_parents(node)
 
   # add or remove internal arguments if needed
   if (!"name" %in% fun_pos_args) {
@@ -178,4 +184,14 @@ initialize_columns <- function(data, tx_nodes, tx_node_names, tx_node_types) {
   }
 
   return(data)
+}
+
+## a simple convenience function that returns its output if not NULL and
+## the 'replacement' otherwise
+replace_NULL <- function(input, replacement) {
+  if (is.null(input)) {
+    return(replacement)
+  } else {
+    return(input)
+  }
 }

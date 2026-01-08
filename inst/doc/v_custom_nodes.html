@@ -527,9 +527,12 @@ function, which simply returns the sum of its parents:</p>
 <div id="requirements-2" class="section level2">
 <h2>Requirements</h2>
 <p>By time-dependent nodes we mean nodes that are created using the
-<code>node_td()</code> function. In general, this works in essentially
-the same way as for simple root nodes or child nodes. The requirements
-are:</p>
+<code>node_td()</code> function. Currently, the
+<code>sim_discrete_event()</code> function only supports nodes of type
+<code>&quot;next_time&quot;</code>, so the following text is exclusively about
+time-dependent nodes in <code>sim_discrete_time()</code>. In general,
+defining custom time-dependent nodes works in essentially the same way
+as for simple root nodes or child nodes. The requirements are:</p>
 <ul>
 <li><strong>1.)</strong> Its’ name should start with <code>node_</code>
 (if you want to use a string to define it in <code>type</code>).</li>

@@ -67,3 +67,27 @@ rcategorical <- function(n, probs, labels=NULL, output="numeric",
 rconstant <- function(n, constant) {
   return(rep(constant, n))
 }
+
+## simply sample from x to generate a node
+#' @export
+rsample <- function(n, x, replace=FALSE, prob=NULL) {
+
+  if (is.data.frame(x)) {
+    ind <- sample.int(n=nrow(x), size=n, replace=replace, prob=prob)
+    out <- x[ind, ]
+  } else {
+    out <- sample(x=x, size=n, replace=replace, prob=prob)
+  }
+
+  return(out)
+}
+
+## generate random values from a left truncated exponential distribution
+#' @export
+rtexp <- function (n, rate, l=NULL)  {
+  if (!is.null(l)) {
+    l - log(1 - stats::runif(n))/rate
+  } else {
+    stats::rexp(n=n, rate=rate)
+  }
+}

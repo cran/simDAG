@@ -137,6 +137,22 @@ mod <- coxph(Surv(start, stop, Y) ~ A, data=data)
 summary(mod)
 
 ## -----------------------------------------------------------------------------
+dag <- empty_dag() +
+  node_td("A", type="next_time", prob_fun=0.01,
+          event_duration=20) +
+  node_td("Y", type="next_time",
+          formula= ~ log(0.01) + log(0.5)*A,
+          event_duration=Inf)
+
+data <- sim_discrete_event(dag, n_sim=500, max_t=500, target_event="Y",
+                           keep_only_first=TRUE)
+head(data)
+
+## -----------------------------------------------------------------------------
+mod <- coxph(Surv(start, stop, Y) ~ A, data=data)
+summary(mod)
+
+## -----------------------------------------------------------------------------
 ## function that generates the probability of the outcome at t 
 ## for all individuals, given the current state of the simulation
 prob_Y <- function(data, intercept, beta_treat) {
@@ -154,6 +170,18 @@ dag <- empty_dag() +
 sim <- sim_discrete_time(dag, n_sim=500, max_t=500)
 data <- sim2data(sim, to="start_stop", overlap=TRUE, target_event="Y",
                  keep_only_first=TRUE)
+head(data)
+
+## -----------------------------------------------------------------------------
+dag <- empty_dag() +
+  node_td("A", type="next_time", prob_fun=0.01,
+          event_duration=20) +
+  node_td("Y", type="next_time",
+          formula= ~ 0.001 + A*0.05, model="aalen",
+          event_duration=Inf)
+
+data <- sim_discrete_event(dag, n_sim=500, max_t=500, target_event="Y",
+                           keep_only_first=TRUE)
 head(data)
 
 ## -----------------------------------------------------------------------------

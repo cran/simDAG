@@ -759,6 +759,61 @@ as:</p>
 0.5, because only 500 individuals were simulated. With increasing
 <code>n_sim</code>, the estimated value will be closer to the true value
 of 0.5.</p>
+<p>If continuous time is required, a nearly equivalent discrete-event
+simulation may be used:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;A&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.01</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>          <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">log</span>(<span class="fl">0.01</span>) <span class="sc">+</span> <span class="fu">log</span>(<span class="fl">0.5</span>)<span class="sc">*</span>A,</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="cn">Inf</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_discrete_event</span>(dag, <span class="at">n_sim=</span><span class="dv">500</span>, <span class="at">max_t=</span><span class="dv">500</span>, <span class="at">target_event=</span><span class="st">&quot;Y&quot;</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>                           <span class="at">keep_only_first=</span><span class="cn">TRUE</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt; Key: &lt;.id, start&gt;</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt;      .id     start      stop      A      Y</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt;     &lt;num&gt;     &lt;num&gt; &lt;lgcl&gt; &lt;lgcl&gt;</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt; 1:     1   0.00000  77.60547  FALSE  FALSE</span></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt; 2:     1  77.60547  97.60547   TRUE  FALSE</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="co">#&gt; 3:     1  97.60547 121.82781  FALSE  FALSE</span></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="co">#&gt; 4:     1 121.82781 141.82781   TRUE  FALSE</span></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#&gt; 5:     1 141.82781 197.83302  FALSE  FALSE</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="co">#&gt; 6:     1 197.83302 217.83302   TRUE  FALSE</span></span></code></pre></div>
+<p>Here, we used nodes of type <code>&quot;next_time&quot;</code> instead, as
+required for <code>sim_discrete_event()</code> calls. Otherwise the
+specification is very similar. Note that instead of using a custom
+probability function, we used the <code>formula</code> interface to
+specify the probability of <code>Y</code>. This could have been done in
+the discrete-time simulation as well, but for performance reasons it is
+often better to use <code>prob_fun</code>.</p>
+<p>Again, we can check the code by fitting the corresponding Cox
+model:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, Y) <span class="sc">~</span> A, <span class="at">data=</span>data)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">summary</span>(mod)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; coxph(formula = Surv(start, stop, Y) ~ A, data = data)</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt;   n= 1396, number of events= 497 </span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt;          coef exp(coef) se(coef)      z Pr(&gt;|z|)    </span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; ATRUE -1.0892    0.3365   0.1863 -5.848 4.98e-09 ***</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt;       exp(coef) exp(-coef) lower .95 upper .95</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; ATRUE    0.3365      2.972    0.2336    0.4847</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt; Concordance= 0.543  (se = 0.007 )</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co">#&gt; Likelihood ratio test= 47.01  on 1 df,   p=7e-12</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="co">#&gt; Wald test            = 34.2  on 1 df,   p=5e-09</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="co">#&gt; Score (logrank) test = 37.68  on 1 df,   p=8e-10</span></span></code></pre></div>
+<p>Which again shows a hazard ratio for <code>A</code> that is fairly
+close to 0.5, as expected. Alternatively, we could have used
+<code>model=&quot;cox&quot;</code> here to directly use the
+<code>node_cox()</code> functionality to generate the times for
+<code>Y</code>. This may be useful when Weibull distributed baseline
+hazards should be used.</p>
 </div>
 <div id="aalen-additive-hazards-model-with-time-dependent-covariates" class="section level2">
 <h2>Aalen Additive Hazards Model with Time-Dependent Covariates</h2>
@@ -770,35 +825,62 @@ model with a time-dependent covariate is defined as:</p>
 hazard difference scale and not on the log hazard ratio scale. Data from
 such a model can be simulated by slightly adapting the
 <code>prob_Y()</code> function:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="do">## function that generates the probability of the outcome at t </span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="do">## for all individuals, given the current state of the simulation</span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>prob_Y <span class="ot">&lt;-</span> <span class="cf">function</span>(data, intercept, beta_treat) {</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  h <span class="ot">&lt;-</span> intercept <span class="sc">+</span> beta_treat<span class="sc">*</span>data<span class="sc">$</span>A_event</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span>(h)))</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>}</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;A&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.01</span>,</span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">20</span>) <span class="sc">+</span></span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_Y,</span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;A_event&quot;</span>),</span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="cn">Inf</span>, <span class="at">intercept=</span><span class="fl">0.001</span>, <span class="at">beta_treat=</span><span class="fl">0.05</span>)</span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a></span>
-<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag, <span class="at">n_sim=</span><span class="dv">500</span>, <span class="at">max_t=</span><span class="dv">500</span>)</span>
-<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim, <span class="at">to=</span><span class="st">&quot;start_stop&quot;</span>, <span class="at">overlap=</span><span class="cn">TRUE</span>, <span class="at">target_event=</span><span class="st">&quot;Y&quot;</span>,</span>
-<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>                 <span class="at">keep_only_first=</span><span class="cn">TRUE</span>)</span>
-<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="co">#&gt;      .id start  stop      A      Y</span></span>
-<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;lgcl&gt; &lt;lgcl&gt;</span></span>
-<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="co">#&gt; 1:     1     1   105  FALSE   TRUE</span></span>
-<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="co">#&gt; 2:     2     1    49  FALSE   TRUE</span></span>
-<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&gt; 3:     3     1   254  FALSE  FALSE</span></span>
-<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="co">#&gt; 4:     3   254   274   TRUE  FALSE</span></span>
-<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="co">#&gt; 5:     3   274   322  FALSE  FALSE</span></span>
-<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="co">#&gt; 6:     3   322   342   TRUE  FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="do">## function that generates the probability of the outcome at t </span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="do">## for all individuals, given the current state of the simulation</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>prob_Y <span class="ot">&lt;-</span> <span class="cf">function</span>(data, intercept, beta_treat) {</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  h <span class="ot">&lt;-</span> intercept <span class="sc">+</span> beta_treat<span class="sc">*</span>data<span class="sc">$</span>A_event</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span>(h)))</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>}</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;A&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.01</span>,</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span>prob_Y,</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>          <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;A_event&quot;</span>),</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="cn">Inf</span>, <span class="at">intercept=</span><span class="fl">0.001</span>, <span class="at">beta_treat=</span><span class="fl">0.05</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag, <span class="at">n_sim=</span><span class="dv">500</span>, <span class="at">max_t=</span><span class="dv">500</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim2data</span>(sim, <span class="at">to=</span><span class="st">&quot;start_stop&quot;</span>, <span class="at">overlap=</span><span class="cn">TRUE</span>, <span class="at">target_event=</span><span class="st">&quot;Y&quot;</span>,</span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>                 <span class="at">keep_only_first=</span><span class="cn">TRUE</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt;      .id start  stop      A      Y</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;lgcl&gt; &lt;lgcl&gt;</span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; 1:     1     1   133  FALSE  FALSE</span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; 2:     1   133   153   TRUE  FALSE</span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; 3:     1   153   476  FALSE  FALSE</span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; 4:     1   476   490   TRUE   TRUE</span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; 5:     2     1   148  FALSE  FALSE</span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt; 6:     2   148   168   TRUE  FALSE</span></span></code></pre></div>
 <p>The coefficients could be recovered using an <code>aalen()</code>
 model from the <code>timereg</code> R package. The code is not shown to
 avoid an unneeded dependency on that package.</p>
+<p>Again, we could use the <code>sim_discrete_event()</code> function
+instead, if we want to generate data from the same data generation
+process but with continuous time:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;A&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.01</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>          <span class="at">formula=</span> <span class="sc">~</span> <span class="fl">0.001</span> <span class="sc">+</span> A<span class="sc">*</span><span class="fl">0.05</span>, <span class="at">model=</span><span class="st">&quot;aalen&quot;</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="cn">Inf</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_discrete_event</span>(dag, <span class="at">n_sim=</span><span class="dv">500</span>, <span class="at">max_t=</span><span class="dv">500</span>, <span class="at">target_event=</span><span class="st">&quot;Y&quot;</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>                           <span class="at">keep_only_first=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt; Key: &lt;.id, start&gt;</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt;      .id     start      stop      A      Y</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt;     &lt;num&gt;     &lt;num&gt; &lt;lgcl&gt; &lt;lgcl&gt;</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt; 1:     1   0.00000  27.46853  FALSE  FALSE</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; 2:     1  27.46853  40.18321   TRUE   TRUE</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt; 3:     2   0.00000  14.72661  FALSE  FALSE</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt; 4:     2  14.72661  34.39991   TRUE   TRUE</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt; 5:     3   0.00000 274.71466  FALSE  FALSE</span></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="co">#&gt; 6:     3 274.71466 288.78126   TRUE   TRUE</span></span></code></pre></div>
+<p>This specification uses the <code>model</code> argument to specify
+that an Aalen additive hazards model should be used to generate the time
+until <code>Y</code>. By also specifying a <code>formula</code>, the
+model is fully specified and times are generated directly from
+<code>node_aalen()</code>.</p>
 </div>
 </div>
 <div id="miscellaneous-simulations" class="section level1">
@@ -812,24 +894,24 @@ nodes of type <code>&quot;gaussian&quot;</code>, <code>&quot;binomial&quot;</cod
 simulate multi-level data as well. In the following example, we consider
 students that are nested in different schools. The outcome is a
 continuous score of some kind.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;school&quot;</span>, <span class="at">type=</span><span class="st">&quot;rcategorical&quot;</span>, <span class="at">probs=</span><span class="fu">rep</span>(<span class="fl">0.1</span>, <span class="dv">10</span>),</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>       <span class="at">labels=</span>LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]) <span class="sc">+</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;female&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">12</span>, <span class="at">sd=</span><span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;score&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> female<span class="sc">*</span><span class="dv">3</span> <span class="sc">+</span> age<span class="sc">*</span><span class="fl">0.1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>school),</span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>       <span class="at">var_corr=</span><span class="fl">0.5</span>, <span class="at">error=</span><span class="dv">1</span>)</span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt;    school female       age      score</span></span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt; &lt;lgcl&gt;     &lt;num&gt;      &lt;num&gt;</span></span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt; 1:      J   TRUE  9.060191  0.6103906</span></span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; 2:      G   TRUE 18.758197  0.5601779</span></span>
-<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; 3:      J   TRUE 14.948317  1.4862632</span></span>
-<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt; 4:      C  FALSE  9.978993 -3.2609397</span></span>
-<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co">#&gt; 5:      D  FALSE 14.413468 -1.6006045</span></span>
-<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="co">#&gt; 6:      A  FALSE 13.147173 -1.4654531</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;school&quot;</span>, <span class="at">type=</span><span class="st">&quot;rcategorical&quot;</span>, <span class="at">probs=</span><span class="fu">rep</span>(<span class="fl">0.1</span>, <span class="dv">10</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>       <span class="at">labels=</span>LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;female&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;age&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">12</span>, <span class="at">sd=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;score&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> female<span class="sc">*</span><span class="dv">3</span> <span class="sc">+</span> age<span class="sc">*</span><span class="fl">0.1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>school),</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>       <span class="at">var_corr=</span><span class="fl">0.5</span>, <span class="at">error=</span><span class="dv">1</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt;    school female       age      score</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt; &lt;lgcl&gt;     &lt;num&gt;      &lt;num&gt;</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; 1:      I   TRUE 12.957818  3.1832933</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; 2:      C   TRUE  7.924776  2.8786369</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt; 3:      D   TRUE 10.176482  2.8363160</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; 4:      F  FALSE 10.180657  0.3773207</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; 5:      I  FALSE 10.157362 -1.2590350</span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; 6:      C  FALSE 12.908317  0.8219375</span></span></code></pre></div>
 <p>In this example, there is a single random effect for school, with a
 standard deviation of 0.5. This example could be expanded to include a
 random slope for age per school, by exchanging <code>(1|school)</code>
@@ -844,26 +926,26 @@ possibility to simulate a sort of “mixed” variables is to directly model
 it using different regression models for different individuals. This can
 be done using the <code>&quot;mixture&quot;</code> node type. Consider the
 following example:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;strata&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="fu">c</span>(<span class="st">&quot;var1&quot;</span>, <span class="st">&quot;var2&quot;</span>), <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span><span class="st">&quot;mixture&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;strata&quot;</span>, <span class="st">&quot;var1&quot;</span>, <span class="st">&quot;var2&quot;</span>),</span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>       <span class="at">distr=</span><span class="fu">list</span>(</span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>         <span class="st">&quot;strata==0&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>                           <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> var1<span class="sc">*</span><span class="dv">2</span> <span class="sc">+</span> var2<span class="sc">*-</span><span class="fl">0.5</span>, <span class="at">error=</span><span class="dv">1</span>),</span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>         <span class="st">&quot;strata==1&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>                           <span class="at">formula=</span> <span class="sc">~</span> <span class="dv">5</span> <span class="sc">+</span> var1<span class="sc">*-</span><span class="dv">1</span> <span class="sc">+</span> var2<span class="sc">*</span><span class="fl">2.3</span>, <span class="at">error=</span><span class="fl">1.5</span>)</span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>       ))</span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt;    strata       var1       var2          Y</span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt;    &lt;lgcl&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; 1:   TRUE  1.8650262  1.3216871  6.2860129</span></span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; 2:   TRUE  0.5357810 -0.4622341  4.0256795</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; 3:  FALSE -0.5255262 -1.0383955 -0.3599495</span></span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; 4:  FALSE -0.4952464 -0.4233173 -1.1806965</span></span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; 5:   TRUE -0.5181156  0.6334964  6.6033972</span></span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; 6:   TRUE  0.6530059 -1.4336485  3.1526539</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;strata&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="fu">c</span>(<span class="st">&quot;var1&quot;</span>, <span class="st">&quot;var2&quot;</span>), <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span><span class="st">&quot;mixture&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;strata&quot;</span>, <span class="st">&quot;var1&quot;</span>, <span class="st">&quot;var2&quot;</span>),</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>       <span class="at">distr=</span><span class="fu">list</span>(</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>         <span class="st">&quot;strata==0&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>                           <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> var1<span class="sc">*</span><span class="dv">2</span> <span class="sc">+</span> var2<span class="sc">*-</span><span class="fl">0.5</span>, <span class="at">error=</span><span class="dv">1</span>),</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>         <span class="st">&quot;strata==1&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>                           <span class="at">formula=</span> <span class="sc">~</span> <span class="dv">5</span> <span class="sc">+</span> var1<span class="sc">*-</span><span class="dv">1</span> <span class="sc">+</span> var2<span class="sc">*</span><span class="fl">2.3</span>, <span class="at">error=</span><span class="fl">1.5</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>       ))</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt;    strata        var1        var2          Y</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt;    &lt;lgcl&gt;       &lt;num&gt;       &lt;num&gt;      &lt;num&gt;</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt; 1:  FALSE -0.92575296  0.63422389 -3.7713404</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt; 2:   TRUE  0.13016410 -0.08978755  5.8966310</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#&gt; 3:  FALSE -0.04944792 -0.47909778 -1.4346367</span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#&gt; 4:  FALSE -1.33428562  0.08187681 -5.0422909</span></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co">#&gt; 5:  FALSE  0.20001205  0.03793749 -2.5544498</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#&gt; 6:  FALSE  0.82301745  1.84891790  0.3152809</span></span></code></pre></div>
 <p>Using the <code>distr</code> argument, we can easily define to which
 simulated individuals the corresponding node definitions should be
 applied to. In the example above, we defined different linear regression
@@ -879,15 +961,15 @@ distribution, made up of two parts, similar to how zero-inflated models
 work. First, values are generated from the general distribution. Then,
 if that variable exceeds some value, sample different values for it. A
 very simple example:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span><span class="st">&quot;mixture&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>),</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>       <span class="at">distr=</span><span class="fu">list</span>(</span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>         <span class="st">&quot;TRUE&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> A<span class="sc">*</span><span class="fl">0.1</span> <span class="sc">+</span> B<span class="sc">*</span><span class="dv">1</span> <span class="sc">+</span> C<span class="sc">*-</span><span class="dv">2</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>                      <span class="at">error=</span><span class="dv">1</span>),</span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>         <span class="st">&quot;Y &gt; 3&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">10000</span>, <span class="at">sd=</span><span class="dv">500</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>       ))</span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Y&quot;</span>, <span class="at">type=</span><span class="st">&quot;mixture&quot;</span>, <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>       <span class="at">distr=</span><span class="fu">list</span>(</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>         <span class="st">&quot;TRUE&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;gaussian&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> A<span class="sc">*</span><span class="fl">0.1</span> <span class="sc">+</span> B<span class="sc">*</span><span class="dv">1</span> <span class="sc">+</span> C<span class="sc">*-</span><span class="dv">2</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>                      <span class="at">error=</span><span class="dv">1</span>),</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>         <span class="st">&quot;Y &gt; 3&quot;</span>, <span class="fu">node</span>(<span class="st">&quot;.&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">10000</span>, <span class="at">sd=</span><span class="dv">500</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>       ))</span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10000</span>)</span></code></pre></div>
 <p>Here, we first simulate 3 standard normal variables <code>A</code>,
 <code>B</code> and <code>C</code>, which will be used as predictor
 variables for our desired outcome <code>Y</code>. For <code>Y</code>
@@ -906,22 +988,22 @@ distribution with a very high mean.</p>
 <p>Real data usually includes at least some missing values in key
 variables. Below is a very simple example on how users could include
 missing values in their data:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_missing&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;identity&quot;</span>,</span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">fifelse</span>(A_missing, <span class="cn">NA</span>, A_real))</span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt;       A_real A_missing A_observed</span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt;        &lt;num&gt;    &lt;lgcl&gt;      &lt;num&gt;</span></span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; 1: 11.556228     FALSE  11.556228</span></span>
-<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; 2: 11.204382      TRUE         NA</span></span>
-<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; 3: 12.000508     FALSE  12.000508</span></span>
-<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; 4:  8.320528      TRUE         NA</span></span>
-<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt; 5:  5.679615     FALSE   5.679615</span></span>
-<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; 6: 13.858496      TRUE         NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_missing&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">fifelse</span>(A_missing, <span class="cn">NA</span>, A_real))</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a><span class="co">#&gt;       A_real A_missing A_observed</span></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="co">#&gt;        &lt;num&gt;    &lt;lgcl&gt;      &lt;num&gt;</span></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="co">#&gt; 1:  8.990730      TRUE         NA</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="co">#&gt; 2:  8.742281     FALSE   8.742281</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="co">#&gt; 3: 11.689047      TRUE         NA</span></span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt; 4: 10.882558     FALSE  10.882558</span></span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="co">#&gt; 5: 11.637514     FALSE  11.637514</span></span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="co">#&gt; 6:  5.727022     FALSE   5.727022</span></span></code></pre></div>
 <p>In this DAG, the real values of node <code>A</code> are generated
 first. Afterwards, an indicator of whether the corresponding values is
 observed is drawn randomly for each individual in node
@@ -935,26 +1017,26 @@ at first, it does allow quite a lot of flexibility in the specification
 of different missingness mechanisms. For example, to simulate
 <strong>missing at random</strong> (MAR) patterns, we could use the
 following code instead:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;B_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_missing&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;B_missing&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">5</span> <span class="sc">+</span> A_real<span class="sc">*</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;identity&quot;</span>,</span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">fifelse</span>(A_missing, <span class="cn">NA</span>, A_real)) <span class="sc">+</span></span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;B_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;identity&quot;</span>,</span>
-<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">fifelse</span>(B_missing, <span class="cn">NA</span>, B_real))</span>
-<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
-<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt;          A_real B_real A_missing B_missing   A_observed B_observed</span></span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt;           &lt;num&gt; &lt;lgcl&gt;    &lt;lgcl&gt;    &lt;lgcl&gt;        &lt;num&gt;     &lt;lgcl&gt;</span></span>
-<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt; 1:  0.007654443  FALSE     FALSE     FALSE  0.007654443      FALSE</span></span>
-<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt; 2: -1.504186161  FALSE     FALSE     FALSE -1.504186161      FALSE</span></span>
-<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#&gt; 3:  0.402660828  FALSE     FALSE     FALSE  0.402660828      FALSE</span></span>
-<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#&gt; 4:  0.686922785  FALSE     FALSE     FALSE  0.686922785      FALSE</span></span>
-<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co">#&gt; 5: -0.140018261   TRUE     FALSE     FALSE -0.140018261       TRUE</span></span>
-<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#&gt; 6: -0.141692283  FALSE      TRUE     FALSE           NA      FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rnorm&quot;</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;B_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_missing&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;B_missing&quot;</span>, <span class="at">type=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">5</span> <span class="sc">+</span> A_real<span class="sc">*</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;A_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">fifelse</span>(A_missing, <span class="cn">NA</span>, A_real)) <span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;B_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>       <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">fifelse</span>(B_missing, <span class="cn">NA</span>, B_real))</span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt;        A_real B_real A_missing B_missing A_observed B_observed</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="co">#&gt;         &lt;num&gt; &lt;lgcl&gt;    &lt;lgcl&gt;    &lt;lgcl&gt;      &lt;num&gt;     &lt;lgcl&gt;</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&gt; 1:  0.5992828   TRUE     FALSE     FALSE  0.5992828       TRUE</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="co">#&gt; 2:  0.2296464  FALSE     FALSE     FALSE  0.2296464      FALSE</span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="co">#&gt; 3: -1.1221036   TRUE     FALSE     FALSE -1.1221036       TRUE</span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="co">#&gt; 4: -0.5055837  FALSE     FALSE     FALSE -0.5055837      FALSE</span></span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="co">#&gt; 5:  0.2642537   TRUE     FALSE     FALSE  0.2642537       TRUE</span></span>
+<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a><span class="co">#&gt; 6:  0.7590262   TRUE     FALSE     FALSE  0.7590262       TRUE</span></span></code></pre></div>
 <p>Here, the missingness in <code>A_observed</code> is again MCAR,
 because it is independent of everything. The missingness in
 <code>B_observed</code>, however, is MAR because the probability of
@@ -969,50 +1051,50 @@ only be detected in 90% of all patients with the disease and may falsely
 be detected in 1% of all patients without the disease. The same strategy
 shown for missing values could be used to simulate such data using
 <code>simDAG</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>probs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">TRUE</span><span class="st">`</span><span class="ot">=</span><span class="fl">0.9</span>, <span class="st">`</span><span class="at">FALSE</span><span class="st">`</span><span class="ot">=</span><span class="fl">0.01</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;conditional_prob&quot;</span>, <span class="at">parents=</span><span class="st">&quot;Disease_real&quot;</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>       <span class="at">probs=</span>probs)</span>
-<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
-<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="co">#&gt;    Disease_real Disease_observed</span></span>
-<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co">#&gt;          &lt;lgcl&gt;           &lt;lgcl&gt;</span></span>
-<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="co">#&gt; 1:         TRUE             TRUE</span></span>
-<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a><span class="co">#&gt; 2:        FALSE            FALSE</span></span>
-<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co">#&gt; 3:        FALSE            FALSE</span></span>
-<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="co">#&gt; 4:        FALSE            FALSE</span></span>
-<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a><span class="co">#&gt; 5:         TRUE             TRUE</span></span>
-<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a><span class="co">#&gt; 6:        FALSE            FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>probs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">TRUE</span><span class="st">`</span><span class="ot">=</span><span class="fl">0.9</span>, <span class="st">`</span><span class="at">FALSE</span><span class="st">`</span><span class="ot">=</span><span class="fl">0.01</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;conditional_prob&quot;</span>, <span class="at">parents=</span><span class="st">&quot;Disease_real&quot;</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>       <span class="at">probs=</span>probs)</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co">#&gt;    Disease_real Disease_observed</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co">#&gt;          &lt;lgcl&gt;           &lt;lgcl&gt;</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="co">#&gt; 1:        FALSE            FALSE</span></span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="co">#&gt; 2:        FALSE            FALSE</span></span>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="co">#&gt; 3:         TRUE             TRUE</span></span>
+<span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a><span class="co">#&gt; 4:         TRUE             TRUE</span></span>
+<span id="cb20-16"><a href="#cb20-16" tabindex="-1"></a><span class="co">#&gt; 5:        FALSE            FALSE</span></span>
+<span id="cb20-17"><a href="#cb20-17" tabindex="-1"></a><span class="co">#&gt; 6:        FALSE            FALSE</span></span></code></pre></div>
 <p>In this example, the disease is present in 50% of all individuals. By
 using a node with <code>type=&quot;conditional_prob&quot;</code> we can easily
 draw new values for the observed disease status by specifying the
 <code>probs</code> argument correctly. We could similarly extend this
 example to make the probability of misclassification dependent on
 another variable:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># first TRUE / FALSE refers to Sex = TRUE / FALSE</span></span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co"># second TRUE / FALSE refers to Disease = TRUE / FALSE</span></span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>probs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">TRUE.TRUE=</span><span class="fl">0.9</span>, <span class="at">TRUE.FALSE=</span><span class="fl">0.01</span>,</span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>              <span class="at">FALSE.TRUE=</span><span class="fl">0.8</span>, <span class="at">FALSE.FALSE=</span><span class="fl">0.05</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;conditional_prob&quot;</span>,</span>
-<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>       <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;Sex&quot;</span>, <span class="st">&quot;Disease_real&quot;</span>), <span class="at">probs=</span>probs)</span>
-<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a></span>
-<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>)</span>
-<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt;       Sex Disease_real Disease_observed</span></span>
-<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="co">#&gt;    &lt;lgcl&gt;       &lt;lgcl&gt;           &lt;lgcl&gt;</span></span>
-<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="co">#&gt; 1:  FALSE        FALSE            FALSE</span></span>
-<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a><span class="co">#&gt; 2:  FALSE         TRUE             TRUE</span></span>
-<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a><span class="co">#&gt; 3:   TRUE        FALSE            FALSE</span></span>
-<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a><span class="co">#&gt; 4:   TRUE        FALSE            FALSE</span></span>
-<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a><span class="co">#&gt; 5:   TRUE         TRUE             TRUE</span></span>
-<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a><span class="co">#&gt; 6:   TRUE        FALSE            FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># first TRUE / FALSE refers to Sex = TRUE / FALSE</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co"># second TRUE / FALSE refers to Disease = TRUE / FALSE</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>probs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">TRUE.TRUE=</span><span class="fl">0.9</span>, <span class="at">TRUE.FALSE=</span><span class="fl">0.01</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>              <span class="at">FALSE.TRUE=</span><span class="fl">0.8</span>, <span class="at">FALSE.FALSE=</span><span class="fl">0.05</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Sex&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_real&quot;</span>, <span class="at">type=</span><span class="st">&quot;rbernoulli&quot;</span>, <span class="at">p=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Disease_observed&quot;</span>, <span class="at">type=</span><span class="st">&quot;conditional_prob&quot;</span>,</span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>       <span class="at">parents=</span><span class="fu">c</span>(<span class="st">&quot;Sex&quot;</span>, <span class="st">&quot;Disease_real&quot;</span>), <span class="at">probs=</span>probs)</span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a><span class="co">#&gt;       Sex Disease_real Disease_observed</span></span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a><span class="co">#&gt;    &lt;lgcl&gt;       &lt;lgcl&gt;           &lt;lgcl&gt;</span></span>
+<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a><span class="co">#&gt; 1:  FALSE        FALSE            FALSE</span></span>
+<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a><span class="co">#&gt; 2:  FALSE         TRUE             TRUE</span></span>
+<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a><span class="co">#&gt; 3:  FALSE        FALSE            FALSE</span></span>
+<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a><span class="co">#&gt; 4:  FALSE        FALSE            FALSE</span></span>
+<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a><span class="co">#&gt; 5:  FALSE         TRUE            FALSE</span></span>
+<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a><span class="co">#&gt; 6:   TRUE         TRUE             TRUE</span></span></code></pre></div>
 <p>In this extended example, <code>Sex</code> is equally distributed
 among the population (with <code>TRUE</code> = “female” and
 <code>FALSE</code> = “male”). In this example, the probability of being

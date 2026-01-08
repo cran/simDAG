@@ -6,7 +6,7 @@
 Create a node object for a \code{DAG}
 }
 \description{
-These functions should be used in conjunction with the \code{\link{empty_dag}} function to create \code{DAG} objects, which can then be used to simulate data using the \code{\link{sim_from_dag}} function or the \code{\link{sim_discrete_time}} function.
+These functions should be used in conjunction with the \code{\link{empty_dag}} function to create \code{DAG} objects, which can then be used to simulate data using the \code{\link{sim_from_dag}}, \code{\link{sim_discrete_time}} or \code{\link{sim_discrete_event}} functions.
 }
 \usage{
 node(name, type, parents=NULL, formula=NULL, ...)
@@ -24,7 +24,7 @@ A single character string specifying the type of the node. Depending on whether 
 A character vector of names, specifying the parents of the node or \code{NULL} (default). If \code{NULL}, the node is treated as a root node. For convenience it is also allowed to set \code{parents=""} to indicate that the node is a root node.
   }
   \item{formula}{
-An optional \code{formula} object to describe how the node should be generated or \code{NULL} (default). If supplied it should start with \code{~}, having nothing else on the left hand side. The right hand side should define the entire structural equation, including the betas and intercepts. It may contain any valid formula syntax, such as \code{~ -2 + A*3 + B*4} or \code{~ -2 + A*3 + B*4 + I(A^2)*0.3 + A:B*1.1}, allowing arbitrary non-linear effects, arbitrary interactions and multiple coefficients for categorical variables. Additionally, for some node types, random effects and random slopes are supported. If this argument is defined, there is no need to define the \code{betas} and \code{intercept} argument. The \code{parents} argument should still be specified whenever a categorical variable is used in the formula. This argument is supported for build-in nodes of type \code{"binomial"}, \code{"gaussian"}, \code{"poisson"}, \code{"negative_binomial"}, \code{"cox"}, \code{"aftreg"}, \code{"ahreg"}, \code{"ehreg"}, \code{"poreg"} and \code{"ypreg"} and for any custom node defined by the user. It is also supported for nodes of type \code{"identity"}, but slightly different input is expected in that case. See examples and the associated vignette for an in-depth explanation.
+An optional \code{formula} object to describe how the node should be generated or \code{NULL} (default). If supplied it should start with \code{~}, having nothing else on the left hand side. The right hand side should define the entire structural equation, including the betas and intercepts. It may contain any valid formula syntax, such as \code{~ -2 + A*3 + B*4} or \code{~ -2 + A*3 + B*4 + I(A^2)*0.3 + A:B*1.1}, allowing arbitrary non-linear effects, arbitrary interactions and multiple coefficients for categorical variables. Additionally, for some node types, random effects and random slopes are supported. If this argument is defined, there is no need to define the \code{betas} and \code{intercept} argument. The \code{parents} argument should still be specified whenever a categorical variable is used in the formula. This argument is supported for build-in nodes of type \code{"binomial"}, \code{"gaussian"}, \code{"poisson"}, \code{"negative_binomial"}, \code{"cox"}, \code{"aftreg"}, \code{"ahreg"}, \code{"ehreg"}, \code{"poreg"}, \code{"ypreg"}, \code{"time_to_event"} and \code{"next_time"} and for any custom node defined by the user. It is also supported for nodes of type \code{"identity"}, but slightly different input is expected in that case. See examples and the associated vignette for an in-depth explanation.
   }
   \item{...}{
 Further named arguments needed to specify the node. Those can be parameters of distribution functions such as the \code{p} argument in the \code{\link{rbernoulli}} function for root nodes or arbitrary named arguments such as the \code{betas} argument of the \code{\link{node_gaussian}} function.
@@ -32,7 +32,7 @@ Further named arguments needed to specify the node. Those can be parameters of d
 }
 \details{
 
-To generate data using the \code{\link{sim_from_dag}} function or the \code{\link{sim_discrete_time}} function, it is required to create a \code{DAG} object first. This object needs to contain information about the causal structure of the data (e.g. which variable causes which variable) and the specific structural equations for each variable (information about causal coefficients, type of distribution etc.). In this package, the \code{node} and/or \code{node_td} function is used in conjunction with the \code{\link{empty_dag}} function to create this object.
+To generate data using the \code{\link{sim_from_dag}}, \code{\link{sim_discrete_time}} or \code{\link{sim_discrete_event}} functions, it is required to create a \code{DAG} object first. This object needs to contain information about the causal structure of the data (e.g. which variable causes which variable) and the specific structural equations for each variable (information about causal coefficients, type of distribution etc.). In this package, the \code{node} and/or \code{node_td} functions are used in conjunction with the \code{\link{empty_dag}} function to create this object.
 
 This works by first initializing an empty \code{DAG} using the \code{\link{empty_dag}} function and then adding multiple calls to the \code{node} and/or \code{node_td} functions to it using a simple \code{+}, where each call to \code{node} and/or \code{node_td} adds information about a single node that should be generated. Multiple examples are given below.
 
@@ -40,19 +40,21 @@ In each call to \code{node} or \code{node_td} the user needs to indicate what th
 
 \strong{\emph{\code{node} vs. \code{node_td}}}:
 
-By calling \code{node} you are indicating that this node is a time-fixed variable which should only be generated once. By using \code{node_td} you are indicating that it is a time-dependent node, which will be updated at each step in time when using a discrete-time simulation.
+By calling \code{node} you are indicating that this node is a time-fixed variable which should only be generated once. By using \code{node_td} you are indicating that it is a time-dependent node, which will be updated at each step in time when using a discrete-time simulation, or at event changes in discrete-event simulations.
 
-\code{node_td} should only be used if you are planning to perform a discrete-time simulation with the \code{\link{sim_discrete_time}} function. \code{DAG} objects including time-dependent nodes may not be used in the \code{\link{sim_from_dag}} function.
+\code{node_td} should only be used if you are planning to perform a discrete-time or discrete-event simulation with the \code{\link{sim_discrete_time}} or \code{\link{sim_discrete_event}} functions. \code{DAG} objects including time-dependent nodes may not be used in the \code{\link{sim_from_dag}} function.
 
 \strong{\emph{Implemented Root Node Types}}:
 
 Any function can be used to generate root nodes. The only requirement is that the function has at least one named argument called \code{n} which controls the length of the resulting vector. For example, the user could specify a node of type \code{"rnorm"} to create a normally distributed node with no parents. The argument \code{n} will be set internally, but any additional arguments can be specified using the \code{...} syntax. In the \code{type="rnorm"} example, the user could set the mean and standard deviation using \code{node(name="example", type="rnorm", mean=10, sd=5)}.
 
-For convenience, this package additionally includes three custom root-node functions:
+For convenience, this package additionally includes five custom root-node functions:
 
 \itemize{
   \item{"\link[=rbernoulli]{rbernoulli}": Draws randomly from a bernoulli distribution.}
   \item{"\link[=rcategorical]{rcategorical}": Draws randomly from any discrete probability density function.}
+  \item{"\link[=rsample]{rsample}": Draws random samples from a given vector.}
+  \item{"\link[=rtexp]{rtexp}": Draws random values from a left-truncated exponential distribution.}
   \item{"\link[=rconstant]{rconstant}": Used to set a variable to a constant value.}
 }
 
@@ -62,7 +64,7 @@ Currently, the following node types are implemented directly for convenience:
 
 \itemize{
   \item{"\link[=node_gaussian]{gaussian}": A node based on (mixed) linear regression.}
-  \item{"\link[=node_binomial]{binomial}": A node based on (mixed) logistic regression.}
+  \item{"\link[=node_binomial]{binomial}": A node based on (mixed) binomial regression.}
   \item{"\link[=node_conditional_prob]{conditional_prob}": A node based on conditional probabilities.}
   \item{"\link[=node_conditional_distr]{conditional_distr}": A node based on conditional draws from different distributions.}
   \item{"\link[=node_multinomial]{multinomial}": A node based on multinomial regression.}
@@ -72,6 +74,7 @@ Currently, the following node types are implemented directly for convenience:
   \item{"\link[=node_identity]{identity}": A node that is just some R expression of other nodes.}
   \item{"\link[=node_mixture]{mixture}": A node that is a mixture of different node definitions.}
   \item{"\link[=node_cox]{cox}": A node based on cox-regression.}
+  \item{"\link[=node_aalen]{aalen}": A node based on an Aalen additive hazards model.}
   \item{"\link[=node_aftreg]{aftreg}": A node based on an accelerated failure time model.}
   \item{"\link[=node_ahreg]{ahreg}": A node based on an accelerated hazard model.}
   \item{"\link[=node_ehreg]{ehreg}": A node based on a extended hazard model.}
@@ -88,6 +91,7 @@ Currently, the following node types are implemented directly for convenience to 
 \itemize{
   \item{"\link[=node_time_to_event]{time_to_event}": A node based on repeatedly checking whether an event occurs at each point in time.}
   \item{"\link[=node_competing_events]{competing_events}": A node based on repeatedly checking whether one of multiple mutually exclusive events occurs at each point in time.}
+  \item{"\link[=node_next_time]{next_time}": A node that draws the time of the next event in discrete-event simulation.}
 }
 
 However, the user may also use any of the child node types in a \code{node_td} call directly. For custom time-dependent node types, please consult the associated vignette.
@@ -104,7 +108,7 @@ If the data generated by a child node is categorical (such as when using \code{n
 
 The name DAG (directed \strong{acyclic} graph) implies that cycles are not allowed. This means that if you start from any node and only follow the arrows in the direction they are pointing, there should be no way to get back to your original node. This is necessary both theoretically and for practical reasons if we are dealing with static DAGs created using the \code{node} function. If the user attempts to generate data from a static cyclic graph using the \code{\link{sim_from_dag}} function, an error will be produced.
 
-However, in the realm of discrete-time simulations, cyclic causal structures are perfectly reasonable. A variable \eqn{A} at \eqn{t = 1} may influence a variable \eqn{B} at \eqn{t = 2}, which in turn may influence variable \eqn{A} at \eqn{t = 3} again. Therefore, when using the \code{node_td} function to simulate time-dependent data using the \code{\link{sim_discrete_time}} function, cyclic structures are allowed to be present and no error will be produced.
+However, in the realm of discrete-time or discrete-event simulations, cyclic causal structures are perfectly reasonable. A variable \eqn{A} at \eqn{t = 1} may influence a variable \eqn{B} at \eqn{t = 2}, which in turn may influence variable \eqn{A} at \eqn{t = 3} again. Therefore, when using the \code{node_td} function to simulate time-dependent data using the \code{\link{sim_discrete_time}} or \code{\link{sim_discrete_event}} function, cyclic structures are allowed to be present and no error will be produced.
 
 }
 \note{

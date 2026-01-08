@@ -101,7 +101,16 @@ dag <- dag +
 
 We simply pass the `node_advance_age()` function to the `type` argument of the `age` node. `death` is a *time-to-event* node, because it's an event which is generated from a probability at each step in time. That probability, as defined here, is determined by the `prob_death` function we defined earlier. We set `event_duration` to `Inf` to make this a permanent event (once you are dead, there is no going back).
 
-To visualize the resulting DAG, we can use the associated `plot()` method:
+Note that we could also directly use the enhanced `formula` interface for the `death` node here to get equivalent results without having to define a `prob_fun` as:
+
+```{r}
+node_td("death", type="time_to_event",
+        formula= ~ -10 + 0.15*age + 0.25*sex,
+        event_duration=Inf, save_past_events=TRUE,
+        check_inputs=FALSE)
+```
+
+This is often more convenient, but does not allow as much flexibility as the `prob_fun` argument. To visualize the resulting DAG, we can use the associated `plot()` method:
 
 ```{r fig.width=7, fig.height=5}
 plot(dag)
@@ -127,6 +136,17 @@ If we want to graphically display a flow diagram of the data-generation mechanis
 ```{r fig.width=7, fig.height=5}
 plot(sim_dat)
 ```
+
+A subtlety that may arise when we are interested in such terminal event times is that the `sim_discrete_time()` function only runs for `max_t` steps. In our example above, 50 steps (or years in this example) were enough to observe the death time for all 10 individuals. One possibility would be to set `max_t` to some absurdly large value (lets say 1000000) and to define the `break_if` argument. This argument allows us to define a condition that should be met at which the simulation will be stopped early. For example we may use:
+
+```{r}
+set.seed(44)
+sim_dat <- sim_discrete_time(n_sim=10, dag=dag, max_t=1000000,
+                             break_if=all(data$death_event==TRUE),
+                             check_inputs=FALSE)
+```
+
+Here, we specify that the simulation should run for a million years, but be stopped early once all individuals are dead. The time at which the simulation was stopped can be accessed using `sim_dat$break_t` and is `r sim_dat$break_t` in this case. Note that this strategy may lead to unexpectedly long computation times, if the event is very unlikely for some individuals. The `remove_if` argument may then also be helpful to speed things up (see documentation).
 
 This particular example could be simulated in a much easier fashion, without relying on a discrete-time approach, because `age` increases linearly and the model for `death` is exactly the same regardless of time. DTS is more useful when truly complex data structures are required. Below we will extend this simple example a little bit, but we will still keep it relatively simple. 
 

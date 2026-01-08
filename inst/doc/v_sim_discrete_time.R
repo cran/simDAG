@@ -38,6 +38,12 @@ dag <- dag +
           prob_fun=prob_death, event_duration=Inf, save_past_events=TRUE,
           check_inputs=FALSE)
 
+## -----------------------------------------------------------------------------
+node_td("death", type="time_to_event",
+        formula= ~ -10 + 0.15*age + 0.25*sex,
+        event_duration=Inf, save_past_events=TRUE,
+        check_inputs=FALSE)
+
 ## ----fig.width=7, fig.height=5------------------------------------------------
 plot(dag)
 
@@ -50,6 +56,12 @@ head(sim_dat$data)
 
 ## ----fig.width=7, fig.height=5------------------------------------------------
 plot(sim_dat)
+
+## -----------------------------------------------------------------------------
+set.seed(44)
+sim_dat <- sim_discrete_time(n_sim=10, dag=dag, max_t=1000000,
+                             break_if=all(data$death_event==TRUE),
+                             check_inputs=FALSE)
 
 ## -----------------------------------------------------------------------------
 dag <- empty_dag() +

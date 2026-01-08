@@ -8,9 +8,6 @@ check_intercept <- function(intercept) {
          call.=FALSE)
   } else if (length(intercept) == 0) {
     stop("No intercept found in supplied 'formula'.", call.=FALSE)
-  } else if (is.na(as.numeric(intercept))) {
-    stop("Intercept supplied in 'formula' is not a number. ",
-         "Supplied intercept: ", intercept, call.=FALSE)
   }
 }
 
@@ -65,7 +62,7 @@ str2numeric <- function(string) {
            USE.NAMES=FALSE)},
     error=function(e){
       stop("One or more of the supplied beta coefficients ",
-           "in 'formula' are not numbers.", call.=FALSE)}
+           "in 'formula' or the intercept are not numbers.", call.=FALSE)}
   )
   return(out)
 }
@@ -127,6 +124,7 @@ parse_formula <- function(formula, node_type) {
   } else {
     intercept <- formvec[!has_star]
     check_intercept(intercept)
+    intercept <- str2numeric(intercept)
   }
 
   # split rest further by variable / value pairs
@@ -203,7 +201,7 @@ args_from_formula <- function(args, formula, node_type) {
 ## create a fitting dataset for special formula based nodes
 #' @importFrom data.table as.data.table
 #' @importFrom data.table setnames
-data_for_formula <- function(data, args, networks=list()) {
+data_for_formula <- function(data, args, networks=list(), net_allowed=TRUE) {
 
   name <- term <- NULL
 
@@ -261,6 +259,11 @@ data_for_formula <- function(data, args, networks=list()) {
   form_net <- get_net_terms(args$parents)
 
   if (length(form_net) > 0) {
+
+    if (!net_allowed) {
+      stop("Using net() in the 'formula' of a node of type 'next_time'",
+           " is currently not supported.", call.=FALSE)
+    }
 
     # add network terms to data
     d_net <- rbindlist(lapply(form_net, FUN=function(x) {eval(str2lang(x))}),
@@ -386,7 +389,7 @@ get_interaction_term_for_formula <- function(parts, data, d_combs) {
 ## check if two objects are the same
 ## this is essentially equivalent to the new version of isTRUE(all.equal())
 is_same_object <- function(fun1, fun2) {
-  out <- all.equal(fun1, fun2)
+  out <- base::all.equal(fun1, fun2)
   return(is.logical(out) && length(out)==1 && !is.na(out) && out)
 }
 
