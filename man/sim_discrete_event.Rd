@@ -13,8 +13,8 @@ sim_discrete_event(dag, n_sim=NULL, t0_sort_dag=FALSE,
                    t0_transform_args=list(),
                    max_t=Inf, remove_if, break_if,
                    max_iter=1000, redraw_at_t=NULL,
-                   allow_ties=FALSE, censor_at_max_t=FALSE,
-                   target_event=NULL, keep_only_first=FALSE,
+                   censor_at_max_t=FALSE, target_event=NULL,
+                   keep_only_first=FALSE,
                    remove_not_at_risk=FALSE,
                    include_event_counts=TRUE,
                    check_inputs=TRUE)
@@ -27,10 +27,10 @@ A \code{DAG} object created using the \code{\link{empty_dag}} function with \cod
 A single number specifying how many observations should be generated. If a \code{data.table} is supplied to the \code{t0_data} argument, this argument is ignored. The sample size will then correspond to the number of rows in \code{t0_data}.
   }
   \item{t0_sort_dag}{
-Corresponds to the \code{sort_dag} argument in the \code{\link{sim_from_dag}} function. Ignored if \code{t0_data} is specified.
+Corresponds to the \code{sort_dag} argument in the \code{\link{sim_from_dag}} function. Ignored if \code{t0_data} is specified and \code{dag} contains only time-dependent nodes.
   }
   \item{t0_data}{
-An optional \code{data.table} like object (also accepts a \code{data.frame}, \code{tibble} etc.) containing values for all relevant variables at \eqn{t = 0}. This dataset will then be transformed over time according to the nodes specified using \code{\link{node_td}} calls in \code{dag}. Alternatively, data for \eqn{t = 0} may be generated automatically by this function if standard \code{\link{node}} calls were added to the \code{dag}.
+An optional \code{data.table} like object (also accepts a \code{data.frame}, \code{tibble} etc.) containing values for all relevant variables at \eqn{t = 0}. This dataset will then be transformed over time according to the nodes specified using \code{\link{node_td}} calls in \code{dag}. Alternatively, data for \eqn{t = 0} may be generated automatically by this function if standard \code{\link{node}} calls were added to the \code{dag}. If \code{t0_data} is specified and the \code{dag} contains time-fixed nodes, all columns from \code{t0_data} are passed first and the nodes are then simulated on top using \code{\link{sim_from_dag}}.
   }
   \item{t0_transform_fun}{
 An optional function that takes the data created at \eqn{t = 0} as the first argument. The function will be applied to the starting data and its output will replace the \code{data.table}. Can be used to perform arbitrary data transformations after the starting data was created. Set to \code{NULL} (default) to not use this functionality.
@@ -52,9 +52,6 @@ A single positive number, specifying the maximum amount of loops the simulation 
   }
   \item{redraw_at_t}{
 A numeric vector of positive values specifying times at which the time to the next event should be re-drawn, regardless of whether an event occurred at this time or not. This may be useful to specify effects or baseline probabilities that vary over discrete intervals of time. Note that using this argument potentially adds multiple additional rows to the output, in which no variables change. Set to \code{NULL} to not use this functionality (default).
-  }
-  \item{allow_ties}{
-Either \code{TRUE} or \code{FALSE} (default), specifying whether multiple events (or changes from \code{TRUE} to \code{FALSE} in some variables) per individual at the exact same time should be allowed. If the times until the next event are continuous, the chances for an exact tie are astronomically small, so it is usually fine to keep this at \code{FALSE}. Should a tie be found anyways, an error will be returned. If some custom function is supplied to the \code{distr_fun} argument of one or more time-dependent nodes, which produce integer times, this argument should be set to \code{TRUE}. Note that this function is much faster with \code{allow_ties=FALSE}, especially with large \code{n_sim}.
   }
   \item{censor_at_max_t}{
 Either \code{TRUE} or \code{FALSE}, specifying whether the last generated time should be censored at the user-specified value of \code{max_t}. Since the simulation jumps times at events, the last observed event time may often be larger than \code{max_t} initially. Setting this to \code{TRUE} censors these values appropriately and potentially discards the last state-change.
@@ -134,9 +131,11 @@ Additionally, the returned data will include all time-constant and time-dependen
 \references{
 Denz, Robin and Nina Timmesfeld (2025). Simulating Complex Crossectional and Longitudinal Data using the simDAG R Package. arXiv preprint, doi: 10.48550/arXiv.2506.01498.
 
-Tang, Jiangjun, George Leu, und Hussein A. Abbass. 2020. Simulation and Computational Red Teaming for Problem Solving. Hoboken: IEEE Press.
-
 Banks, Jerry, John S. Carson II, Barry L. Nelson, and David M. Nicol (2014). Discrete-Event System Simulation. Vol. 5. Edinburgh Gate: Pearson Education Limited.
+
+Gillespie, Daniel T. 1976. “A General Method for Numerically Simulating the Stochastic Time Evolution of Coupled Chemical Reactions.” Journal of Computational Physics 22 (4): 403–34.
+
+Anderson, David F. 2007. “A Modified Next Reaction Method for Simulating Chemical Systems with Time Dependent Propensities and Delays.” The Journal of Chemical Physics 127 (21).
 }
 \examples{
 library(simDAG)

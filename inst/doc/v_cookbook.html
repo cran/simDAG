@@ -581,15 +581,18 @@ using the following syntax:</p>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">node</span>(<span class="st">&quot;Outcome&quot;</span>, <span class="at">type=</span><span class="st">&quot;poisson&quot;</span>, <span class="at">formula=</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> Treatment<span class="sc">*</span><span class="dv">4</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Clinic),</span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>       <span class="at">var_corr=</span><span class="fl">0.5</span>)</span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">sim_from_dag</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">head</span>(data)</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt;    Clinic Treatment Outcome</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;     &lt;int&gt;    &lt;lgcl&gt;   &lt;int&gt;</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; 1:     16     FALSE       0</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; 2:     11     FALSE       0</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; 3:     41      TRUE      26</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 4:     36      TRUE      61</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; 5:     30      TRUE      12</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; 6:     13     FALSE       0</span></span></code></pre></div>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; Registered S3 method overwritten by &#39;car&#39;:</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt;   method           from</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;   na.action.merMod lme4</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="fu">head</span>(data)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;    Clinic Treatment Outcome</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;     &lt;int&gt;    &lt;lgcl&gt;   &lt;int&gt;</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 1:     16     FALSE       0</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; 2:     11     FALSE       0</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; 3:     41      TRUE      26</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; 4:     36      TRUE      61</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; 5:     30      TRUE      12</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; 6:     13     FALSE       0</span></span></code></pre></div>
 <p>In this DGP, each individual is randomly assigned to one of 50
 Clinics with equal probability. All patients in clinics numbered 0-24
 are assigned to the control group, while the other patients are assigned
@@ -906,12 +909,12 @@ continuous score of some kind.</p>
 <span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="fu">head</span>(data)</span>
 <span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt;    school female       age      score</span></span>
 <span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt; &lt;lgcl&gt;     &lt;num&gt;      &lt;num&gt;</span></span>
-<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; 1:      I   TRUE 12.957818  3.1832933</span></span>
-<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; 2:      C   TRUE  7.924776  2.8786369</span></span>
-<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt; 3:      D   TRUE 10.176482  2.8363160</span></span>
-<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; 4:      F  FALSE 10.180657  0.3773207</span></span>
-<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; 5:      I  FALSE 10.157362 -1.2590350</span></span>
-<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; 6:      C  FALSE 12.908317  0.8219375</span></span></code></pre></div>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; 1:      I   TRUE 12.957818  3.3111130</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; 2:      C   TRUE  7.924776  2.7577452</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt; 3:      D   TRUE 10.176482  2.8479959</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; 4:      F  FALSE 10.180657  0.6492182</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; 5:      I  FALSE 10.157362 -1.1312153</span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; 6:      C  FALSE 12.908317  0.7010458</span></span></code></pre></div>
 <p>In this example, there is a single random effect for school, with a
 standard deviation of 0.5. This example could be expanded to include a
 random slope for age per school, by exchanging <code>(1|school)</code>

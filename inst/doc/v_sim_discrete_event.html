@@ -385,8 +385,6 @@ time-dependent variables</a></li>
 probabilities and effects</a></li>
 <li><a href="#categorical-count-continuous-variables" id="toc-categorical-count-continuous-variables">Categorical / Count /
 Continuous variables</a></li>
-<li><a href="#ties-in-event-times" id="toc-ties-in-event-times">Ties in
-event times</a></li>
 </ul></li>
 <li><a href="#discussion" id="toc-discussion">Discussion</a></li>
 <li><a href="#references" id="toc-references">References</a></li>
@@ -774,51 +772,6 @@ supported. There is no way to easily integrate time-dependent
 categorical, count or continuous variables instead. If these are
 required, users may need to use the <code>sim_discrete_time()</code>
 function.</p>
-</div>
-<div id="ties-in-event-times" class="section level2">
-<h2>Ties in event times</h2>
-<p>Conceptually, no complications arise from multiple events happening
-at the same exact time, which we will call <em>ties</em> from here on.
-If ties occur, the algorithm should simply update the respective
-variables at the same time, generating only one new row for the
-start-stop dataset. The simulation may then proceed as usual.
-Computationally, it does make a difference though. The
-<code>sim_discrete_event()</code> function internally uses a mix of a
-long- and wide-format dataset. Updating this dataset is fast and
-efficient if it can be assumed that only one event occurs, but somewhat
-more involved if we have to allow ties. This is where the
-<code>allow_ties</code> argument comes in.</p>
-<p>By default, the time until the next event is drawn from a (truncated)
-exponential distribution and thus truly continuous. In this case, the
-likelihood that two generated event times, lets say for variable <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are exactly equal are astronomically
-small. For all intents and purposes, we may ignore this possibility. The
-<code>allow_ties</code> argument is therefore set to <code>FALSE</code>
-by default, allowing computations to be a lot faster. If, however, the
-user supplies a custom function that generates integer based times, this
-argument needs to be set to <code>TRUE</code> (otherwise an error will
-be returned).</p>
-<p>For example, consider the following code:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>integer_rtexp <span class="ot">&lt;-</span> <span class="cf">function</span>(n, rate, l) {</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">ceiling</span>(<span class="fu">rtexp</span>(<span class="at">n=</span>n, <span class="at">rate=</span>rate, <span class="at">l=</span>l))</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>}</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.01</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">100</span>, <span class="at">distr_fun=</span>integer_rtexp) <span class="sc">+</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>          <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">log</span>(<span class="fl">0.001</span>) <span class="sc">+</span> <span class="fu">log</span>(<span class="fl">0.8</span>)<span class="sc">*</span>treatment, <span class="at">link=</span><span class="st">&quot;log&quot;</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="cn">Inf</span>, <span class="at">distr_fun=</span>integer_rtexp)</span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_event</span>(dag, <span class="at">n_sim=</span><span class="dv">1000</span>, <span class="at">remove_if=</span>death<span class="sc">==</span><span class="cn">TRUE</span>,</span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>                          <span class="at">target_event=</span><span class="st">&quot;death&quot;</span>, <span class="at">allow_ties=</span><span class="cn">TRUE</span>,</span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>                          <span class="at">keep_only_first=</span><span class="cn">TRUE</span>)</span></code></pre></div>
-<p>Here, we use an artificially discretized version of the truncated
-exponential distribution to generate the time until the next change.
-This may lead to ties, so we need to set <code>allow_ties=TRUE</code>.
-Note that for sample sizes below 10000, the computational differences
-are very small. Only with large <code>n_sim</code> does the difference
-between <code>allow_ties=TRUE</code> and <code>allow_ties=FALSE</code>
-become more noticeable.</p>
 </div>
 </div>
 <div id="discussion" class="section level1">

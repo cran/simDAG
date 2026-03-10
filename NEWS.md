@@ -1,11 +1,22 @@
 
+# simDAG 0.5.1
+
+New Features
+
+* Added the `node_polr()` function to allow generation of data from an ordered logistic or probit regression.
+
+Enhancements
+
+* Added support for all `rsurv` package based time-to-event nodes in the `model` argument of `node_next_time()` nodes in discrete-event simulation. Many thanks to Fábio N. Demarqui (@fndemarqui) for making this possible!
+* Removed the `allow_ties` argument from `sim_discrete_event()` (ties are now handled automatically in a more efficient manner, without the need for user intervention).
+
 # simDAG 0.5.0
 
 New Features
 
 * Added the `sim_discrete_event()` function, which allows users to perform discrete-event simulations to generate complex longitudinal data in continuous time. This function is usually much faster than comparable `sim_discrete_time()` calls, although at the cost of some flexibility.
 * Added the `rtexp()` function to allow sampling from left-truncated exponential distributions.
-* Added the `rsample()` function as a convenient wrapper around `sample()`, as suggested by Ed Hagen.
+* Added the `rsample()` function as a convenient wrapper around `sample()`, as suggested by Ed Hagen (@grasshoppermouse).
 * Added the `node_aalen()` function to allow data to be generated according to an Aalen additive hazards model with time-constant betas and baseline hazard.
 * Added the `as_tidy_dagitty.DAG()` method, which allows direct conversion of `DAG` to `tidy_dagitty` objects used to create plots in the `ggdag` package.
 

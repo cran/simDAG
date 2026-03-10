@@ -88,19 +88,3 @@ sim <- sim_discrete_event(dag, n_sim=10, remove_if=death==TRUE,
                           target_event="death", keep_only_first=TRUE)
 head(sim)
 
-## -----------------------------------------------------------------------------
-integer_rtexp <- function(n, rate, l) {
-  ceiling(rtexp(n=n, rate=rate, l=l))
-}
-
-dag <- empty_dag() +
-  node_td("treatment", type="next_time", prob_fun=0.01,
-          event_duration=100, distr_fun=integer_rtexp) +
-  node_td("death", type="next_time",
-          formula= ~ log(0.001) + log(0.8)*treatment, link="log",
-          event_duration=Inf, distr_fun=integer_rtexp)
-
-sim <- sim_discrete_event(dag, n_sim=1000, remove_if=death==TRUE,
-                          target_event="death", allow_ties=TRUE,
-                          keep_only_first=TRUE)
-
