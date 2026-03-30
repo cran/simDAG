@@ -1,6 +1,6 @@
-400ae72d632f1541f8e552ca7528d510 *DESCRIPTION
+dc91fd7b1350cb5339ba15d7b1b0f7a5 *DESCRIPTION
 7bef560d2bfbd96789afbb8a73290a24 *NAMESPACE
-da5bb0a6c9fc43559e07d3a8c56da726 *NEWS.md
+9fe59e3859950c3b2850fdeedea3b4cd *NEWS.md
 7d5cd0f7f53c43cf7e74b962e21b8685 *R/dag.r
 13e3684e59c44b20082e7de6cabccd6f *R/dag2matrix.r
 67726112f7053230fdd1c7bd2aa29e44 *R/dag_from_data.r
@@ -49,10 +49,10 @@ d7156d500cce70d643d99f14c3dd47c4 *build/vignette.rds
 1a53681683c4f7156eef9719d6a29fd8 *inst/CITATION
 0038184e8e93a89e2924ed7a54aeae27 *inst/doc/simDAG.R
 ccd670f1563c8fdd7345d107b0260d33 *inst/doc/simDAG.Rmd
-fdcea3e6a5812adbf7a85c2d5f46d2fd *inst/doc/simDAG.html
+47d15c245497b7869b60553313054d1a *inst/doc/simDAG.html
 b641587f15f82259e9263ced908f6265 *inst/doc/v_cookbook.R
 2637b26f83a3c667e781c0c6e59a936f *inst/doc/v_cookbook.Rmd
-8ddf62b38d930aeed030441f4f619b84 *inst/doc/v_cookbook.html
+f1f1aa8c176cdb852ed28aa38a1bcec8 *inst/doc/v_cookbook.html
 0b094e8952de1d768b2bef0e0adf7ea9 *inst/doc/v_covid_example.R
 e65be802289165d64adb28a42eab0a17 *inst/doc/v_covid_example.Rmd
 a5a62d5d2f4b5af24ced32997fe596ee *inst/doc/v_covid_example.html
@@ -114,7 +114,7 @@ e67649c88b8b4c9f7c67b5c0e544c9a4 *man/node_poisson.Rd
 c75cc4173529e6a307da4c43521138d5 *man/rcategorical.Rd
 d512d9f33d1d2390ca5531ac30a6e575 *man/rconstant.Rd
 b748bdec524e54533eb9c91e124dd787 *man/rsample.Rd
-34092c96652cf7595b754bb2025b2bf0 *man/rtexp.Rd
+7320e0bccf768e35a3de8cd313d60633 *man/rtexp.Rd
 c81adc9c902db721aeaf85a749630012 *man/sim2data.Rd
 e55281a7b5816ea7a116f15f1204560f *man/simDAG.Rd
 a1d600a18d1bdfa496ee0f7a48f3086f *man/sim_discrete_event.Rd
@@ -196,7 +196,7 @@ c2eb925643584fdd479b5fb56fb83e0b *tests/testthat/test_is_time_varying_dag.r
 71af6c7f41f69ac6fff02dadf1944a5a *tests/testthat/test_merge_nested_lists.r
 1613a67d736dd0eb358e8ae018260728 *tests/testthat/test_na_locf.r
 58f60742a6658b28551ede5c244bfb58 *tests/testthat/test_names_DAG.r
-27956eb58f9644470f481d6d06e41337 *tests/testthat/test_network.r
+2b5534d1fbf788c444c74d6a3bb612d7 *tests/testthat/test_network.r
 d1d407f2e378a690fb1dadba1bf02ad3 *tests/testthat/test_node.r
 690bf9a9f3ea2ac97205e1c42d8ec1fe *tests/testthat/test_node_aalen.r
 ff57f65e817f2d6bc14384e448a3a4d0 *tests/testthat/test_node_binomial.r
@@ -208,7 +208,7 @@ ed020d6faa0bb222a4f37c3adb4fa500 *tests/testthat/test_node_cox.r
 a0e41342aaf934039717e793944b7d7d *tests/testthat/test_node_gaussian.r
 157617e4daef0dc1e4f3601546e82d7b *tests/testthat/test_node_has_arg.r
 80115687963b90b02c2f77a788227eef *tests/testthat/test_node_identity.r
-9df3437d6aa318cda16c210acae2095c *tests/testthat/test_node_lmer.r
+ba274dcfc779e1d61ef8ef41648f234d *tests/testthat/test_node_lmer.r
 b07538fcbec29c711d8b04030bebc85f *tests/testthat/test_node_mixture.r
 24c8255c0864ce6096f9f6d75092e9f3 *tests/testthat/test_node_multinomial.r
 5243fa2aded3d9092a400501925037db *tests/testthat/test_node_negative_binomial.r
