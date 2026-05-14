@@ -747,6 +747,54 @@ test_that("supplying t0_data and nodes in dag", {
   expect_equal(colnames(sim), c(".id", "start", "stop", "X", "A", "B", "Y"))
 })
 
+test_that("debug functionality working", {
+
+  set.seed(1234)
+
+  dag <- empty_dag() +
+    node("A", type="rbernoulli") +
+    node_td("L", type="next_time", formula= ~ log(0.0001) + A*log(5),
+            event_duration=100) +
+    node_td("Y", type="next_time", formula= ~ log(0.00001) + A*log(2.5) +
+              L*log(0.5), event_duration=Inf)
+
+  # run simulation, but return every full state of it
+  sim1 <- sim_discrete_event(dag, n_sim=100, max_t=700,
+                             debug=list(return_full_state=TRUE,
+                                        continue_state=FALSE))
+
+  # continue simulation run at specific state
+  sim1$data <- copy(sim1$states[[2]])
+  sim2 <- sim_discrete_event(dag, n_sim=100, max_t=700,
+                             t0_data=sim1, check_inputs=FALSE,
+                             debug=list(return_full_state=FALSE,
+                                        continue_state=TRUE))
+
+  out <- sim2[, .(max_t = max(stop)), by=.id]
+
+  expect_equal(nrow(out), length(unique(sim1$states[[2]]$.id)))
+  expect_true(all(is.infinite(out$max_t)))
+})
+
+test_that("custom baseline hazard with model='cox' working", {
+
+  fbasehaz <- function(t) {
+    0.0001 + t*0.0001
+  }
+
+  dag <- empty_dag() +
+    node("A", type="rbernoulli", output="numeric") +
+    node_td("Y1", type="next_time", formula= ~ A*log(0.7), model="cox",
+            surv_dist=fbasehaz, basehaz_grid=1:1000000, event_duration=Inf) +
+    node_td("Y2", type="next_time", formula= ~ A*log(1.5), model="cox",
+            surv_dist=fbasehaz, basehaz_grid=1:1000000, event_duration=Inf)
+
+  set.seed(1234)
+  data <- sim_discrete_event(dag, n_sim=100, max_t=1000, censor_at_max_t=TRUE)
+
+  expect_equal(round(mean(data$Y2), 3), 0.537)
+})
+
 test_that("warning if max_iter reached", {
 
   set.seed(356345)

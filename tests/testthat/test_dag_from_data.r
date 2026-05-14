@@ -111,7 +111,9 @@ test_that("gen_node_rcategorical", {
                    type_fun=rcategorical,
                    parents=NULL,
                    time_varying=FALSE,
-                   params=list(labels=c("0", "1", "2"), probs=c(0.4, 0.2, 0.4)))
+                   params=list(labels=c("0", "1", "2"), probs=c(0.4, 0.2, 0.4),
+                               output="numeric", reference=NULL,
+                               all_levels=FALSE))
 
   out <- gen_node_rcategorical(data=data, name="y", na.rm=TRUE)
 
@@ -214,4 +216,66 @@ test_that("gen_node_negative_binomial", {
   out$model <- NULL
 
   expect_equal(out, expected, tolerance=0.0001)
+})
+
+test_that("works with categorical parents", {
+
+  dag <- empty_dag() +
+    node("cat", type="rcategorical", labels=c("A", "B", "C"),
+         probs=c(0.2, 0.2, 0.6), output="factor") +
+    node("Y", type="gaussian", formula= ~ -2 + catB*0.5 + catC*-4,
+         error=1) +
+    node("Y2", type="negative_binomial", formula= ~ -2 + catB*0.5 + catC*-4,
+         theta=2)
+
+  set.seed(134)
+  data <- sim_from_dag(dag, n_sim=1000)
+
+  dag_raw <- empty_dag() +
+    node("cat", type="rcategorical", output="factor") +
+    node("Y", type="gaussian", parents="cat")
+
+  dag_est <- dag_from_data(dag_raw, data=data)
+  data_new <- sim_from_dag(dag_est$dag, n_sim=100)
+
+  expect_equal(levels(data_new$cat), c("A", "B", "C"))
+  expect_equal(round(mean(data$Y), 3), -4.365)
+  expect_equal(round(mean(data$Y2), 3), 0.065)
+})
+
+test_that("works with a custom gen_node_ function that has arguments", {
+
+  ## some custom node function
+  node_custom <- function(data, parents, arg1, arg2=TRUE) {
+    if (arg1 & arg2) {
+      out <- rep(1, nrow(data))
+    } else {
+      out <- rep(2, nrow(data))
+    }
+    return(out)
+  }
+
+  ## some generator function for the custom node
+  gen_node_custom <- function(name, parents, data, return_model, na.rm,
+                              arg1, arg2=TRUE) {
+    out <- list(name=name, parents=parents, type_str="custom",
+                type_fun=node_custom, arg1=arg1, arg2=arg2)
+    return(out)
+  }
+
+  assign("node_custom", node_custom, envir=.GlobalEnv)
+  assign("gen_node_custom", gen_node_custom, envir=.GlobalEnv)
+
+  dag <- empty_dag() +
+    node("X", type="rnorm") +
+    node("Y", type="custom", parents="X", arg1=TRUE)
+
+  data <- sim_from_dag(dag, n_sim=100)
+
+  dag_est <- dag_from_data(dag, data=data)
+
+  data2 <- sim_from_dag(dag_est$dag, n_sim=100)
+
+  expect_true(all(data$Y==1))
+  expect_true(all(data2$Y==1))
 })

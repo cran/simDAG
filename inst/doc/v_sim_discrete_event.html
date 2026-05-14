@@ -422,7 +422,7 @@ right place.</p>
 familiar with the <code>simDAG</code> syntax. If this is not the case,
 we recommend consulting the introductory vignette or the main paper
 associated with this package first <span class="citation">(Denz and
-Timmesfeld 2025)</span>.</p>
+Timmesfeld 2026)</span>.</p>
 </div>
 <div id="what-is-discrete-event-simulation-and-why-use-it" class="section level1">
 <h1>What is Discrete-Event Simulation and Why Use it?</h1>
@@ -530,23 +530,24 @@ until we are finished. This can be done using the
 <code>sim_discrete_time()</code> function using the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(simDAG)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>dag_dts <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.01</span>, <span class="at">event_duration=</span><span class="cn">Inf</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>simDTS <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag_dts, <span class="at">n_sim=</span><span class="dv">10</span>, <span class="at">max_t=</span><span class="dv">10000000</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>                            <span class="at">break_if=</span><span class="fu">all</span>(data<span class="sc">$</span>death_event<span class="sc">==</span><span class="cn">TRUE</span>))</span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="fu">head</span>(simDTS<span class="sc">$</span>data)</span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co">#&gt;      .id death_event death_time</span></span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt;      &lt;lgcl&gt;      &lt;int&gt;</span></span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt; 1:     1        TRUE         98</span></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt; 2:     2        TRUE         20</span></span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co">#&gt; 3:     3        TRUE         13</span></span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co">#&gt; 4:     4        TRUE        112</span></span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt; 5:     5        TRUE         36</span></span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt; 6:     6        TRUE         54</span></span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>dag_dts <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;time_to_event&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.01</span>, <span class="at">event_duration=</span><span class="cn">Inf</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>simDTS <span class="ot">&lt;-</span> <span class="fu">sim_discrete_time</span>(dag_dts, <span class="at">n_sim=</span><span class="dv">10</span>, <span class="at">max_t=</span><span class="dv">10000000</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>                            <span class="at">break_if=</span><span class="fu">all</span>(data<span class="sc">$</span>death_event<span class="sc">==</span><span class="cn">TRUE</span>))</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="fu">head</span>(simDTS<span class="sc">$</span>data)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co">#&gt;      .id death_event death_time</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt;      &lt;lgcl&gt;      &lt;int&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt; 1:     1        TRUE         98</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co">#&gt; 2:     2        TRUE         20</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co">#&gt; 3:     3        TRUE         13</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt; 4:     4        TRUE        112</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt; 5:     5        TRUE         36</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co">#&gt; 6:     6        TRUE         54</span></span></code></pre></div>
 <p>Here, we set the <code>max_t</code> argument to a very large number
 and told the function to stop once everyone has died using the
 <code>break_if</code> argument. This approach works well, but it is also
@@ -683,38 +684,37 @@ not be an issue in practice.</p>
 <p>By default, the time until the next event is generated using a random
 draw from an exponential distribution. This approach, however, assumes
 that the probability of occurrence is independent of the time. We can
-relax this assumption by using the <code>redraw_at_t</code> argument.
-This argument allows users to specify points in time at which the time
-to the next event should be re-drawn. By additionally making the
-probability function supplied to a time-dependent node time-specific, we
-can then use a piecewise-constant probability instead. Consider the
-following code:</p>
+relax this assumption in multiple ways. The most simply way is to use
+the <code>redraw_at_t</code> argument. This argument allows users to
+specify points in time at which the time to the next event should be
+re-drawn. By additionally making the probability function supplied to a
+time-dependent node time-specific, we can then use a piecewise-constant
+baseline event probability, instead of a truly constant one. Consider
+the following code:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>prob_death <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  </span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  base_p <span class="ot">&lt;-</span> <span class="fu">fifelse</span>(data<span class="sc">$</span>.time <span class="sc">&gt;</span> <span class="dv">300</span>, <span class="fl">0.005</span>, <span class="fl">0.001</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  </span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  base_p <span class="sc">*</span> <span class="fl">0.8</span><span class="sc">^</span>(data<span class="sc">$</span>treatment)</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>}</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.01</span>,</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">100</span>) <span class="sc">+</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>, <span class="at">prob_fun=</span>prob_death,</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="cn">Inf</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_event</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>, <span class="at">remove_if=</span>death<span class="sc">==</span><span class="cn">TRUE</span>,</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>                          <span class="at">target_event=</span><span class="st">&quot;death&quot;</span>, <span class="at">redraw_at_t=</span><span class="dv">300</span>,</span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>                          <span class="at">keep_only_first=</span><span class="cn">TRUE</span>)</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="fu">head</span>(sim)</span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; Key: &lt;.id, start&gt;</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;      .id     start      stop treatment  death</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt;     &lt;num&gt;     &lt;num&gt;    &lt;lgcl&gt; &lt;lgcl&gt;</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; 1:     1   0.00000  32.13286     FALSE  FALSE</span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 2:     1  32.13286 132.13286      TRUE  FALSE</span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; 3:     1 132.13286 300.00000     FALSE  FALSE</span></span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; 4:     1 300.00000 440.08265     FALSE  FALSE</span></span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt; 5:     1 440.08265 540.08265      TRUE  FALSE</span></span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt; 6:     1 540.08265 648.71324     FALSE  FALSE</span></span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  base_p <span class="ot">&lt;-</span> <span class="fu">fifelse</span>(data<span class="sc">$</span>.time <span class="sc">&gt;</span> <span class="dv">300</span>, <span class="fl">0.005</span>, <span class="fl">0.001</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  base_p <span class="sc">*</span> <span class="fl">0.8</span><span class="sc">^</span>(data<span class="sc">$</span>treatment)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>}</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.01</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">100</span>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>, <span class="at">prob_fun=</span>prob_death,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="cn">Inf</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_event</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>, <span class="at">remove_if=</span>death<span class="sc">==</span><span class="cn">TRUE</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>                          <span class="at">target_event=</span><span class="st">&quot;death&quot;</span>, <span class="at">redraw_at_t=</span><span class="dv">300</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>                          <span class="at">keep_only_first=</span><span class="cn">TRUE</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="fu">head</span>(sim)</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; Key: &lt;.id, start&gt;</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt;      .id     start      stop treatment  death</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt;     &lt;num&gt;     &lt;num&gt;    &lt;lgcl&gt; &lt;lgcl&gt;</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; 1:     1   0.00000  32.13286     FALSE  FALSE</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; 2:     1  32.13286 132.13286      TRUE  FALSE</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; 3:     1 132.13286 300.00000     FALSE  FALSE</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 4:     1 300.00000 440.08265     FALSE  FALSE</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; 5:     1 440.08265 540.08265      TRUE  FALSE</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; 6:     1 540.08265 648.71324     FALSE  FALSE</span></span></code></pre></div>
 <p>In this code, the baseline probability is 0.001 until <span class="math inline">\(t = 300\)</span> and then increases to 0.005. It
 is not sufficient to only define the probability function this way,
 because then there would be no way for the simulation itself to know
@@ -758,12 +758,63 @@ directly defining the probability functions and drawing values using an
 exponential distribution. Since the Weibull distribution is not constant
 over time, this is a valid strategy if we want continuously changing
 baseline event probabilities.</p>
+<p>Since <code>node_cox()</code> (the function that is used to generate
+the times following a Cox model under the hood) allows users to specify
+arbitrary baseline hazard functions, users may use any kind of
+time-dependent probabilities. For example, lets define this arbitrary
+baseline hazard for <code>death</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>fbasehaz <span class="ot">&lt;-</span> <span class="cf">function</span>(t) {</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fl">0.0002</span> <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    <span class="fl">0.001</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>((t <span class="sc">-</span> <span class="dv">200</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="dv">50</span><span class="sc">^</span><span class="dv">2</span>)) <span class="sc">+</span> <span class="co"># first hill</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>    <span class="fl">0.0008</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>((t <span class="sc">-</span> <span class="dv">700</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="dv">80</span><span class="sc">^</span><span class="dv">2</span>))  <span class="co"># second hill</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>}</span></code></pre></div>
+<p>Plotted, it looks like this for the first 1000 time units:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>plotdata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="at">val=</span><span class="fu">fbasehaz</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">ggplot</span>(plotdata, <span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>val)) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>We can use this function as a baseline hazard for <code>death</code>
+through the <code>surv_dist</code> argument of <code>node_cox()</code>
+like this:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">empty_dag</span>() <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;treatment&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>, <span class="at">prob_fun=</span><span class="fl">0.01</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="dv">100</span>, <span class="at">immunity_duration=</span><span class="cn">Inf</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">node_td</span>(<span class="st">&quot;death&quot;</span>, <span class="at">type=</span><span class="st">&quot;next_time&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>          <span class="at">formula=</span> <span class="sc">~</span> <span class="fu">log</span>(<span class="fl">0.8</span>)<span class="sc">*</span>treatment, <span class="at">model=</span><span class="st">&quot;cox&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>          <span class="at">surv_dist=</span>fbasehaz, <span class="at">basehaz_grid=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">1000000</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>          <span class="at">event_duration=</span><span class="cn">Inf</span>, <span class="at">extrapolate=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">sim_discrete_event</span>(dag, <span class="at">n_sim=</span><span class="dv">10</span>, <span class="at">remove_if=</span>death<span class="sc">==</span><span class="cn">TRUE</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>                          <span class="at">target_event=</span><span class="st">&quot;death&quot;</span>, <span class="at">keep_only_first=</span><span class="cn">TRUE</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>                          <span class="at">max_t=</span><span class="dv">10000</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="fu">head</span>(sim)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; Key: &lt;.id, start&gt;</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;      .id     start       stop treatment  death</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt;     &lt;num&gt;      &lt;num&gt;    &lt;lgcl&gt; &lt;lgcl&gt;</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 1:     1   0.00000   10.02079     FALSE  FALSE</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; 2:     1  10.02079  110.02079      TRUE  FALSE</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; 3:     1 110.02079 1487.77199     FALSE   TRUE</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; 4:     2   0.00000   60.61419     FALSE  FALSE</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; 5:     2  60.61419  160.61419      TRUE  FALSE</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; 6:     2 160.61419 4432.02708     FALSE   TRUE</span></span></code></pre></div>
+<p>Internally, the time to <code>death</code> is now generated by
+following steps: (1) numerically calculating the cumulative baseline
+hazard using the trapezoid rule over the grid of time points specified
+using <code>basehaz_grid</code>, (2) interpolating the increments
+linearly to obtain a smooth function, (3) inverting the estimated
+cumulative hazard function, (4) simulating cumulative hazards from the
+defined model and (5) reading off the corresponding survival time
+through the inverted cumulative hazard function. Note that this method
+can only generate data up to <code>max(basehaz_grid)</code>.</p>
 <p>In theory, the same strategy could be used for any other
 time-to-event model, such as Aalen additive hazards models, accelerated
 failure time models etc. Users only need a function that simulates data
-from such models and directly allows left-truncation. Currently, only
-Cox and Aalen models are supported through the <code>model</code>
-argument, but we are working on further built-in options.</p>
+from such models and directly allows left-truncation. Although many of
+these models are supported through the <code>model</code> argument, only
+the Cox model currently allows completely flexible baseline hazard
+definitions.</p>
 </div>
 <div id="categorical-count-continuous-variables" class="section level2">
 <h2>Categorical / Count / Continuous variables</h2>
@@ -807,10 +858,10 @@ the ’Simmer’ Package for Health Economic Modelling: A Tutorial and
 Illustration in Colon Cancer.”</span> <em>Applied Health Economics and
 Health Policy</em> 23: 961–75.
 </div>
-<div id="ref-Denz2025" class="csl-entry">
-Denz, Robin, and Nina Timmesfeld. 2025. <span>“Simulating Complex
-Crossectional and Longitudinal Data Using the simDAG r Package.”</span>
-<em>arXiv Preprint</em>. <a href="https://doi.org/10.48550/arXiv.2506.01498">https://doi.org/10.48550/arXiv.2506.01498</a>.
+<div id="ref-Denz2026" class="csl-entry">
+Denz, Robin, and Nina Timmesfeld. 2026. <span>“Simulating Complex
+Cross-Sectional and Longitudinal Data Using the <span class="nocase">simDAG</span> <span>R</span> Package.”</span> <em>Journal
+of Statistical Software</em> 116 (2): 1–40. <a href="https://doi.org/10.18637/jss.v116.i02">https://doi.org/10.18637/jss.v116.i02</a>.
 </div>
 <div id="ref-Gillespie1976" class="csl-entry">
 Gillespie, Daniel T. 1976. <span>“A General Method for Numerically

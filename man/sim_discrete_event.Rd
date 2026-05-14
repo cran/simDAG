@@ -17,7 +17,7 @@ sim_discrete_event(dag, n_sim=NULL, t0_sort_dag=FALSE,
                    keep_only_first=FALSE,
                    remove_not_at_risk=FALSE,
                    include_event_counts=TRUE,
-                   check_inputs=TRUE)
+                   check_inputs=TRUE, debug=NULL)
 }
 \arguments{
   \item{dag}{
@@ -71,6 +71,9 @@ Either \code{TRUE} or \code{FALSE}, specifying whether event counts of time-depe
   \item{check_inputs}{
 Whether to perform plausibility checks for the user input or not. Is set to \code{TRUE} by default, but can be set to \code{FALSE} in order to speed things up when using this function in a simulation study or something similar.
   }
+  \item{debug}{
+Strictly used for developmental purposes. Keep at \code{NULL} to ignore this argument.
+  }
 }
 \details{
 
@@ -108,8 +111,7 @@ In general, this function should be \emph{a lot faster} than a corresponding \co
 
 Unlike the \code{\link{sim_discrete_time}} function, which does not assume any parametric distributions, this function requires the user to specify a function that may be used to generate the time of the next change in a binary variable. Multiple built-in options are provided, but it is nevertheless less flexible. Additionally, only binary time-dependent variables are supported (with no restrictions set on time-fixed variables). Some forms of dependencies are harder (but not impossible) to specify using the discrete-event approach.
 
-For example, simulating effects of variables or overall event probabilities that are smooth functions of time is difficult. If the event probability is constant over time and only changes when some other variable changed, a simple left-truncated exponential distribution (see \code{\link{rtexp}}) may be used. If only the general event probability should vary over time, times may be generated using a Weibull or some other parametric functions. In any case, users will have to know very clearly what functions to use and then have to provide a function that is able to generate truncated random values from this distribution. If these requirements cannot be met, discrete-time simulation may be the only alternative.
-
+For example, simulating time-dependent effects that are smooth functions of time is difficult (piecewise constant effects may be simulated easily using the \code{redraw_at_t} argument). If only the general event probability should vary over time, times may be generated using a Weibull or some other parametric functions (see associated vignette). In any case, users will have to know very clearly what functions to use and then have to provide a function that is able to generate truncated random values from this distribution. If these requirements cannot be met, discrete-time simulation may be the only alternative.
 }
 \author{
 Robin Denz
@@ -129,7 +131,7 @@ Additionally, the returned data will include all time-constant and time-dependen
 \code{\link{empty_dag}}, \code{\link{node}}, \code{\link{node_td}}, \code{\link{node_next_time}}, \code{\link{sim_discrete_time}}
 }
 \references{
-Denz, Robin and Nina Timmesfeld (2025). Simulating Complex Crossectional and Longitudinal Data using the simDAG R Package. arXiv preprint, doi: 10.48550/arXiv.2506.01498.
+Denz, Robin and Nina Timmesfeld (2026). "Simulating Complex Cross-Sectional and Longitudinal Data using the simDAG R Package". Journal of Statistical Software 116 (2), doi: 10.18637/jss.v116.i02.
 
 Banks, Jerry, John S. Carson II, Barry L. Nelson, and David M. Nicol (2014). Discrete-Event System Simulation. Vol. 5. Edinburgh Gate: Pearson Education Limited.
 

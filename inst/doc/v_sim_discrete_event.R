@@ -10,6 +10,7 @@ knitr::include_graphics("./images_v_sim_discrete_event/flow_chart.png")
 ## -----------------------------------------------------------------------------
 library(simDAG)
 library(data.table)
+library(ggplot2)
 
 set.seed(1234)
 
@@ -58,9 +59,7 @@ sim <- sim_discrete_event(dag, n_sim=10, remove_if=death==TRUE,
 
 ## -----------------------------------------------------------------------------
 prob_death <- function(data) {
-  
   base_p <- fifelse(data$.time > 300, 0.005, 0.001)
-  
   base_p * 0.8^(data$treatment)
 }
 
@@ -86,5 +85,33 @@ dag <- empty_dag() +
 
 sim <- sim_discrete_event(dag, n_sim=10, remove_if=death==TRUE,
                           target_event="death", keep_only_first=TRUE)
+head(sim)
+
+## -----------------------------------------------------------------------------
+fbasehaz <- function(t) {
+  0.0002 +
+    0.001 * exp(-((t - 200)^2) / (2 * 50^2)) + # first hill
+    0.0008 * exp(-((t - 700)^2) / (2 * 80^2))  # second hill
+}
+
+## ----fig.width=7, fig.height=4------------------------------------------------
+plotdata <- data.frame(time=1:1000, val=fbasehaz(1:1000))
+
+ggplot(plotdata, aes(x=time, y=val)) +
+  geom_line() +
+  theme_minimal()
+
+## -----------------------------------------------------------------------------
+dag <- empty_dag() +
+  node_td("treatment", type="next_time", prob_fun=0.01,
+          event_duration=100, immunity_duration=Inf) +
+  node_td("death", type="next_time",
+          formula= ~ log(0.8)*treatment, model="cox",
+          surv_dist=fbasehaz, basehaz_grid=1:1000000,
+          event_duration=Inf, extrapolate=TRUE)
+
+sim <- sim_discrete_event(dag, n_sim=10, remove_if=death==TRUE,
+                          target_event="death", keep_only_first=TRUE,
+                          max_t=10000)
 head(sim)
 
