@@ -1,6 +1,6 @@
 Package: simDAG
 Title: Simulate Data from a (Time-Dependent) Causal DAG
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Robin", "Denz", , "robin.denz@rub.de", role = c("aut", "cre")),
     person("Katharina", "Meiszl", , "meiszl@amib.rub-uni-bochum.de", role = c("aut"))
@@ -27,8 +27,8 @@ Contact: <robin.denz@rub.de>
 Encoding: UTF-8
 RoxygenNote: 7.3.3
 NeedsCompilation: no
-Packaged: 2026-05-14 07:16:30 UTC; Robin Denz
+Packaged: 2026-07-31 06:50:14 UTC; Robin Denz
 Author: Robin Denz [aut, cre],
   Katharina Meiszl [aut]
 Repository: CRAN
-Date/Publication: 2026-05-14 14:00:02 UTC
+Date/Publication: 2026-07-31 09:10:02 UTC

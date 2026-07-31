@@ -65,14 +65,14 @@ sim <- sim_discrete_time(dag, n_sim=1000, max_t=5, save_states="all")
 data <- sim2data(sim, to="long")
 head(data)
 
-## -----------------------------------------------------------------------------
-dag <- empty_dag() +
-  node("Clinic", type="rcategorical", probs=rep(0.02, 50)) +
-  node("Treatment", type="identity", formula= ~ Clinic >= 25) +
-  node("Outcome", type="poisson", formula= ~ -1 + Treatment*4 + (1|Clinic),
-       var_corr=0.5)
-data <- sim_from_dag(dag, n_sim=1000)
-head(data)
+## ----eval=FALSE---------------------------------------------------------------
+# dag <- empty_dag() +
+#   node("Clinic", type="rcategorical", probs=rep(0.02, 50)) +
+#   node("Treatment", type="identity", formula= ~ Clinic >= 25) +
+#   node("Outcome", type="poisson", formula= ~ -1 + Treatment*4 + (1|Clinic),
+#        var_corr=0.5)
+# data <- sim_from_dag(dag, n_sim=1000)
+# head(data)
 
 ## -----------------------------------------------------------------------------
 dag <- empty_dag() +
@@ -184,17 +184,17 @@ data <- sim_discrete_event(dag, n_sim=500, max_t=500, target_event="Y",
                            keep_only_first=TRUE)
 head(data)
 
-## -----------------------------------------------------------------------------
-dag <- empty_dag() +
-  node("school", type="rcategorical", probs=rep(0.1, 10),
-       labels=LETTERS[1:10]) +
-  node("female", type="rbernoulli", p=0.5) +
-  node("age", type="rnorm", mean=12, sd=3) +
-  node("score", type="gaussian",
-       formula= ~ -2 + female*3 + age*0.1 + (1|school),
-       var_corr=0.5, error=1)
-data <- sim_from_dag(dag, n_sim=10)
-head(data)
+## ----eval=FALSE---------------------------------------------------------------
+# dag <- empty_dag() +
+#   node("school", type="rcategorical", probs=rep(0.1, 10),
+#        labels=LETTERS[1:10]) +
+#   node("female", type="rbernoulli", p=0.5) +
+#   node("age", type="rnorm", mean=12, sd=3) +
+#   node("score", type="gaussian",
+#        formula= ~ -2 + female*3 + age*0.1 + (1|school),
+#        var_corr=0.5, error=1)
+# data <- sim_from_dag(dag, n_sim=10)
+# head(data)
 
 ## -----------------------------------------------------------------------------
 dag <- empty_dag() +

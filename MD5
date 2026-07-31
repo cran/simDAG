@@ -1,6 +1,6 @@
-136a0e8f590de799754f17dd83dadb49 *DESCRIPTION
+7fd777208d6c7a71280de6e305365896 *DESCRIPTION
 7bef560d2bfbd96789afbb8a73290a24 *NAMESPACE
-1a75449eb23fbecb5afdc8289d40cd17 *NEWS.md
+366a5e1552a3147885d7ae5d25e090c0 *NEWS.md
 7d5cd0f7f53c43cf7e74b962e21b8685 *R/dag.r
 13e3684e59c44b20082e7de6cabccd6f *R/dag2matrix.r
 1086fe75cc20a5564664315e9093ccbc *R/dag_from_data.r
@@ -18,7 +18,7 @@ b1e76f9bbaf9e73de6b91d1f47b6af7c *R/node_binomial.r
 8d6d9bbd8516fe50d99e28c83324cdd6 *R/node_competing_events.r
 882eac30586147efc25af3baf5fa2a3a *R/node_conditional_distr.r
 2dd94ec140ea53d43b1248dd424d7f2f *R/node_conditional_prob.r
-41fe3cd9803284b2fab1c15dfc0ebdfa *R/node_cox.r
+91867a2e49deb6e611c63f7388d763e7 *R/node_cox.r
 b1ede29ad3f6131e6ffcdce532e036b2 *R/node_gaussian.r
 d7d3cad029cf910ff957ae7249107924 *R/node_identity.r
 567f1903e873dfcf027301a690d08b71 *R/node_lmer.r
@@ -44,18 +44,18 @@ ded68e12199248bb0c936fce6088f550 *R/sim_dt_helpers.r
 18a3d2fb74d184147c04cf83310e1c39 *R/sim_from_dag.r
 171b5534e823b31125215f78865fe63d *R/sim_n_datasets.r
 d0c830d13acf3aa4cc0abc8ab52e947c *R/structural_equations.r
-c0e6570b3e392b34c6c81ba988b32503 *README.md
+511352906e5d729b5aa37f895ead3749 *README.md
 c5953fd1038a950abdca370c36c1aa2b *build/vignette.rds
 01a6cb9044a10e67f4b5d1fef37c0249 *inst/CITATION
 0038184e8e93a89e2924ed7a54aeae27 *inst/doc/simDAG.R
 c29321543f3b952b9bde1168fdf32d77 *inst/doc/simDAG.Rmd
-3003f5e26e65f9d3240b5258775e206d *inst/doc/simDAG.html
-b641587f15f82259e9263ced908f6265 *inst/doc/v_cookbook.R
-2637b26f83a3c667e781c0c6e59a936f *inst/doc/v_cookbook.Rmd
-f1f1aa8c176cdb852ed28aa38a1bcec8 *inst/doc/v_cookbook.html
+5270a5cd0ba231f75a43a0606557f779 *inst/doc/simDAG.html
+c848d1b68a605454cbf9d9d4a87bdbf3 *inst/doc/v_cookbook.R
+3e1b60f2d9aa42c2d58c849e85cca4ef *inst/doc/v_cookbook.Rmd
+4e7140e40c9c09795d9bd47a7e5bfdbb *inst/doc/v_cookbook.html
 0b094e8952de1d768b2bef0e0adf7ea9 *inst/doc/v_covid_example.R
 e65be802289165d64adb28a42eab0a17 *inst/doc/v_covid_example.Rmd
-91ead6d2c00f028355496190b0f0b733 *inst/doc/v_covid_example.html
+bf523070a35b1a6a7fd6eb8460fa8abd *inst/doc/v_covid_example.html
 eb453388f11f93a17b257a3a2045a0aa *inst/doc/v_custom_nodes.R
 9454de8b84f7583b1570964b61a6c907 *inst/doc/v_custom_nodes.Rmd
 874902b9c81fc2848e25789314dc8538 *inst/doc/v_custom_nodes.html
@@ -91,7 +91,7 @@ caa4b8e5c9b7e6795a659b10ba31e80b *man/net.Rd
 d5247795b2cae6b7931b1455b80743c6 *man/network.Rd
 d9a11e7899ccedbb8beeec8aa7fd6a0d *man/node.Rd
 92f4f44d938bd29ed0eed0a50ef81668 *man/node_aalen.Rd
-75da60e895a526ff622d25a852ab0f28 *man/node_binomial.Rd
+7a0c078aee21a29606c7b7bfdaac6b50 *man/node_binomial.Rd
 f33b35cc289f4eb296e51087fdb784eb *man/node_competing_events.Rd
 e3390111f1e1b0696172ab452ddcd6b2 *man/node_conditional_distr.Rd
 0b06f8e2eb61d7d564c662e4757d1cd2 *man/node_conditional_prob.Rd
@@ -102,7 +102,7 @@ cbbdb30432a31c95fd1115499e72e056 *man/node_gaussian.Rd
 445b6be6130e54194ae65eba7e241044 *man/node_multinomial.Rd
 ff808f47f3e734c8b9e8d463ca968708 *man/node_negative_binomial.Rd
 cb65e273046c26ad8fd6cecbd270c143 *man/node_next_time.Rd
-e67649c88b8b4c9f7c67b5c0e544c9a4 *man/node_poisson.Rd
+c2e6ed00ada4650ce568642ece111a28 *man/node_poisson.Rd
 092dd2fcc08145bdc756cccd52795659 *man/node_polr.Rd
 64eacd29fbadd85998d6f92d949ec977 *man/node_rsurv.Rd
 602ec2e0ba9b81cf264732d2eb1e8f47 *man/node_time_to_event.Rd
@@ -207,7 +207,7 @@ dfbc6c54fe40604a17feea7a13a43617 *tests/testthat/test_node_conditional_distr.R
 a0e41342aaf934039717e793944b7d7d *tests/testthat/test_node_gaussian.r
 157617e4daef0dc1e4f3601546e82d7b *tests/testthat/test_node_has_arg.r
 80115687963b90b02c2f77a788227eef *tests/testthat/test_node_identity.r
-ba274dcfc779e1d61ef8ef41648f234d *tests/testthat/test_node_lmer.r
+a753a0e4b17b8919b60c315960c154ca *tests/testthat/test_node_lmer.r
 b07538fcbec29c711d8b04030bebc85f *tests/testthat/test_node_mixture.r
 24c8255c0864ce6096f9f6d75092e9f3 *tests/testthat/test_node_multinomial.r
 5243fa2aded3d9092a400501925037db *tests/testthat/test_node_negative_binomial.r
@@ -215,7 +215,7 @@ b07538fcbec29c711d8b04030bebc85f *tests/testthat/test_node_mixture.r
 9610224b0c8b0d18697ca05b43390ea4 *tests/testthat/test_node_polr.r
 f58951e6c5071d02e9236824aff4a421 *tests/testthat/test_node_rsurv.r
 a3b26dd79c0b8f31a2c6720fb900a8c2 *tests/testthat/test_node_time_to_event.r
-7211896b5371b31fded8642ab95958ba *tests/testthat/test_node_zeroinfl.r
+212797f2751b7f4d2b48a51f5c49ebf3 *tests/testthat/test_node_zeroinfl.r
 687903d3b4aebfdede34cc74a89bce76 *tests/testthat/test_parse_formula.r
 cfeb72cc24254a5982d4cec1a9e0b8e6 *tests/testthat/test_plot.DAG.r
 39839c339dd4473adf2352bf35f22dd6 *tests/testthat/test_plot.simDT.r
@@ -270,7 +270,7 @@ a636d3a5d9473e2418ebe73dba723c03 *vignettes/images_v_joss/disc_time_sim.bib.sav.
 223ada9bf44bdf38284aed22a7f73ebd *vignettes/images_v_sim_from_dag/simple_dag.png
 81292e3b3a8700465b22001889746c53 *vignettes/images_v_sim_from_dag/time_dep_dag.png
 c29321543f3b952b9bde1168fdf32d77 *vignettes/simDAG.Rmd
-2637b26f83a3c667e781c0c6e59a936f *vignettes/v_cookbook.Rmd
+3e1b60f2d9aa42c2d58c849e85cca4ef *vignettes/v_cookbook.Rmd
 e65be802289165d64adb28a42eab0a17 *vignettes/v_covid_example.Rmd
 9454de8b84f7583b1570964b61a6c907 *vignettes/v_custom_nodes.Rmd
 d63a143c55d660c9133f65ef6e4b070c *vignettes/v_sim_discrete_event.Rmd
