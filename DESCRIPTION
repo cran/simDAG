@@ -1,6 +1,6 @@
 Package: simDAG
 Title: Simulate Data from a (Time-Dependent) Causal DAG
-Version: 1.0.1
+Version: 1.1.0
 Authors@R: c(
     person("Robin", "Denz", , "robin.denz@rub.de", role = c("aut", "cre")),
     person("Katharina", "Meiszl", , "meiszl@amib.rub-uni-bochum.de", role = c("aut"))
@@ -20,15 +20,15 @@ Imports: data.table (>= 1.15.0), Rfast, rlang, igraph (>= 2.0.0),
         dagitty, ggdag
 Suggests: knitr, rmarkdown, testthat (>= 3.0.0), vdiffr (>= 1.0.0),
         ggplot2, ggforce, MASS, covr, foreach, doSNOW, doRNG, parallel,
-        utils, simr, rsurv, survival
+        utils, simr, rsurv, survival, calibrar
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Contact: <robin.denz@rub.de>
 Encoding: UTF-8
-RoxygenNote: 7.3.3
+Config/roxygen2/version: 8.1.1
 NeedsCompilation: no
-Packaged: 2026-07-31 06:50:14 UTC; Robin Denz
+Packaged: 2026-11-02 14:26:59 UTC; denz
 Author: Robin Denz [aut, cre],
   Katharina Meiszl [aut]
 Repository: CRAN
-Date/Publication: 2026-07-31 09:10:02 UTC
+Date/Publication: 2026-11-02 15:20:02 UTC
